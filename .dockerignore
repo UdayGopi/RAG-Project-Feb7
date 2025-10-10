@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+.venv/
+venv/
+.env
+.env.*
+
+# Node / Frontend build artifacts (if any)
+node_modules/
+dist/
+build/
+
+# VCS
+.git
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data / runtime artifacts
+history.json
+users.db
+uploads/

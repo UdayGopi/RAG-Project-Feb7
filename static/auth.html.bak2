@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In / Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-6">
+  <main class="w-full max-w-5xl h-[90vh] bg-white/90 backdrop-blur rounded-2xl shadow-2xl border border-slate-200 p-0 overflow-hidden">
+    <div class="grid md:grid-cols-2 h-full">
+      <!-- Left: Project overview -->
+      <section class="relative hidden md:block bg-gradient-to-br from-sky-50 via-white to-blue-50 text-slate-800 p-8 overflow-y-auto">
+        <div class="absolute inset-0 opacity-50 pointer-events-none" style="background: radial-gradient(500px 300px at 10% 10%, rgba(59,130,246,.15), transparent), radial-gradient(400px 350px at 90% 30%, rgba(147,197,253,.15), transparent), radial-gradient(600px 450px at 50% 90%, rgba(99,102,241,.15), transparent);"></div>
+        <div class="relative space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-white border border-slate-200 grid place-items-center"><span class="text-xl">🤖</span></div>
+            <div>
+              <h1 class="text-xl font-extrabold tracking-tight text-blue-900">CarePolicy Hub</h1>
+              <p class="text-xs text-slate-500">AI Policy Assistant</p>
+            </div>
+          </div>
+          <h2 class="text-2xl font-extrabold leading-snug text-blue-900">Welcome to your AI assistant for esMD & policy docs</h2>
+          <p class="text-slate-700">Search across complex guidance, extract codes or tables, and generate concise summaries — all grounded in your uploaded documents.</p>
+          <div class="mt-6">
+            <div class="rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1600&auto=format&fit=crop" alt="AI agent with chatbot search" class="w-full h-80 object-cover"/>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Auth panel -->
+      <section class="p-6 space-y-6 overflow-y-auto">
+        <header class="text-center">
+          <h1 class="text-2xl font-bold text-slate-800">Sign In / Sign Up</h1>
+          <p class="text-slate-500 text-sm">Access CarePolicy Hub</p>
+        </header>
+
+        <div class="flex justify-center">
+          <button id="view-toggle" class="px-4 py-1.5 rounded-full border border-slate-300 bg-slate-900 text-white text-sm shadow hover:bg-slate-800 transition-colors">New here? Create account</button>
+        </div>
+
+        <section id="signin" class="space-y-4">
+      <div class="space-y-2">
+        <button id="oauth-google" class="w-full border rounded p-2 hover:bg-slate-50 flex items-center justify-center gap-2">
+          <img src="https://www.google.com/favicon.ico" class="w-4 h-4"/> Sign in with Google
+        </button>
+        <button id="oauth-microsoft" class="w-full border rounded p-2 hover:bg-slate-50 flex items-center justify-center gap-2">
+          <img src="https://login.live.com/favicon.ico" class="w-4 h-4"/> Sign in with Microsoft
+        </button>
+        <div id="oauth-sep" class="text-center text-xs text-slate-400">or use email and password</div>
+      </div>
+      <div class="space-y-2">
+        <label class="text-sm text-slate-700">Email</label>
+        <input id="si-email" type="email" class="w-full border rounded p-2" placeholder="you@example.com" />
+      </div>
+      <div class="space-y-2">
+        <label class="text-sm text-slate-700">Password</label>
+        <input id="si-password" type="password" class="w-full border rounded p-2" placeholder="••••••••" />
+      </div>
+      <button id="signin-btn" class="w-full bg-blue-600 text-white rounded p-2 hover:bg-blue-700">Sign In</button>
+      <div class="text-right"><button id="forgot-btn" type="button" class="mt-2 text-xs text-blue-700 hover:underline">Forgot password?</button></div>
+        </section>
+
+        <section id="signup" class="space-y-4 hidden">
+      <div class="flex flex-col items-center gap-2">
+        <img id="avatar-preview" src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=default" alt="Avatar" class="w-20 h-20" />
+        <p class="text-xs text-slate-500">Avatar auto-generates from your email</p>
+      </div>
+      <div class="space-y-2">
+        <label class="text-sm text-slate-700">Name</label>
+        <input id="su-name" type="text" class="w-full border rounded p-2" placeholder="Your Name" />
+      </div>
+      <div class="space-y-2">
+        <label class="text-sm text-slate-700">Email</label>
+        <input id="su-email" type="email" class="w-full border rounded p-2" placeholder="you@example.com" />
+      </div>
+      <div class="space-y-2">
+        <label class="text-sm text-slate-700">Password</label>
+        <input id="su-password" type="password" class="w-full border rounded p-2" placeholder="••••••••" />
+      </div>
+      <button id="signup-btn" class="w-full bg-blue-600 text-white rounded p-2 hover:bg-blue-700">Create Account</button>
+        </section>
+
+        <p id="msg" class="text-center text-sm text-red-600"></p>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE_URL = window.location.origin;
+
+    const secSignin = document.getElementById('signin');
+    const secSignup = document.getElementById('signup');
+    const toggleBtn = document.getElementById('view-toggle');
+    const msg = document.getElementById('msg');
+
+    let mode = 'signin';
+    function setMode(m) {
+      mode = m;
+      const isSignin = mode === 'signin';
+      secSignin.classList.toggle('hidden', !isSignin);
+      secSignup.classList.toggle('hidden', isSignin);
+      toggleBtn.textContent = isSignin ? 'New here? Create account' : 'Have an account? Sign in';
+      msg.textContent = '';
+    }
+    toggleBtn.onclick = () => setMode(mode === 'signin' ? 'signup' : 'signin');
+    setMode('signin');
+
+    // Hide OAuth buttons if providers not configured
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/providers`);
+        if (!res.ok) throw new Error('providers check failed');
+        const p = await res.json();
+        const g = document.getElementById('oauth-google');
+        const m = document.getElementById('oauth-microsoft');
+        const sep = document.getElementById('oauth-sep');
+        // Keep buttons visible; if not configured, disable with tooltip
+        if (g && !p.google) { g.disabled = true; g.title = 'Configure GOOGLE_CLIENT_ID/SECRET and APP_BASE_URL in .env'; g.classList.add('opacity-60','cursor-not-allowed'); }
+        if (m && !p.microsoft) { m.disabled = true; m.title = 'Configure MS_CLIENT_ID/SECRET and APP_BASE_URL in .env'; m.classList.add('opacity-60','cursor-not-allowed'); }
+        if (sep) sep.classList.remove('hidden');
+      } catch {}
+    })();
+
+    // Avatar preview on email change
+    const suEmail = document.getElementById('su-email');
+    const avatarImg = document.getElementById('avatar-preview');
+    if (suEmail) {
+      suEmail.addEventListener('input', () => {
+        const seed = encodeURIComponent(suEmail.value.trim().toLowerCase() || 'default');
+        avatarImg.src = `https://api.dicebear.com/8.x/bottts-neutral/svg?seed=${seed}`;
+      });
+    }
+
+    document.getElementById('signin-btn').onclick = async () => {
+      msg.textContent = '';
+      const email = document.getElementById('si-email').value.trim();
+      const password = document.getElementById('si-password').value;
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/signin`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Sign in failed');
+        window.location.href = '/welcome';
+      } catch (e) { msg.textContent = e.message; }
+    };
+
+    document.getElementById('signup-btn').onclick = async () => {
+      msg.textContent = '';
+      const name = document.getElementById('su-name').value.trim();
+      const email = document.getElementById('su-email').value.trim();
+      const password = document.getElementById('su-password').value;
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', body: JSON.stringify({ name, email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Sign up failed');
+        window.location.href = '/welcome';
+      } catch (e) { msg.textContent = e.message; }
+    };
+
+    // OAuth buttons
+    const go = (url) => { window.location.href = url; };
+    document.getElementById('oauth-google').onclick = () => go(`${API_BASE_URL}/auth/login/google`);
+    document.getElementById('oauth-microsoft').onclick = () => go(`${API_BASE_URL}/auth/login/microsoft`);
+  </script>
+<div id="forgot-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+  <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-xl">
+    <h3 class="text-lg font-semibold text-blue-900">Reset password</h3>
+    <p class="text-sm text-slate-600 mt-1">Enter your email and solve the captcha.</p>
+    <div class="mt-3 space-y-3">
+      <input id="fp-email" type="email" placeholder="you@example.com" class="w-full border rounded p-2"/>
+      <div id="fp-captcha" class="text-sm text-slate-700"></div>
+      <input id="fp-answer" type="number" placeholder="Answer" class="w-full border rounded p-2"/>
+    </div>
+    <div class="mt-4 flex items-center justify-end gap-2">
+      <button id="fp-cancel" class="px-3 py-1.5 border rounded text-slate-700 hover:bg-slate-100">Cancel</button>
+      <button id="fp-submit" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700">Send Reset Link</button>
+    </div>
+    <p id="fp-msg" class="mt-2 text-sm"></p>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,2983 @@
+[
+  {
+    "timestamp": "2025-10-05T16:48:42.285494",
+    "query": "Can you just explain me about the FHIR how esMD using ?",
+    "response": {
+      "summary": "The esMD system uses the FHIR standard to enable the exchange of clinical and administrative documents between Health Information Handlers (HIHs) and the esMD system.",
+      "detailed_response": "The esMD FHIR Implementation Guide describes the usage of esMD's REST APIs and defines esMD's custom profiles, extensions, value sets, and transaction flows that support seamless integration between HIHs and esMD services for submission and retrieval of medical documentation. The esMD system implements security using industry-standard mechanisms to ensure secure interactions between external systems and esMD FHIR REST APIs. The guide outlines the key use cases for esMD, including secure authentication, secure file uploads, transmit submission bundles, submit provider registrations, retrieving documents, and submit provider delivery acknowledgements.",
+      "key_points": [
+        "The esMD system uses the FHIR standard to enable the exchange of clinical and administrative documents.",
+        "The esMD FHIR Implementation Guide describes the usage of esMD's REST APIs and custom profiles.",
+        "The esMD system implements security using industry-standard mechanisms."
+      ],
+      "suggestions": [
+        "Review the esMD FHIR Implementation Guide to understand the usage of esMD's REST APIs and custom profiles.",
+        "Familiarize yourself with the esMD security mechanisms to ensure secure interactions between external systems and esMD FHIR REST APIs.",
+        "Explore the esMD FHIR Workflows Tab to access detailed specifications for each of esMD's REST APIs."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for secure authentication using the esMD Authentication API?",
+        "How do I use the esMD Generate Presigned URL API to enable secure file uploads?",
+        "What are the key differences between the esMD Bundle Submission API and the esMD Practitioner API?"
+      ],
+      "code_snippets": [
+        "<ns1:assertion>                <ns1:id>TD635208P_8442_7882_1477_2020080714340001701</ns1:id> </ns1:assertion>",
+        "<ns2:Slot name=\"parentUniqueNumber\"> <ns2:ValueList> <ns2:Value>TD635208P_8442_7882_1477_2020080714340001701</ns2:Value> </ns2:ValueList> </ns2:Slot>",
+        "<ns2:Slot name=\"splitNumber\"> <ns2:ValueList> <ns2:Value>1-3</ns2:Value> </ns2:ValueList> </ns2:Slot>"
+      ],
+      "downloadable_files": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\https___esmdguide-fhir_cms_hhs_gov_.txt",
+          "relevance": 0.9492955803871155
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.07838476449251175
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-05T16:50:50.399923",
+    "query": "Is there any info related to the rc by fhir?",
+    "response": {
+      "summary": "There is no information related to 'rc by fhir' in the provided context.",
+      "detailed_response": "The context provided does not contain any information related to 'rc by fhir'. The context is focused on the RC Client Workflow, XML Messages, and API interactions, but does not mention FHIR (Fast Healthcare Interoperability Resources).",
+      "key_points": [],
+      "suggestions": [],
+      "follow_up_questions": [
+        "Can you provide more context or clarify what 'rc by fhir' refers to?",
+        "Is there a specific aspect of FHIR you would like to know more about?",
+        "Are you looking for information on how to integrate FHIR with the RC Client?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esMD_RC_Onboarding_Form_1.15.21.pdf",
+          "relevance": 0.00028208541334606707
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.00021045540052000433
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-05T16:51:52.360805",
+    "query": "Explain me esMD FHIR Workflows?",
+    "response": {
+      "summary": "The esMD FHIR Workflows Tab provides access to currently supported workflows, including Bundle Submission, Service Registration, Notifications Retrieval, Document Retrieval, and Delivery Acknowledgement.",
+      "detailed_response": "This implementation guide provides details about esMD's FHIR workflows, including RESTful FHIR operations, custom esMD FHIR profiles, and transaction flowcharts for various workflows. The esMD FHIR Workflows Tab located at the top of this page provides access to currently supported workflows, including Bundle Submission, Service Registration, Notifications Retrieval, Document Retrieval, and Delivery Acknowledgement. These workflows enable Health Information Handlers (HIHs) to securely upload clinical documents, submit provider service registration requests, retrieve notifications, retrieve clinical documents and related metadata, and submit provider delivery acknowledgements to esMD.",
+      "key_points": [
+        "The esMD FHIR Workflows Tab provides access to currently supported workflows.",
+        "Bundle Submission, Service Registration, Notifications Retrieval, Document Retrieval, and Delivery Acknowledgement are currently supported workflows.",
+        "These workflows enable HIHs to securely interact with the esMD System using FHIR standards."
+      ],
+      "suggestions": [
+        "Review the esMD FHIR Workflows Tab to understand the currently supported workflows.",
+        "Consult the implementation guide for detailed specifications on each workflow.",
+        "Contact the CMS esMD Service Desk for additional information or support."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for Bundle Submission?",
+        "How do I retrieve notifications using the Notifications Retrieval workflow?",
+        "What are the security considerations for Document Retrieval?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\https___esmdguide-fhir_cms_hhs_gov_.txt",
+          "relevance": 0.8451253771781921
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.012082631699740887
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-05T16:53:07.112298",
+    "query": "Hello",
+    "response": {
+      "summary": "The provided context is a user guide and installation handbook for the Review Contractor (RC) Client Java User Guide and Installation Handbook AR2025.04.0, specifically focusing on the CMS XLC Notification API and Status API.",
+      "detailed_response": "The context provides detailed information on the Notification API and Status API, including request parameters, request methods, and response formats. It also includes code snippets and examples for the ICDT Solicited Response ProcessorImpl class. The context is primarily focused on the electronic submission of medical documentation (esMD) and the interaction between the Review Contractor (RC) and the Healthcare Information Handler (HIH).",
+      "key_points": [
+        "The Notification API and Status API are used for electronic submission of medical documentation (esMD).",
+        "The Notification API request parameters include Authorization Token, scope, and content-type headers.",
+        "The Status API request parameters include Authorization Token, content-type, sender routing ID, and username headers."
+      ],
+      "suggestions": [
+        "Review the request parameters and methods for the Notification API and Status API to ensure proper implementation.",
+        "Use the provided code snippets and examples for the ICDT Solicited Response ProcessorImpl class to create the Response XML based on the absolute path of the file or file object.",
+        "Test the Notification API and Status API to ensure successful interaction between the Review Contractor (RC) and the Healthcare Information Handler (HIH)."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the Authorization Token header in the Notification API request?",
+        "How does the Status API handle errors and exceptions?",
+        "Can the ICDT Solicited Response ProcessorImpl class be used for other types of responses besides solicited responses?"
+      ],
+      "code_snippets": [
+        {
+          "language": "Java",
+          "code": "public Message generateICDTPackage(String icdtSolicitedResponseXMLFileLocation_, boolean isUniqueIdCreate, Collection<File> icdtAttachmentFiles_) {\n    // code snippet\n}"
+        },
+        {
+          "language": "Java",
+          "code": "public Message generateICDTPackage(File icdtSolicitedRequestXMLFileObj_, boolean isUniqueIdCreate_, Collection<File> icdtAttachmentFiles_) {\n    // code snippet\n}"
+        },
+        {
+          "language": "Java",
+          "code": "public ICDTResponse readSolicitedResponseXMLFile(String xmlFileNamewithAbsolutePath_) {\n    // code snippet\n}"
+        }
+      ],
+      "downloadable_files": [
+        "ESMD2.D.L1_5.GUID01020304051.ES0001.D040622.T1051500.zip",
+        "ESD002.D.L1.KSZ0002296501EC.ESMD2.D072022.T2152490.zip"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.0004004404181614518
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-05T16:53:58.279422",
+    "query": "hello in french",
+    "response": {
+      "summary": "The provided context is a set of documents related to the esMD System XDR Profile and CMS XLC Health Care Services \u2013 PA/PCR Response. The documents describe the Electronic Submission of Medical Documentation (esMD) and its implementation guidelines.",
+      "detailed_response": "Unfortunately, the context does not contain any information about the French language. The only mention of a language code is 'en-us' in the urn4:Slot name='languageCode' section, which specifies the human language of character data in the document as English (United States).",
+      "key_points": [
+        "The esMD System XDR Profile is a set of documents related to the Electronic Submission of Medical Documentation (esMD).",
+        "The CMS XLC Health Care Services \u2013 PA/PCR Response document describes the esMD implementation guidelines.",
+        "The urn4:Slot name='languageCode' section specifies the human language of character data in the document as English (United States)."
+      ],
+      "suggestions": [
+        "Review the esMD System XDR Profile and CMS XLC Health Care Services \u2013 PA/PCR Response documents for more information on the Electronic Submission of Medical Documentation (esMD).",
+        "Consult the urn4:Slot name='languageCode' section for information on language codes used in the document.",
+        "Explore other sections of the documents for relevant information on the esMD implementation guidelines."
+      ],
+      "follow_up_questions": [
+        "What are the requirements for the language code in the esMD System XDR Profile?",
+        "How does the CMS XLC Health Care Services \u2013 PA/PCR Response document relate to the esMD implementation guidelines?",
+        "What are the implications of using the 'en-us' language code in the urn4:Slot name='languageCode' section?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.0038250850047916174
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.0015984184574335814
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-07T16:37:02.280926",
+    "query": "Hello",
+    "response": {
+      "summary": "The provided context is a technical documentation for the CMS XLC Notification API and Status API, including request parameters, API methods, and file names.",
+      "detailed_response": "The CMS XLC Notification API and Status API are used for electronic submission of medical documentation (esMD). The Notification API is used for pickup notifications from the Review Contractor (RC) to the Healthcare Information Handler (HIH), while the Status API is used to retrieve the status of the submitted documents. The API methods and request parameters are detailed in the provided documentation, including the use of headers, content types, and file names.",
+      "key_points": [
+        "The Notification API is used for pickup notifications from RC to HIH.",
+        "The Status API is used to retrieve the status of submitted documents.",
+        "API methods and request parameters are detailed in the provided documentation."
+      ],
+      "suggestions": [
+        "Review the API methods and request parameters to ensure proper implementation.",
+        "Test the Notification API and Status API to verify functionality.",
+        "Consult the provided documentation for any updates or changes to the API methods and request parameters."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the Authorization Token header in the Notification API?",
+        "How does the Status API handle errors or failed submissions?",
+        "Are there any specific file naming conventions required for the submitted documents?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.0004004404181614518
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.00032653630478307605
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-07T16:38:49.281645",
+    "query": "What are the line of businesses supported by the esMD list out all from all tenants and also give me few content codes?",
+    "response": {
+      "summary": "The esMD system supports various lines of businesses and content codes, which are listed in the provided implementation guide.",
+      "detailed_response": "The esMD system supports multiple lines of businesses, including Inpatient Rehabilitation Facility (IRF), First Level Appeal Requests, Second Level Appeal Requests, Advance Determination of Medicare Coverage (ADMC) Request, RA Discussion Requests, DME Phone Discussion Requests, and others. The content codes are used to identify the line of business for which the provider/HIH is sending the submission request. The content codes are listed in Table 8: Content Type Codes and Corresponding Content Type Code Display Names in the implementation guide.",
+      "key_points": [
+        "The esMD system supports multiple lines of businesses.",
+        "Content codes are used to identify the line of business for submission requests.",
+        "Table 8 lists the content type codes and corresponding display names."
+      ],
+      "suggestions": [
+        "Review Table 8 to understand the content type codes and their corresponding display names.",
+        "Consult the implementation guide for more information on the esMD system and its supported lines of businesses.",
+        "Contact the relevant authorities for clarification on specific content codes and their usage."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for submitting Inpatient Rehabilitation Facility (IRF) requests through the esMD system?",
+        "How do I determine the correct content code for a particular submission request?",
+        "Are there any additional lines of businesses that will be supported by the esMD system in future releases?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.8573498725891113
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\https___esmdguide-fhir_cms_hhs_gov_.txt",
+          "relevance": 0.169674351811409
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-07T16:39:53.460067",
+    "query": "What are the specific requirements for submitting Inpatient Rehabilitation Facility (IRF) requests through the esMD system?",
+    "response": {
+      "summary": "To submit Inpatient Rehabilitation Facility (IRF) requests through the esMD system, Review Contractors (RCs) must follow specific requirements, including using the X12N 278 format and submitting Admin and PA Reject Responses via the RC Client.",
+      "detailed_response": "According to the esMD release AR2024.04.0 in April 2024, RCs can start accepting the IRF PCR program in X12N 278 format. The X12N 278 request is shared via the Shared Systems like other PA programs. No changes will be needed on the RC Client API to accept IRF X12 packages. The RCs will submit Admin and PA Reject Responses via the RC Client to the esMD system. The IRF-PCR is effective only for the MACs with a Jurisdiction/State of Palmetto Part A JJ/Alabama.",
+      "key_points": [
+        "RCs must use the X12N 278 format for IRF requests",
+        "X12N 278 requests are shared via Shared Systems",
+        "No changes are needed on the RC Client API to accept IRF X12 packages",
+        "RCs submit Admin and PA Reject Responses via the RC Client"
+      ],
+      "suggestions": [
+        "Review the esMD release AR2024.04.0 documentation for more information on IRF PCR program requirements",
+        "Contact the CMS esMD Support Team (esMD_Support@cms.hhs.gov) for assistance with implementing IRF requests",
+        "Verify that the RC Client is configured to accept X12N 278 format requests"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for submitting IRF requests in the X12N 278 format?",
+        "How do RCs configure their RC Client to accept X12N 278 format requests?",
+        "What are the consequences of not submitting Admin and PA Reject Responses via the RC Client?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9897456169128418
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9852073192596436
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esMD_RC_Onboarding_Form_1.15.21.pdf",
+          "relevance": 0.8682348132133484
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-07T16:40:42.487000",
+    "query": "What are the consequences of not submitting Admin and PA Reject Responses via the RC Client?",
+    "response": {
+      "summary": "If Admin and PA Reject Responses are not submitted via the RC Client, the esMD application generates an error response and sends it to the RC, which will need to correct and resubmit the response.",
+      "detailed_response": "According to the provided context, when the RC Client sends a PA Reject Response to esMD, the esMD application processes and sends the PA Reject Response to the HIH. If there is an error in processing the PA Reject Response submitted by the RC, the esMD application generates the PA Reject Response Error, as detailed in Figure 27: F_L9_QZF0011037065EC_Validation_Error.xml, and sends it to the RC. The RC will correct the response and resubmits the PA Reject Response. This implies that if Admin and PA Reject Responses are not submitted via the RC Client, the esMD application will generate an error response and send it to the RC, which will need to correct and resubmit the response.",
+      "key_points": [
+        "The esMD application generates an error response if Admin and PA Reject Responses are not submitted via the RC Client.",
+        "The error response is sent to the RC, which will need to correct and resubmit the response.",
+        "The RC Client validates the data entered and displays error messages as applicable."
+      ],
+      "suggestions": [
+        "Verify that Admin and PA Reject Responses are being submitted via the RC Client.",
+        "Check the error response generated by the esMD application for any issues with the submitted response.",
+        "Correct and resubmit the response if necessary."
+      ],
+      "follow_up_questions": [
+        "What are the specific error codes generated by the esMD application when Admin and PA Reject Responses are not submitted via the RC Client?",
+        "How does the RC Client validate the data entered and display error messages?",
+        "What are the consequences of not correcting and resubmitting the response after receiving an error response from the esMD application?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "F_L9_QZF0011037065EC_Validation_Error.xml"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.7997908592224121
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.7660683989524841
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-07T16:42:35.989372",
+    "query": "As a RC want to know What are line of businesses supported by the esMD?",
+    "response": {
+      "summary": "The esMD system supports various line of businesses (LOBs) including Post-Pay, Pre-Pay, and Prior Authorization Decision Letters.",
+      "detailed_response": "According to the context, the esMD system supports the following line of businesses (LOBs): Post-Pay, Pre-Pay, Prior Authorization Decision Letters, and Review Result Letters. The esMD system also supports the Inpatient Rehabilitation Facility (IRF) PCR program in XDR and X12N 278 formats. Additionally, the system supports the submission of Prior Authorization Decision Letters and Review Result Letters by MACs and RACs.",
+      "key_points": [
+        "The esMD system supports Post-Pay and Pre-Pay LOBs.",
+        "The system supports Prior Authorization Decision Letters and Review Result Letters.",
+        "The esMD system supports the Inpatient Rehabilitation Facility (IRF) PCR program in XDR and X12N 278 formats."
+      ],
+      "suggestions": [
+        "Review the esMD system requirements to ensure your system meets the necessary specifications.",
+        "Contact the CMS esMD Support Team to inquire about the onboarding process and any additional requirements.",
+        " Familiarize yourself with the esMD system documentation to understand the supported LOBs and their requirements."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for submitting Prior Authorization Decision Letters and Review Result Letters?",
+        "How do I obtain an IDM login to access the esMD system?",
+        "What are the system requirements for installing the Microsoft .NET version of the RC Client?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "esMD RC Onboarding and Change Request Form",
+        "Review Contractor (RC) Client Java User Guide and Installation Handbook AR2025.04.0",
+        "Review Contractor (RC) Client Microsoft .NET User Guide and Installation Handbook AR2025.04.0"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.6242910623550415
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esMD_RC_Onboarding_Form_1.15.21.pdf",
+          "relevance": 0.4177565276622772
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.38094061613082886
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-07T16:43:42.225357",
+    "query": "As a HIH want to know What are line of businesses supported by the esMD?",
+    "response": {
+      "summary": "The esMD system supports various lines of business, including Durable Medical Equipment, Prosthetics/Orthotics, and Supplies (DMEPOS) Multiple services, Inpatient Rehabilitation Facility (IRF), and PADL and RRL requests from Review Contractors.",
+      "detailed_response": "According to the esMD Release AR2023.10.0, the system will support PADL and RRL requests from Review Contractors. Additionally, the esMD Release AR2023.08.0 introduces a new PCR program, Inpatient Rehabilitation Facility (IRF), to be received in XDR format. Furthermore, the esMD system already supports Durable Medical Equipment, Prosthetics/Orthotics, and Supplies (DMEPOS) Multiple services, as mentioned in the esMD Release AR2023.04.0.",
+      "key_points": [
+        "DMEPOS Multiple services are supported by the esMD system.",
+        "Inpatient Rehabilitation Facility (IRF) is a new PCR program supported by the esMD system.",
+        "PADL and RRL requests from Review Contractors are supported by the esMD system."
+      ],
+      "suggestions": [
+        "HIHs should review the esMD Implementation Guide to ensure they are meeting the requirements for these lines of business.",
+        "HIHs should test their systems to ensure they can handle the new PCR program for Inpatient Rehabilitation Facility (IRF).",
+        "HIHs should familiarize themselves with the PADL and RRL requests from Review Contractors to ensure they can process these requests correctly."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for submitting PADL and RRL requests from Review Contractors?",
+        "How will the esMD system handle the new PCR program for Inpatient Rehabilitation Facility (IRF)?",
+        "What are the implications of supporting multiple lines of business on HIH system configuration and testing?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "HIH Implementation Guide AR2025.04.0",
+        "HIH Preliminary Technical Release Change Document (Notification 2119)",
+        "Interim Release Summary Document (November 2025 Release - Notification 2117)"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.5494391322135925
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd_esmd-health-information-handlers.txt",
+          "relevance": 0.5036838054656982
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:19:57.221806",
+    "query": "What is RC and how to onboard to RC?",
+    "response": {
+      "summary": "RC stands for Review Contractor, and to onboard to RC, follow the steps outlined in the esMD Implementation Guide and submit a completed RC Onboarding form to the esMD Service Desk.",
+      "detailed_response": "A new Review Contractor (RC) who wishes to start submitting/receiving medical documentation utilizing the esMD system needs to follow the below steps to onboard for esMD. The sequence of steps for an RC to onboard for esMD includes reviewing the RC Implementation Guide, submitting a completed RC Onboarding form to the esMD Service Desk, and completing the necessary configuration and testing steps. The RC Implementation Guide can be found in the downloads section of the esMD website, and the RC Onboarding form can also be found in the download section of the esMD website. After the form has been reviewed and approved by the esMD Support Team, the RC will need to register users with an IDM ID, register users to an MFT Mailbox associated with esMD, install and configure the RC Client, test using the RC Client in the esMD UAT environment, and configure the RC Client to the Production environment.",
+      "key_points": [
+        "Review the RC Implementation Guide",
+        "Submit a completed RC Onboarding form to the esMD Service Desk",
+        "Complete the necessary configuration and testing steps"
+      ],
+      "suggestions": [
+        "Review the IDM Instructions document for step-by-step instructions on how to register users with an IDM ID",
+        "Contact the esMD Service Desk (esMD_Support@cms.hhs.gov) with any questions related to esMD",
+        "Test using the RC Client in the esMD UAT environment before configuring it for the Production environment"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for registering users with an IDM ID?",
+        "How do I install and configure the RC Client?",
+        "What are the technical specifications for installing and configuring RC Client on a computer system or network?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "RC Implementation Guide",
+        "RC Onboarding form",
+        "IDM Instructions document"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD_RC_Onboarding_Form_1.15.21.pdf",
+          "relevance": 0.061125192791223526
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD_Onboarding_Steps_for_RCs.pdf",
+          "relevance": 0.059761784970760345
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.02122889645397663
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:24:55.151048",
+    "query": "What are the specific requirements for registering users with an IDM ID?",
+    "response": {
+      "summary": "The context does not provide specific requirements for registering users with an IDM ID.",
+      "detailed_response": "The provided context is related to Health Care Services\u2013Prior Authorization (PA) Additional Information to Support a Health Care Services Review and X12N 278 Companion Guide. It includes information about segments, tables, and implementation notes for electronic submission of medical documentation (esMD). However, it does not mention IDM ID or user registration requirements.",
+      "key_points": [],
+      "suggestions": [],
+      "follow_up_questions": [
+        "Can you provide more context or information about IDM ID?",
+        "Is IDM ID related to Health Care Services\u2013Prior Authorization (PA) or X12N 278 Companion Guide?",
+        "Are there any other documents or resources that provide information about IDM ID?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD-X12N-275-Companion-Guide_4_03_2019.pdf",
+          "relevance": 0.2540152966976166
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.07805690169334412
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:25:56.353780",
+    "query": "IDM ID registration requirements",
+    "response": {
+      "summary": "The context does not explicitly mention IDM ID registration requirements, but it provides information on X12N 275 Companion Guide and esMD implementation notes for various segments.",
+      "detailed_response": "The provided context is related to Health Care Services\u2013Prior Authorization (PA) Additional Information to Support a Health Care Services Review, X12N 275 Companion Guide, and esMD implementation notes. It covers various segments such as NM1, HL, and PER, but does not explicitly mention IDM ID registration requirements. To find the required information, you may need to search the provided documents or contact the relevant authorities.",
+      "key_points": [
+        "The context provides information on X12N 275 Companion Guide and esMD implementation notes.",
+        "The documents cover various segments such as NM1, HL, and PER.",
+        "The context does not explicitly mention IDM ID registration requirements."
+      ],
+      "suggestions": [
+        "Search the provided documents for IDM ID registration requirements.",
+        "Contact the relevant authorities for more information on IDM ID registration requirements.",
+        "Review the X12N 275 Companion Guide and esMD implementation notes for any relevant information."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for IDM ID registration?",
+        "How do I register for an IDM ID?",
+        "Are there any additional documents or resources that provide information on IDM ID registration requirements?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD-X12N-275-Companion-Guide_4_03_2019.pdf",
+          "relevance": 0.09888092428445816
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.07842278480529785
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:27:17.873067",
+    "query": "As a HIH want to know What are line of businesses supported by the esMD?",
+    "response": {
+      "summary": "Could not format response.",
+      "detailed_response": "The esMD system supports various lines of business, including Durable Medical Equipment, Prosthetics/Orthotics, and Supplies (DMEPOS), as well as Inpatient Rehabilitation Facility (IRF) and Health Information Handlers (HIH) for receiving letters.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.6141034960746765
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:33:51.062730",
+    "query": "IDM ID registration requirements for RC",
+    "response": {
+      "summary": "To register for an IDM ID for RC, refer to the Identity Management (IDM) Instructions in the link provided, and follow the steps outlined in Section 1.4.3 RC Client Operation Overview for Enterprise File Transfer (EFT) Password requirements.",
+      "detailed_response": "According to the context, to register for an IDM ID for RC, you should refer to the Identity Management (IDM) Instructions in the link provided: https://www.cms.gov/Research-Statistics-Data-and-Systems/CMS-Information-Technology/EnterpriseIdentityManagement/Guides-and-Documentation. Additionally, you should follow the steps outlined in Section 1.4.3 RC Client Operation Overview for Enterprise File Transfer (EFT) Password requirements. This will provide you with the necessary information to obtain an IDM login and register for an IDM ID.",
+      "key_points": [
+        "Refer to the Identity Management (IDM) Instructions in the link provided for IDM ID registration",
+        "Follow the steps outlined in Section 1.4.3 RC Client Operation Overview for Enterprise File Transfer (EFT) Password requirements",
+        "IDM login credentials are confidential and should not be shared with others"
+      ],
+      "suggestions": [
+        "Visit the provided link to access the IDM Instructions and start the registration process",
+        "Review Section 1.4.3 RC Client Operation Overview for Enterprise File Transfer (EFT) Password requirements to understand the necessary steps",
+        "Contact the relevant authorities if you have any questions or concerns about the IDM ID registration process"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for IDM ID registration for RC?",
+        "How do I obtain an IDM login and register for an IDM ID?",
+        "What are the consequences of sharing IDM login credentials with others?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9789940118789673
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.977001965045929
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:35:09.082227",
+    "query": "How do I obtain an IDM login and register for an IDM ID?",
+    "response": {
+      "summary": "The provided context does not contain information on obtaining an IDM login and registering for an IDM ID.",
+      "detailed_response": "Unfortunately, the context does not provide any information on how to obtain an IDM login and register for an IDM ID. The documents appear to be related to the esMD system and X12 transactions, but do not mention IDM login or registration.",
+      "key_points": [],
+      "suggestions": [],
+      "follow_up_questions": [
+        "Can you provide more context or information about IDM login and registration?",
+        "Is there a specific document or section that you are referring to?",
+        "Can you clarify what IDM stands for and what type of ID you are trying to register for?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.0006731280009262264
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.00018830054614227265
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD-X12N-275-Companion-Guide_4_03_2019.pdf",
+          "relevance": 0.0001820304460125044
+        }
+      ],
+      "selected_tenant": "HIH"
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:35:46.655495",
+    "query": "RC How do I obtain an IDM login and register for an IDM ID?",
+    "response": {
+      "summary": "To obtain an IDM login and register for an IDM ID, follow the steps outlined in the IDM User Guide and the esMD Onboarding process.",
+      "detailed_response": "According to the context, a new Review Contractor (RC) who wishes to start submitting/receiving medical documentation utilizing the esMD system needs to follow the esMD Onboarding process. The first step in this process is to review the RC Implementation Guide, which can be found in the downloads section of the esMD website. The guide provides information about the RC Client, content type codes, and other information related to the esMD program. After reviewing the guide, the RC needs to submit a completed RC Onboarding form to the esMD Service Desk. Once the form has been reviewed and approved, the RC needs to register users with an IDM ID, which can be done by referencing the 'IDM Instructions' document in the downloads area of the esMD website. This document provides step-by-step instructions on how to register for an IDM ID.",
+      "key_points": [
+        "Review the RC Implementation Guide for information about the RC Client and esMD program",
+        "Submit a completed RC Onboarding form to the esMD Service Desk",
+        "Register users with an IDM ID by referencing the 'IDM Instructions' document"
+      ],
+      "suggestions": [
+        "Review the IDM User Guide for more information on IDM login credentials and registration",
+        "Contact the esMD Service Desk (esMD_Support@cms.hhs.gov) for assistance with the onboarding process",
+        "Bookmark the IDM UI URL (https://home.idm.cms.gov/) for easy access to IDM account management"
+      ],
+      "follow_up_questions": [
+        "What are the requirements for registering users with an IDM ID?",
+        "How do I access the 'IDM Instructions' document for step-by-step instructions on how to register for an IDM ID?",
+        "What is the process for submitting a completed RC Onboarding form to the esMD Service Desk?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "RC Implementation Guide",
+        "RC Onboarding form",
+        "IDM Instructions document"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9975746273994446
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9902455806732178
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.9021432399749756
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD_Onboarding_Steps_for_RCs.pdf",
+          "relevance": 0.8938481211662292
+        }
+      ],
+      "selected_tenant": "RC"
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:50:45.653125",
+    "query": "What is IDM?",
+    "response": {
+      "summary": "IDM is CMS' Enterprise Identity Management solution that provides a single User ID to access multiple CMS applications.",
+      "detailed_response": "IDM is a Commercial Off-The-Shelf (COTS) software that improves system maintainability and scalability, and enables the efficient integration of new applications. It provides a means for business partners to create a single User ID that can be leveraged to access multiple CMS applications. IDM also offers features such as Multi-Factor Authentication, role and profile management, and annual role certification.",
+      "key_points": [
+        "IDM is a COTS software that improves system maintainability and scalability.",
+        "IDM provides a single User ID to access multiple CMS applications.",
+        "IDM offers Multi-Factor Authentication and role and profile management features."
+      ],
+      "suggestions": [
+        "Bookmark the IDM UI URL to update your IDM account and request additional application roles.",
+        "Contact the Tier 1 Help Desk for assistance with login issues.",
+        "Review the IDM User Guide for more information on IDM features and functionality."
+      ],
+      "follow_up_questions": [
+        "What are the available factors in IDM for Multi-Factor Authentication?",
+        "How does IDM's annual role certification process work?",
+        "What is the purpose of the IDM Help Center?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.961839497089386
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.27659961581230164
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_guides-documentation.txt",
+          "relevance": 0.06184449419379234
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.544
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:51:25.975882",
+    "query": "What are the line of business supported by the esMD and list out all?",
+    "response": {
+      "summary": "The Electronic Submission of Medical Documentation (esMD) system supports various lines of business, primarily focused on health care services review, and provides a platform for providers and suppliers to securely exchange documentation with Review contractors.",
+      "detailed_response": "According to the provided context, the esMD system is primarily used for health care services review. The system allows providers and suppliers to securely exchange documentation with Review contractors. The esMD system supports various lines of business, but the specific lines of business are not explicitly listed in the provided context. However, it can be inferred that the system is used for health care services review, which may include various lines of business such as Medicare, Medicaid, and other government programs.",
+      "key_points": [
+        "The esMD system is used for health care services review.",
+        "The system allows providers and suppliers to securely exchange documentation with Review contractors.",
+        "The esMD system supports various lines of business, primarily focused on health care services review."
+      ],
+      "suggestions": [
+        "Review the esMD Implementation Guide (PDF) for more information on the system's capabilities and supported lines of business.",
+        "Contact the esMD Help Desk for additional assistance and guidance on using the system.",
+        "Check the esMD website periodically for updates on new releases and supported lines of business."
+      ],
+      "follow_up_questions": [
+        "What are the specific lines of business supported by the esMD system?",
+        "How do providers and suppliers securely exchange documentation with Review contractors using the esMD system?",
+        "What are the system requirements for implementing and using the esMD system?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "Change Request \u2013 Certificate Renewal Form (PDF)",
+        "HIH Implementation Guide (PDF)",
+        "Interim Release Summary Document (November 2025 Release - Notification 2117, sent 8/18/2025) (PDF)",
+        "HIH Preliminary Technical Release Change Document (Notification 2119, sent 08/27/2025) (PDF)",
+        "Program Integrity Manual Section 3.2.3.4 \u2013 \u201cAdditional Documentation Request Required and Optional Elements\u201d (PDF)",
+        "Program Integrity Manual Exhibits 46.1 \u2013 46.5 (PDF)",
+        "RC POC for HIH Use (PDF)",
+        "RC Organization ID (OID) Reference (PDF)",
+        "X12 275 Health Claim Services (PDF)",
+        "X12 Transaction Companion Guide and Codes (PDF)"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD-X12N-275-Companion-Guide_4_03_2019.pdf",
+          "relevance": 0.2945652902126312
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.2084173858165741
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd_esmd-health-information-handlers.txt",
+          "relevance": 0.15474863350391388
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.658
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:52:26.214493",
+    "query": "As a hih What are the line of business supported by the esMD?",
+    "response": {
+      "summary": "The esMD system supports various lines of business (LOBs), including Durable Medical Equipment, Prosthetics/Orthotics, and Supplies (DMEPOS) Multiple services, Inpatient Rehabilitation Facility (IRF), and PADL and RRL requests from Review Contractors.",
+      "detailed_response": "According to the esMD Release AR2023.08.0, the system will start supporting a new PCR program, Inpatient Rehabilitation Facility (IRF), to be received in XDR format. Additionally, the esMD Release AR2023.10.0 will implement PADL and RRL requests from Review Contractors. Furthermore, the esMD system will accept multiple decision responses for Durable Medical Equipment, Prosthetics/Orthotics, and Supplies (DMEPOS) Multiple services in XDR format using Content Type code '8.4'.",
+      "key_points": [
+        "DMEPOS Multiple services are supported by the esMD system",
+        "Inpatient Rehabilitation Facility (IRF) is a new PCR program supported by the esMD system",
+        "PADL and RRL requests from Review Contractors are supported by the esMD system"
+      ],
+      "suggestions": [
+        "HIHs should review the esMD HIH Implementation Guide (PDF) for detailed information on supported LOBs",
+        "HIHs should ensure they have an experienced technical staff to expedite all testing tasks and review the esMD HIH Implementation Guide (PDF)",
+        "HIHs should contact the esMD Help Desk for additional assistance"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for implementing PADL and RRL requests from Review Contractors?",
+        "How does the esMD system handle multiple decision responses for DMEPOS Multiple services?",
+        "What is the process for obtaining a server certificate from a Certificate Authority (CA) for the HIH's Gateway Endpoint?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.5669772028923035
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd_esmd-health-information-handlers.txt",
+          "relevance": 0.5374575853347778
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.698
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:53:15.044416",
+    "query": "What are the line of business supported by the esMD?",
+    "response": {
+      "summary": "The esMD supports the line of business for Electronic Submission of Medical Documentation (esMD) Prior Authorization (PA) and Pre-Claim Review (PCR) programs and Durable Medical Equipment, Prosthetics, Orthotics, and Supplies (DMEPOS).",
+      "detailed_response": "The esMD system supports the line of business for Electronic Submission of Medical Documentation (esMD) Prior Authorization (PA) and Pre-Claim Review (PCR) programs and Durable Medical Equipment, Prosthetics, Orthotics, and Supplies (DMEPOS). This is mentioned in the X12N 278 Companion Guide, which provides standardized data requirements and content for all trading partners participating in real-time esMD PA and PCR programs and DMEPOS. The guide also provides information necessary for esMD trading partners to submit an electronic request for review and receive an electronic response from the esMD system.",
+      "key_points": [
+        "esMD supports Prior Authorization (PA) and Pre-Claim Review (PCR) programs",
+        "esMD supports Durable Medical Equipment, Prosthetics, Orthotics, and Supplies (DMEPOS)",
+        "esMD provides electronic submission of medical documentation"
+      ],
+      "suggestions": [
+        "Review the X12N 278 Companion Guide for detailed information on esMD PA and PCR programs and DMEPOS",
+        "Contact the esMD Service Desk for support and guidance on implementing esMD",
+        "Familiarize yourself with the CAQH CORE X12 Document Submission Service Interface Specification"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for submitting electronic requests for review in esMD?",
+        "How does esMD handle multiple service requests in a single transaction?",
+        "What are the consequences of submitting an edit failure with one or more errors in esMD?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD-X12N-275-Companion-Guide_4_03_2019.pdf",
+          "relevance": 0.4141714870929718
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.12953196465969086
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.64
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:54:16.645941",
+    "query": "What are the line of business supported by the esMD for RC?",
+    "response": {
+      "summary": "The esMD system supports various lines of business (LOBs) for Review Contractors (RCs), including MACs, RACs, QICs, CERTs, and SMRCs.",
+      "detailed_response": "According to the context, the esMD system supports the following lines of business for Review Contractors (RCs): MACs, RACs, QICs, CERTs, and SMRCs. These LOBs can submit various types of electronic medical documentation requests (eMDRs) and prior authorization decision letters to the esMD application. The esMD system also enables the Inpatient Rehabilitation Facility (IRF) PCR program in XDR format for MACs with a Jurisdiction/State of Palmetto Part A JJ/Alabama.",
+      "key_points": [
+        "The esMD system supports MACs, RACs, QICs, CERTs, and SMRCs as lines of business.",
+        "These LOBs can submit eMDRs and prior authorization decision letters to the esMD application.",
+        "The esMD system enables the IRF PCR program in XDR format for MACs with a Jurisdiction/State of Palmetto Part A JJ/Alabama."
+      ],
+      "suggestions": [
+        "Review the esMD Role Request Quick Reference Guide (PDF) for more information on the supported LOBs and eMDR processes.",
+        "Contact the esMD Help Desk for additional assistance with implementing the esMD system for your organization.",
+        "Check the Prior Authorization Reject Codes (PDF) document for a list of reject codes and their corresponding descriptions."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for submitting eMDRs and prior authorization decision letters for each supported LOB?",
+        "How does the esMD system handle errors and exceptions for the IRF PCR program?",
+        "What are the benefits and advantages of using the esMD system for Review Contractors (RCs)?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_computer-data-systems_esmd_esmd-review-contractors.txt",
+          "relevance": 0.9104662537574768
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.8229193687438965
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.7514259815216064
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.722
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:55:12.183526",
+    "query": "I want to onboard to esMD help me to fill the form? for HIH",
+    "response": {
+      "summary": "Could not format response.",
+      "detailed_response": "To onboard to esMD as a Health Information Handler (HIH), you will need to complete the esMD HIH Onboarding Request Form. This form requires you to provide the following information:\n\n1. Your organization's details, including your Health Level 7 (HL7) Organizational Identifiers (OID).\n2. Your Gateway IP Address, which should be a public-facing IP address that allows the esMD Gateway to connect to your network.\n3. Your Gateway Endpoint Uniform Resource Locator (URL) for responses, where the esMD system will send responses to your Gateway.\n4. Your Transport Layer Security (TLS) Certificate, which includes your Server Certificate, Intermediate Certificates (if applicable), and Root Certificate.\n5. Information about your cryptographic modules, ensuring they adhere to Federal Information Processing Standards (FIPS) 140-2 Compliance criteria.\n6. Your Electronic Data Interchange (EDI) ID, which you will use as the Sender ID when submitting X12N 278 Requests to esMD.\n\nTo fill out the form, you will need to:\n\n1. Register for an HL7 OID on the HL7 website (www.hl7.org) and obtain an OID Type based on your organization's type and purpose.\n2. Obtain a public-facing IP address for your Gateway and configure Network Address Translation (NAT) to hide your internal private IP address.\n3. Obtain a TLS Certificate from a trusted Certificate Authority (CA) that adheres to the specified guidelines.\n4. Ensure your cryptographic modules are FIPS 140-2 compliant.\n5. Register for an EDI ID, if you plan to submit X12N 278 requests.\n\nOnce you have gathered this information, you can submit the esMD HIH Onboarding Request Form to the esMD Support Team at esMD_Support@cms.hhs.gov.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.9909323453903198
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.689
+    }
+  },
+  {
+    "timestamp": "2025-10-08T03:59:06.895421",
+    "query": "I want to onboard to esMD help me to fill the form? for HIH",
+    "response": {
+      "summary": "Could not format response.",
+      "detailed_response": "To onboard to esMD as a Health Information Handler (HIH), you'll need to complete the esMD HIH Onboarding Request Form. This form requires you to provide the following information:\n\n1. Successfully completed CONNECT/CONNECT-compatible self-tests results.\n2. Your Health Level 7 (HL7) Organizational Identifiers (OID) with the appropriate OID Type, based on your organization type and purpose.\n3. Your public-facing Internet Protocol (IP) address for the HIH's Gateway, which you'll obtain by procuring or assigning a public-facing IP address to your internal private IP.\n4. The Uniform Resource Locator (URL) for the HIH's Gateway Endpoint to receive responses from the esMD system.\n5. A server certificate from a trusted Certificate Authority (CA), including the server certificate, intermediate certificates (if applicable), and root certificate.\n6. Information about your cryptographic modules, ensuring they adhere to Federal Information Processing Standards (FIPS) 140-2 Compliance criteria and have a Transport Layer Security (TLS) CA.\n7. Your Electronic Data Interchange (EDI) ID, which you'll use as the Sender ID when submitting X12N 278 Requests to esMD (if applicable).\n\nYou can find the esMD HIH Onboarding Request Form on the CMS Government website: http://www.cms.gov/Research-Statistics-Data-and-Systems/Computer-Data-and-Systems/ESMD/Information_for_HIHs.html.\n\nAdditionally, you'll need to submit the form to the esMD Support Team via email to esMD_Support@cms.hhs.gov.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.9909323453903198
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.689
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:03:36.722041",
+    "query": "I want to onboard to esMD help me to fill the form? for HIH",
+    "response": {
+      "summary": "To onboard to esMD as a HIH, you need to complete the esMD HIH Onboarding Request Form and submit it to the esMD Support Team along with the results of successfully completed CONNECT/CONNECT-compatible self-tests.",
+      "detailed_response": "The esMD Onboarding Process for HIHs involves several steps. First, you need to complete the esMD HIH Onboarding Request Form, which is located on the CMS Government website at http://www.cms.gov/Research-Statistics-Data-and-Systems/Computer-Data-and-Systems/ESMD/Information_for_HIHs.html. The form requires you to provide information about your organization, including your Health Level 7 Organizational Identifiers (OID), Gateway IP Address, Gateway Endpoint Uniform Resource Locator for Responses, and Transport Layer Security Certificate. You also need to submit the results of successfully completed CONNECT/CONNECT-compatible self-tests. Once you have completed the form and submitted it to the esMD Support Team, the esMD Support Team will verify the environment details and validate the self-tests results. If everything is in order, you will receive an email notification from the esMD Support team that you have completed the onboarding process, and you will then be involved in integration and interoperability testing.",
+      "key_points": [
+        "Complete the esMD HIH Onboarding Request Form",
+        "Submit the form to the esMD Support Team along with self-test results",
+        "Provide Health Level 7 Organizational Identifiers (OID)",
+        "Submit Gateway IP Address and Gateway Endpoint Uniform Resource Locator for Responses",
+        "Obtain a Transport Layer Security Certificate"
+      ],
+      "suggestions": [
+        "Contact the esMD Support Team for assistance with the onboarding process",
+        "Review the esMD HIH Implementation Guide for more information on the onboarding process",
+        "Ensure that your organization's environment details and self-test results are accurate and complete"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the Transport Layer Security Certificate?",
+        "How do I obtain a Health Level 7 Organizational Identifier (OID)?",
+        "What is the process for integration and interoperability testing after completing the onboarding process?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "HIH Implementation Guide AR2025.04.0",
+        "esMD HIH Onboarding Request Form"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.9909323453903198
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.689
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:07:12.580033",
+    "query": "What is RC and how to onboard to RC?",
+    "response": {
+      "summary": "RC stands for Review Contractor, and to onboard to RC, follow the steps outlined in the esMD Implementation Guide and submit a completed RC Onboarding form to the esMD Service Desk.",
+      "detailed_response": "A new Review Contractor (RC) who wishes to start submitting/receiving medical documentation utilizing the esMD system needs to follow the below steps to onboard. The first step is to review the RC Implementation Guide, which can be found in the downloads section of the esMD website. The guide provides information about the RC Client, content type codes, and other information related to the esMD program. After reviewing the guide, the RC needs to submit a completed RC Onboarding form to the esMD Service Desk (esMD_Support@cms.hhs.gov). The form can also be found in the download section of the esMD website. Once the form has been reviewed and approved by the esMD Support Team, the RC needs to register users with an IDM ID, register users to an MFT Mailbox associated with esMD, install and configure the RC Client, test using the RC Client in the esMD UAT environment, and configure the RC Client to the Production environment.",
+      "key_points": [
+        "Review the RC Implementation Guide",
+        "Submit a completed RC Onboarding form to the esMD Service Desk",
+        "Register users with an IDM ID",
+        "Register users to an MFT Mailbox associated with esMD",
+        "Install and configure the RC Client"
+      ],
+      "suggestions": [
+        "Review the RC Implementation Guide carefully to understand the esMD program and the RC Client",
+        "Submit the RC Onboarding form as soon as possible to expedite the onboarding process",
+        "Work with the esMD Support Team to ensure a smooth onboarding process"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for registering users with an IDM ID?",
+        "How do I configure the RC Client for notifications?",
+        "What are the security measures in place for the esMD system?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "RC Implementation Guide",
+        "RC Onboarding form",
+        "IDM Instructions document"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD_RC_Onboarding_Form_1.15.21.pdf",
+          "relevance": 0.061125192791223526
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD_Onboarding_Steps_for_RCs.pdf",
+          "relevance": 0.059761784970760345
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.02122889645397663
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.681
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:09:44.322984",
+    "query": "What is RC?",
+    "response": {
+      "summary": "RC stands for Review Contractor, which is a client used for Electronic Submission of Medical Documentation (esMD).",
+      "detailed_response": "The Review Contractor (RC) Client is used for Electronic Submission of Medical Documentation (esMD). The document provides an overview of how the RC Client is structured and includes user guides for both Microsoft .NET and Java versions. The RC Client is used for various tasks such as starting and logging into the client, entering review responses, and submitting inbound submissions errors. The document also covers advanced debugging, installation, and configuration of the RC Client application.",
+      "key_points": [
+        "RC stands for Review Contractor",
+        "RC Client is used for Electronic Submission of Medical Documentation (esMD)",
+        "The document provides user guides for both Microsoft .NET and Java versions of the RC Client"
+      ],
+      "suggestions": [
+        "Review the user guide for the Microsoft .NET version of the RC Client",
+        " Familiarize yourself with the advanced debugging features of the RC Client",
+        "Check the systems requirements for installing the RC Client application"
+      ],
+      "follow_up_questions": [
+        "What are the specific tasks that can be performed using the RC Client?",
+        "How do I configure the RC Client application for notifications?",
+        "What are the XML/JSON Messages used for in the RC Client?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "AR2025.04.0",
+        "Microsoft .NET User Guide and Installation Handbook",
+        "Java User Guide and Installation Handbook"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.06123339757323265
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.05876385420560837
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.62
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:10:39.703167",
+    "query": "What is GROQ? for HIH",
+    "response": {
+      "summary": "GROQ is not mentioned in the provided context.",
+      "detailed_response": "The provided context includes information about the CMS XLC Electronic Delivery of List of NPI Information to the HIH (Registered Provider File), HIH Implementation Guide AR2025.04.0, and other related documents. However, GROQ is not mentioned in any of these documents.",
+      "key_points": [],
+      "suggestions": [],
+      "follow_up_questions": [
+        "Can you provide more context or information about GROQ?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.0167576614767313
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.607
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:11:52.724199",
+    "query": "What is HIH?",
+    "response": {
+      "summary": "HIH stands for Health Information Handler, which is a term used in the context of electronic submission of medical documentation (esMD).",
+      "detailed_response": "HIH is a term used in the context of electronic submission of medical documentation (esMD). According to the provided documents, HIHs are entities that receive and process medical documentation. They are involved in various processes, including the receipt of XDR submissions, the provision of registered provider files, and the handling of administrative errors. HIHs are also mentioned in the context of CAQH Core Rest APIs, where they are required to authenticate and submit requests using JSON structures. The documents provide detailed information on the roles and responsibilities of HIHs in the esMD system.",
+      "key_points": [
+        "HIH stands for Health Information Handler.",
+        "HIHs receive and process medical documentation.",
+        "HIHs are involved in XDR submissions and administrative errors."
+      ],
+      "suggestions": [
+        "Review the ICD document for reference on submitting PA requests using the new CAQH REST API approach.",
+        "Understand the roles and responsibilities of HIHs in the esMD system.",
+        " Familiarize yourself with the CAQH Core Rest APIs and JSON structures for submitting requests."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for HIHs to authenticate and submit requests using the CAQH Core Rest APIs?",
+        "How do HIHs handle administrative errors and XDR submissions?",
+        "What are the benefits and implications of using the CAQH Core Rest APIs for HIHs?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.23198466002941132
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.634
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:12:48.059126",
+    "query": "What are the content codes supported by the esMD?",
+    "response": {
+      "summary": "The esMD supports various content codes for different lines of business, as listed in Table 8: Content Type Codes and Corresponding Content Type Code Display Names.",
+      "detailed_response": "According to the provided context, the esMD supports the following content codes: Response to Additional Documentation Request (ADR), Service Registration Request, Unsolicited PWK XDR, Non-Emergent Ambulance Transport PA Request, HHPCR, DMEPOS, HOPD, Inpatient Rehabilitation Facility (IRF), First Level Appeal Requests, Second Level Appeal Requests, Advance Determination of Medicare Coverage (ADMC) Request, RA Discussion Requests, DME Phone Discussion Requests, and Supporting Documentation for an unsolicited X12N 278 5010 Request. These content codes are listed in Table 8: Content Type Codes and Corresponding Content Type Code Display Names, along with their corresponding display names and coding schemas.",
+      "key_points": [
+        "The esMD supports various content codes for different lines of business.",
+        "Table 8 lists the content codes and their corresponding display names and coding schemas.",
+        "The content codes are used to identify the line of business for which the provider/HIH is sending the submission request."
+      ],
+      "suggestions": [
+        "Review Table 8 to understand the content codes supported by the esMD.",
+        "Consult the esMD documentation for more information on the content codes and their usage.",
+        "Verify the content codes used in your submission requests to ensure they match the supported codes."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for using each content code?",
+        "How do I determine which content code to use for a particular submission request?",
+        "Are there any additional requirements or restrictions for using certain content codes?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.9740481376647949
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.678
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:13:28.906504",
+    "query": "What is IDM who use these?",
+    "response": {
+      "summary": "IDM is CMS' Enterprise Identity Management solution used by business partners to create a single User ID for accessing multiple CMS applications.",
+      "detailed_response": "IDM leverages Commercial Off-The-Shelf (COTS) software, which improves overall system maintainability and scalability, while also improving the efficiency at which new applications can be integrated. All users are required to complete Multi-Factor Authentication at login, and users are strongly encouraged to add supplementary devices to their account after their first login. The available factors in IDM are Email, Short Message Service (SMS), Interactive Voice Response (IVR), Okta Verify, and Google Authenticator.",
+      "key_points": [
+        "IDM is CMS' Enterprise Identity Management solution",
+        "IDM uses Commercial Off-The-Shelf (COTS) software",
+        "All users must complete Multi-Factor Authentication at login"
+      ],
+      "suggestions": [
+        "Review the IDM User Guide for detailed information on registering an IDM User ID, logging in to IDM, and requesting an application role",
+        "Bookmark the IDM UI URL for easy access to IDM account management",
+        "Contact the Tier 1 Help Desk for assistance with login issues"
+      ],
+      "follow_up_questions": [
+        "What are the available factors in IDM for Multi-Factor Authentication?",
+        "How do I request an application role in IDM?",
+        "What is the purpose of the Tier 1 Help Desk in IDM?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "IDM User Guide (PDF)"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.13981077075004578
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.02507280558347702
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.006097446195781231
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.599
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:14:35.807671",
+    "query": "What are the available factors in IDM for Multi-Factor Authentication?",
+    "response": {
+      "summary": "The available factors in IDM for Multi-Factor Authentication are Email, Short Message Service (SMS), Interactive Voice Response (IVR), Okta Verify, and Google Authenticator.",
+      "detailed_response": "According to the context, all users are required to complete Multi-Factor Authentication at login. The available factors in IDM are listed as follows: Email \u2013 Address associated with the User\u2019s profile in IDM, Short Message Service (SMS) \u2013 Text Message, Interactive Voice Response (IVR), Okta Verify \u2013 Smart Phone Application, and Google Authenticator \u2013 Smart Phone Application. Within IDM, T1 Help Desk users have the ability to view and remove the MFA devices associated with a user\u2019s account, but cannot add devices on behalf of a user.",
+      "key_points": [
+        "Multi-Factor Authentication is required for all users at login",
+        "Available factors in IDM include Email, SMS, IVR, Okta Verify, and Google Authenticator",
+        "T1 Help Desk users can view and remove MFA devices, but not add them"
+      ],
+      "suggestions": [
+        "Review the IDM User Guide for more information on setting up MFA",
+        "Contact the Tier 1 Help Desk for assistance with MFA-related issues",
+        "Update your IDM account to add or update MFA devices"
+      ],
+      "follow_up_questions": [
+        "What are the requirements for setting up MFA devices in IDM?",
+        "Can T1 Help Desk users add MFA devices on behalf of users?",
+        "How do users update their MFA devices in IDM?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.7578238248825073
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.0047484030947089195
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.0024749848525971174
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.613
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:15:23.917029",
+    "query": "How do users update their MFA devices in IDM?",
+    "response": {
+      "summary": "Users can update their MFA devices in IDM by logging in, navigating to their profile, and adding or updating MFA devices associated with their profile.",
+      "detailed_response": "According to the provided information, all users are required to complete Multi-Factor Authentication at login. Users are provided an opportunity to setup their MFA device(s) at the time of account creation. Once successfully logged in, the user can always add or update the MFA devices associated with their profile. Users can do this by logging in to IDM, navigating to their profile, and adding or updating MFA devices associated with their profile. It is also mentioned that T1 Help Desk users have the ability to view and remove the MFA devices associated with a user's account, but cannot add devices on behalf of a user.",
+      "key_points": [
+        "Users can add or update MFA devices associated with their profile in IDM.",
+        "T1 Help Desk users can view and remove MFA devices associated with a user's account.",
+        "Users can setup their MFA device(s) at the time of account creation."
+      ],
+      "suggestions": [
+        "Users should regularly review and update their MFA devices to ensure they have the most up-to-date options.",
+        "Users should contact their T1 Help Desk if they have any issues with their MFA devices.",
+        "Users should ensure they have the most up-to-date information about IDM's MFA policies and procedures."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for MFA devices in IDM?",
+        "How do users request assistance with MFA devices from their T1 Help Desk?",
+        "What are the consequences of not having a valid MFA device in IDM?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.9865331649780273
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_faq.txt",
+          "relevance": 0.015410986728966236
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.007552707567811012
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.596
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:16:15.880468",
+    "query": "What is IDM how it helpful?",
+    "response": {
+      "summary": "IDM is CMS' Enterprise Identity Management solution that provides a single User ID to access multiple CMS applications, with features like Multi-Factor Authentication, role and profile management, and annual role certification.",
+      "detailed_response": "IDM is a comprehensive identity management system that offers various benefits to its users. It provides a single User ID that can be used to access multiple CMS applications, making it easier for users to manage their accounts and access the resources they need. Additionally, IDM features Multi-Factor Authentication, which adds an extra layer of security to the login process. Users can also manage their roles and profiles within the IDM User Interface, and the system includes an annual role certification process to ensure that users have the necessary permissions to access sensitive information. Overall, IDM is a powerful tool that helps to streamline identity management and improve security within the CMS environment.",
+      "key_points": [
+        "IDM provides a single User ID to access multiple CMS applications",
+        "IDM features Multi-Factor Authentication for added security",
+        "Users can manage their roles and profiles within the IDM User Interface"
+      ],
+      "suggestions": [
+        "Bookmark the IDM UI URL for easy access to IDM account management",
+        "Take advantage of IDM's self-service password reset functionality to quickly regain access to your account",
+        "Contact your Tier 1 Help Desk for assistance with IDM-related issues"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for IDM passwords?",
+        "How do I request an application role within IDM?",
+        "What is the process for annual role certification in IDM?"
+      ],
+      "code_snippets": [],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.30848631262779236
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_guides-documentation.txt",
+          "relevance": 0.02168380469083786
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_help-desk-support.txt",
+          "relevance": 0.019046088680624962
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_faq.txt",
+          "relevance": 0.01495104469358921
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.562
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:16:58.185543",
+    "query": "What is IDM who use these?",
+    "response": {
+      "summary": "IDM is CMS' Enterprise Identity Management solution used by business partners to create a single User ID for accessing multiple CMS applications.",
+      "detailed_response": "IDM continues to provide a means for business partners to create a single User ID that can be leveraged to access multiple CMS applications. It leverages Commercial Off-The-Shelf (COTS) software, which improves overall system maintainability and scalability, while also improving the efficiency at which new applications can be integrated. Users are required to complete Multi-Factor Authentication at login and can add supplementary devices to their account after their first login. The available factors in IDM are Email, Short Message Service (SMS), Interactive Voice Response (IVR), Okta Verify, and Google Authenticator.",
+      "key_points": [
+        "IDM is CMS' Enterprise Identity Management solution",
+        "IDM provides a single User ID for accessing multiple CMS applications",
+        "Users are required to complete Multi-Factor Authentication at login"
+      ],
+      "suggestions": [
+        "Review the IDM User Guide for detailed information on registering an IDM User ID, logging in to IDM, and requesting an application role",
+        "Bookmark the IDM UI URL for easy access to IDM account management",
+        "Contact the Tier 1 Help Desk for assistance with login issues"
+      ],
+      "follow_up_questions": [
+        "What are the available factors in IDM for Multi-Factor Authentication?",
+        "How do I add supplementary devices to my IDM account?",
+        "What is the role of the Tier 1 Help Desk in IDM?"
+      ],
+      "code_snippets": [],
+      "downloadable_files": [
+        "IDM User Guide (PDF)"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.13981077075004578
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.02507280558347702
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.006097446195781231
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.599
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:19:21.180745",
+    "query": "What is IDM who use these?",
+    "response": {
+      "summary": "IDM is CMS' Enterprise Identity Management solution used by business partners to create a single User ID for accessing multiple CMS applications.",
+      "code_snippets": [],
+      "key_points": [
+        "IDM is CMS' Enterprise Identity Management solution",
+        "IDM uses Commercial Off-The-Shelf (COTS) software",
+        "All users must complete Multi-Factor Authentication at login"
+      ],
+      "suggestions": [
+        "Review the IDM User Guide for detailed instructions on registering an IDM User ID, logging in to IDM, and requesting an application role",
+        "Bookmark the IDM UI URL for easy access to IDM account management and application role requests",
+        "Contact the Tier 1 Help Desk for assistance with login issues or IDM-related problems"
+      ],
+      "follow_up_questions": [
+        "What are the available factors for Multi-Factor Authentication in IDM?",
+        "How do I request an application role in IDM?",
+        "What is the purpose of the Tier 1 Help Desk in IDM?"
+      ],
+      "detailed_response": "IDM leverages Commercial Off-The-Shelf (COTS) software, which improves overall system maintainability and scalability, while also improving the efficiency at which new applications can be integrated. All users are required to complete Multi-Factor Authentication at login, and users are strongly encouraged to add supplementary devices to their account after their first login. The available factors in IDM are Email, Short Message Service (SMS), Interactive Voice Response (IVR), Okta Verify, and Google Authenticator.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.13981077075004578
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.02507280558347702
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.006097446195781231
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.599
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:24:07.960489",
+    "query": "esmd onboarding instructions for prospective hih's",
+    "response": {
+      "summary": "The esMD Onboarding Instructions for Prospective HIHs require completing the esMD HIH Onboarding Request Form and submitting it to the esMD Support Team, along with the results of successfully completed CONNECT/CONNECT-compatible self-tests.",
+      "code_snippets": [],
+      "key_points": [
+        "Complete the esMD HIH Onboarding Request Form",
+        "Submit the form to the esMD Support Team",
+        "Provide the results of successfully completed CONNECT/CONNECT-compatible self-tests"
+      ],
+      "suggestions": [
+        "Review the esMD HIH Implementation Guide for more information on the onboarding process",
+        "Contact the esMD Support Team for assistance with the onboarding process",
+        "Ensure that the HIH has an experienced technical staff to expedite all testing tasks"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the CONNECT/CONNECT-compatible self-tests?",
+        "How will the esMD Support Team verify the environment details provided by the HIH?",
+        "What is the timeline for completing the onboarding process?"
+      ],
+      "detailed_response": "The HIH shall complete and submit the esMD HIH Onboarding Request Form, along with the results of successfully completed CONNECT/CONNECT-compatible self-tests to the esMD Support Team to the following email address: esMD_Support@cms.hhs.gov. The HIH Onboarding Request Form is located on the following CMS Government website: http://www.cms.gov/Research-Statistics-Data-and-Systems/Computer-Data-and-Systems/ESMD/Information_for_HIHs.html. The esMD Support Team will verify the environment details that have been provided by the HIH are acceptable and will validate the API CONNECT/CONNECT-compatible self-tests conducted by the HIH were successful, based on the self-tests results submitted to the esMD Support Team.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.9985014200210571
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd_esmd-health-information-handlers.txt",
+          "relevance": 0.9430806636810303
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.744
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:27:52.548603",
+    "query": "can you give me the list of RC poc's for hih references",
+    "response": {
+      "summary": "The HIH implementation guide does not provide a list of RC POCs for HIH references.",
+      "code_snippets": [],
+      "key_points": [],
+      "suggestions": [
+        "Review the HIH implementation guide for any additional information about RC POCs.",
+        "Contact the relevant authorities or support teams for assistance with HIH references.",
+        "Verify the HIH implementation guide version and ensure it is up-to-date."
+      ],
+      "follow_up_questions": [
+        "What is the purpose of the RC POCs for HIH references?",
+        "How can I obtain the list of RC POCs for HIH references?",
+        "Are there any specific requirements or procedures for HIH references?"
+      ],
+      "detailed_response": "The provided context does not contain any information about RC POCs for HIH references. The context discusses the electronic delivery of RC OID information to HIH, the pull approach for retrieving active RC details, and the sample JSON and XML responses. However, it does not mention a list of RC POCs.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.1856204867362976
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.692
+    }
+  },
+  {
+    "timestamp": "2025-10-08T04:29:47.361834",
+    "query": "please summarize the rc implementation guide java",
+    "response": {
+      "summary": "The RC implementation guide for Java provides a comprehensive overview of how to start and log into the RC Client, enter Review Response decisions, and submit Inbound Submissions errors, as well as technical specifications for installing and configuring the RC Client on a computer system or network.",
+      "code_snippets": [],
+      "key_points": [
+        "The RC Client requires a Pentium 2 266-Megahertz (MHz) processor or greater.",
+        "The RC Client requires a minimum of 50 MB of free memory.",
+        "The RC Client requires Java Runtime Environment (JRE) 1.8 or greater."
+      ],
+      "suggestions": [
+        "Review the system requirements for installing the RC Client.",
+        "Follow the installation process for the RC Client on a computer system or network.",
+        "Configure the RC Client application according to the technical specifications."
+      ],
+      "follow_up_questions": [
+        "What are the specific system requirements for the RC Client?",
+        "How do I configure the RC Client application for Java 1.8 version?",
+        "What are the XML/JSON messages used in the RC Client?"
+      ],
+      "detailed_response": "The RC implementation guide for Java is structured into two primary sections. The first section is intended for RC business users and covers topics such as starting and logging into the RC Client, entering Review Response decisions, and submitting Inbound Submissions errors. The second section is intended for the person(s) installing the RC Client application and provides technical specifications for installing and configuring the RC Client on a computer system or network. This includes systems requirements, installation process, file transfers from the esMD Cloud environment, XML/JSON messages, and configuring the RC Client application.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.854080080986023
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.67
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:03:17.183813",
+    "query": "What are the line of business supported by the esMD?",
+    "response": {
+      "summary": "The esMD system supports various lines of business, including DME MACs, MACs, RACs, UPICs, SMRC, RRB, CERT, PERM, and QICs.",
+      "key_points": [
+        "The esMD system supports various lines of business.",
+        "DME MACs, MACs, RACs, UPICs, SMRC, RRB, CERT, PERM, and QICs are supported by the esMD system.",
+        "The specific lines of business are listed in the context."
+      ],
+      "suggestions": [
+        "Review the list of supported lines of business to determine which ones apply to your organization.",
+        "Contact the esMD Help Desk for additional assistance with implementing the esMD system for your specific line of business.",
+        "Consult the esMD documentation for more information on implementing the esMD system for your line of business."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the specific requirements for implementing the esMD system for my line of business?",
+        "How do I determine which HIH to work with for my line of business?",
+        "What are the benefits of using the esMD system for my line of business?"
+      ],
+      "detailed_response": "The esMD system supports various lines of business, including DME MACs, MACs, RACs, UPICs, SMRC, RRB, CERT, PERM, and QICs. The specific lines of business are listed in the context, including DME MACs such as DME MAC JA & JD (Noridian) and DME MAC JB & JC (CGS), MACs such as MAC JE & JF (Noridian) and MAC J6 & JK (NGS), RACs such as Performant (RAC Region 1 & 2) and Cotiviti (RAC Region 3, 4 & 5), UPICs such as UPIC West & South West (Qlarant) UPIC and UPIC Mid-West (Covent Bridge, formerly AdvanceMed), SMRC such as Noridian, RRB such as Palmetto, CERT such as Empower AI (formerly NCI Inc.), PERM such as Empower AI (formerly NCI Inc.), and QICs such as QIC Part A West & DME (Maximus) and QICs Part A East, Part B North & South (C2C).",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd_esmd-medicare-providers-and-suppliers.txt",
+          "relevance": 0.7561100125312805
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD-X12N-275-Companion-Guide_4_03_2019.pdf",
+          "relevance": 0.23820139467716217
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.12953196465969086
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.64
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:24:07.748392",
+    "query": "What providers use to submit the documentation to esMD?",
+    "response": {
+      "summary": "Providers use a Health Information Handler (HIH) organization or a gateway service to submit documentation to esMD.",
+      "key_points": [
+        "Providers use a Health Information Handler (HIH) organization to perform tasks.",
+        "HIHs offer esMD gateway services to send responses electronically to a Review Contractor (RC).",
+        "Providers can use a gateway service to submit documentation to esMD."
+      ],
+      "suggestions": [
+        "Check with your HIH organization to see if they offer esMD gateway services.",
+        "Consider using a gateway service to submit documentation to esMD.",
+        "Verify that your HIH organization is handling health information according to nationally recognized standards."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the requirements for using a gateway service to submit documentation to esMD?",
+        "How do I verify that my HIH organization is handling health information according to nationally recognized standards?",
+        "What are the benefits of using a gateway service to submit documentation to esMD?"
+      ],
+      "detailed_response": "According to the context, many providers use a Health Information Handler (HIH) organization to perform tasks, such as submitting claims and providing electronic health record systems. HIHs are organizations that handle health information on behalf of a provider. Some HIHs offer esMD gateway services, which allow providers to send responses for requests for additional documentation electronically to a Review Contractor (RC) during the claims review process. Additionally, providers can use a gateway service to submit documentation to esMD.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9668828845024109
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.95317143201828
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.697
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:25:18.240426",
+    "query": "Providers can use esMD for what?",
+    "response": {
+      "summary": "Providers can use esMD to submit supporting medical documentation for various Lines of Business, including Prior Authorization Requests, Review Choice Demonstration, and Response to Additional Document Requests.",
+      "key_points": [
+        "Providers can use esMD to submit supporting medical documentation for various Lines of Business.",
+        "esMD allows providers to submit Prior Authorization Requests, Review Choice Demonstration, and Response to Additional Document Requests.",
+        "Providers can use esMD to submit Unsolicited Paperwork (PWK) Claim attachments in XDR using Content Type Code (CTC) 7."
+      ],
+      "suggestions": [
+        "Contact one or more of the Health Information Handlers (HIHs) to determine if esMD services are available to the provider for a reasonable price.",
+        "Use esMD to submit supporting medical documentation electronically to a Review Contractor (RC) during the claims review process.",
+        "Take advantage of the esMD system to reduce paperwork and save time by sending medical documentation electronically."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the requirements for a provider to use esMD?",
+        "How do providers obtain access to the esMD system?",
+        "What are the benefits of using esMD for providers?"
+      ],
+      "detailed_response": "Providers can use the Electronic Submission of Medical Documentation (esMD) system to submit supporting medical documentation for the Lines of Business mentioned on the esMD Overview page. This includes Prior Authorization Requests for Hospital Outpatient Department (OPD), Prior Authorization (PA) Requests for Repetitive Scheduled Non-Emergent Ambulance Transport, Review Choice Demonstration for Home Health Services, Response to Additional Document Requests (ADR), and Supporting Documentation for PA Request. Additionally, providers can use esMD to submit Unsolicited Paperwork (PWK) Claim attachments in XDR using Content Type Code (CTC) 7 and receive PA/Pre-Claim Review (PCR) Decision Letters in PDF format as attachments in XDR using CTC 1.4.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd_esmd-medicare-providers-and-suppliers.txt",
+          "relevance": 0.9997617602348328
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd.txt",
+          "relevance": 0.9985451698303223
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.9901752471923828
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.672
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:29:18.312546",
+    "query": "Providers can use esMD for what?",
+    "response": {
+      "summary": "Providers can use esMD to submit supporting medical documentation for various Lines of Business, including Prior Authorization Requests, Review Choice Demonstration, and Response to Additional Document Requests.",
+      "key_points": [
+        "Providers can use esMD to submit supporting medical documentation for various Lines of Business.",
+        "esMD allows providers to submit documentation electronically, reducing burden and supporting the CMS eHealth Initiative.",
+        "Providers can use esMD to respond to Additional Document Requests (ADR) electronically."
+      ],
+      "suggestions": [
+        "Contact one or more of the Health Information Handlers (HIHs) to determine if esMD services are available to the provider for a reasonable price.",
+        "Providers who have paper records can use esMD services so long as they have a mechanism to scan the paper records into a PDF file.",
+        "Providers can use esMD to submit documentation for Prior Authorization Requests, Review Choice Demonstration, and Response to Additional Document Requests."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the requirements for a provider to use esMD?",
+        "How do providers obtain a Health Information Handler (HIH) to assist with esMD services?",
+        "What are the benefits of using esMD for providers?"
+      ],
+      "detailed_response": "Providers and suppliers can use esMD to submit supporting medical documentation for the Lines of Business mentioned on the esMD Overview page. This includes Prior Authorization Requests for Hospital Outpatient Department (OPD), Prior Authorization (PA) Requests for Repetitive Scheduled Non-Emergent Ambulance Transport, Review Choice Demonstration for Home Health Services, Response to Additional Document Requests (ADR), Supporting Documentation for PA Request, Paperwork (PWK) Unsolicited documents, First and Second Level Appeal Requests, and Advanced Determination of Medicare Coverage Requests (ADMC).",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd_esmd-medicare-providers-and-suppliers.txt",
+          "relevance": 0.9997617602348328
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_computer-data-systems_esmd.txt",
+          "relevance": 0.9985451698303223
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.9901752471923828
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.672
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:30:06.471935",
+    "query": "What is IDM?",
+    "response": {
+      "summary": "IDM is CMS' Enterprise Identity Management solution that provides a single User ID to access multiple CMS applications.",
+      "key_points": [
+        "IDM is a single User ID to access multiple CMS applications",
+        "IDM uses Commercial Off-The-Shelf (COTS) software",
+        "Multi-Factor Authentication is required for all users"
+      ],
+      "suggestions": [
+        "Bookmark the IDM UI URL for easy access to IDM account management",
+        "Contact the Application's Tier 1 Help Desk for assistance with login issues",
+        "Review the IDM User Guide for detailed information on IDM features and functionality"
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the available MFA devices in IDM?",
+        "How does the ARC process work in IDM?",
+        "What is the purpose of the IDM Help Center?"
+      ],
+      "detailed_response": "IDM leverages Commercial Off-The-Shelf (COTS) software, which improves overall system maintainability and scalability, while also improving the efficiency at which new applications can be integrated. All users are required to complete Multi-Factor Authentication at login, and users can add or update the MFA devices associated with their profile. IDM provides a space for applications to capture their decision to recertify or revoke a user's role through the Annual Role Certification (ARC) process.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_eidm-idm-migration-overview.txt",
+          "relevance": 0.961839497089386
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.27659961581230164
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\https___www_cms_gov_data-research_cms-information-technology_cms-identity-management_guides-documentation.txt",
+          "relevance": 0.06184449419379234
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.544
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:38:56.042907",
+    "query": "What are the HIH POC for the RCs use?",
+    "response": {
+      "summary": "The HIH POC for RCs use is not explicitly mentioned in the provided context.",
+      "key_points": [],
+      "suggestions": [
+        "Contact the CMS or the HIH organization directly to inquire about the POC for RCs use.",
+        "Review the CMS documentation or website for any information about HIH POC.",
+        "Reach out to the HIH organization's customer support or help desk for assistance."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What is the process for contacting the HIH POC for RCs use?",
+        "How can RCs obtain the contact information for the HIH POC?",
+        "What is the role of the HIH POC in the esMD system?"
+      ],
+      "detailed_response": "The context mentions that many providers use a Health Information Handler (HIH) organization to perform tasks, such as submitting claims and providing electronic health record systems. However, it does not provide any information about the Point of Contact (POC) for the HIHs. The context only mentions that some HIHs are beginning to offer esMD gateway services, but it does not provide any contact information or POC for these services.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9798843860626221
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9719902276992798
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.653
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:39:51.407702",
+    "query": "All Errors sent from esMD to RC ?",
+    "response": {
+      "summary": "The context provides a list of error codes sent from esMD to RC, along with their descriptions.",
+      "key_points": [
+        "The list of error codes is extensive, with over 600 unique codes.",
+        "Each error code is accompanied by a description and instructions on how to correct and resubmit.",
+        "The errors are categorized into different types, including esMD validation errors and internal system errors."
+      ],
+      "suggestions": [
+        "Review the list of error codes to identify potential issues and correct them before resubmitting.",
+        "Consult the provided documentation, such as the Microsoft .NET User Guide and Installation Handbook, for guidance on how to correct common errors.",
+        "Test and validate submissions to ensure they meet the required standards and avoid errors."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the most common error codes encountered by RC?",
+        "How can RC ensure that their submissions meet the required standards and avoid errors?",
+        "What are the consequences of not correcting and resubmitting errors, and how can RC mitigate these consequences?"
+      ],
+      "detailed_response": "The errors are categorized into different types, including esMD validation errors, internal system errors, and others. Each error code is accompanied by a description of the issue and instructions on how to correct and resubmit. The list of error codes includes 600 unique codes, ranging from 111 to 606, with descriptions such as 'File not formatted correctly', 'esMD validation error: Error encountered while saving ReviewContractorPickUpStatus data', and 'esMD internal system error (Unzip failure). Resubmit'.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9992963075637817
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9940776824951172
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9914074540138245
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.73
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:41:15.146371",
+    "query": "Give me all error codes sent from esMD to RC?",
+    "response": {
+      "summary": "The context provides a list of error codes sent from esMD to RC, which can be used for error handling and correction.",
+      "key_points": [
+        "Error codes are sent from esMD to RC for error handling and correction.",
+        "Tables 36 and 43 list the error codes with corresponding error descriptions.",
+        "Error codes are categorized by type, including esMD validation errors and internal system errors."
+      ],
+      "suggestions": [
+        "Review the error codes and descriptions to identify and correct errors in the submission process.",
+        "Use the error codes to improve the submission process and reduce errors.",
+        "Consult the provided documents for more information on error handling and correction."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the most common error codes sent from esMD to RC?",
+        "How can the submission process be improved to reduce errors?",
+        "What are the consequences of not correcting errors in the submission process?"
+      ],
+      "detailed_response": "The error codes sent from esMD to RC are listed in Tables 36 and 43 of the provided documents. These tables contain error codes with corresponding error descriptions, which can be used to identify and correct errors in the submission process. The error codes are categorized by type, including esMD validation errors, internal system errors, and other types of errors.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9988659620285034
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9978645443916321
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9973579049110413
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.751
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:42:08.073612",
+    "query": "esMD validation error:  Review Contractor PickUp Timestamp is not a valid Timestamp. Correct and resubmit.",
+    "response": {
+      "summary": "The esMD validation error 'Review Contractor PickUp Timestamp is not a valid Timestamp' requires correction and resubmission.",
+      "key_points": [
+        "The error 'Review Contractor PickUp Timestamp is not a valid Timestamp' requires correction.",
+        "The submission must be resubmitted after correcting the timestamp.",
+        "This error is listed in the CMS XLC Error Codes documentation."
+      ],
+      "suggestions": [
+        "Review the timestamp format to ensure it is correct.",
+        "Correct the timestamp and resubmit the submission.",
+        "Verify that the submission meets all esMD validation requirements."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What is the correct format for the Review Contractor PickUp Timestamp?",
+        "How can I verify that the submission meets all esMD validation requirements?",
+        "What are the consequences of not correcting and resubmitting the submission?"
+      ],
+      "detailed_response": "This error message indicates that the Review Contractor PickUp Timestamp is not in a valid format. To resolve this issue, the timestamp must be corrected and the submission must be resubmitted. This error is listed in the CMS XLC Error Codes documentation under the 'Errors: esMD to RC' section.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9999158382415771
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9997767806053162
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9997475743293762
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.67
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:43:01.311953",
+    "query": "What is 556 codes why it is used?",
+    "response": {
+      "summary": "The provided context does not mention '556 codes'.",
+      "key_points": [],
+      "suggestions": [],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "Can you provide more context or information about '556 codes'?"
+      ],
+      "detailed_response": "The information about '556 codes' is not available in the provided documents. There is no mention of this code in the context.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 5.3530671721091494e-05
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\pim83c03_hih.pdf",
+          "relevance": 5.055843939771876e-05
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 4.834411811316386e-05
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\eMDR Document Codes List_April 2024 Release_final2.pdf",
+          "relevance": 4.588596129906364e-05
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.547
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:44:13.389076",
+    "query": "What is 556 codes why it is used from esMD to RC?",
+    "response": {
+      "summary": "Error Code 556 is used from esMD to RC when the Decision Indicator must be A, N, M, or R. It is used to indicate that the Decision Indicator is invalid.",
+      "key_points": [
+        "Error Code 556 is used to indicate that the Decision Indicator is invalid.",
+        "The Decision Indicator must be one of the following: A, N, M, or R.",
+        "If the Decision Indicator is invalid, the esMD system will return Error Code 556."
+      ],
+      "suggestions": [
+        "Check the Decision Indicator to ensure it is one of the allowed values (A, N, M, or R).",
+        "Correct the Decision Indicator and resubmit the request.",
+        "Verify that the Decision Indicator is correctly formatted and does not contain any special characters."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the possible reasons for the Decision Indicator being invalid?",
+        "How can the RC ensure that the Decision Indicator is correctly formatted?",
+        "What are the consequences of submitting an invalid Decision Indicator?"
+      ],
+      "detailed_response": "Error Code 556 is used from esMD to RC when the Decision Indicator must be A, N, M, or R. This error code is used to indicate that the Decision Indicator is invalid. According to the context, the Decision Indicator must be one of the following: A, N, M, or R. If it is not, then the esMD system will return Error Code 556. This error code is used to notify the RC that the Decision Indicator is invalid and that it needs to be corrected and resubmitted.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.7712448239326477
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.6957408785820007
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.38461169600486755
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.685
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:45:26.656551",
+    "query": "Then why 625 is used? for RC",
+    "response": {
+      "summary": "The context does not provide information on why 625 is used for RC.",
+      "key_points": [],
+      "suggestions": [],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "Can you provide more context or information about what 625 refers to in relation to RC?"
+      ],
+      "detailed_response": "The provided context does not contain any information about the number 625 or its usage in relation to RC. The context discusses system requirements, document change history, and library versions for the RC Client, but does not mention the specific number 625.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.00172658811789006
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.0006386768654920161
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.565
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:46:00.834304",
+    "query": "What is 625 codes why it is used from esMD to RC?",
+    "response": {
+      "summary": "The provided context does not mention the 625 code, therefore, it is not possible to determine its purpose or usage from the given information.",
+      "key_points": [],
+      "suggestions": [],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "Can you provide more context or information about the 625 code?",
+        "Is there a specific section or document that mentions the 625 code?",
+        "Are there any other relevant details or codes that can help clarify the purpose of the 625 code?"
+      ],
+      "detailed_response": "The context provided includes a list of error codes sent from esMD to RC, but the 625 code is not present in the list. It is also not mentioned in the section discussing esMD validation errors or other related topics. As a result, it is not possible to determine the purpose or usage of the 625 code based on the provided context.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.09221141785383224
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.05555145442485809
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.707
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:46:49.589325",
+    "query": "Is there a specific section or document that mentions the 625 code?",
+    "response": {
+      "summary": "The provided context does not mention the 625 code.",
+      "key_points": [],
+      "suggestions": [],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "Can you provide more context or information about the 625 code?"
+      ],
+      "detailed_response": "The eMDR Document Codes List (April 2024 Release) document does not contain any information about the 625 code. The document lists various codes and their descriptions, but the 625 code is not mentioned.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\eMDR Document Codes List_April 2024 Release_final2.pdf",
+          "relevance": 0.0010832161642611027
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.0010384998749941587
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.0010122504318132997
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.616
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:47:53.601180",
+    "query": "esMD validation error: Reason code is not required for decision Indicator A. Correct and Resubmit",
+    "response": {
+      "summary": "The provided error message indicates that a reason code is not required for decision indicator A, but it is required for decision indicators N or R.",
+      "key_points": [
+        "Reason codes are not required for decision indicator A.",
+        "Reason codes are required for decision indicators N or R.",
+        "Error code 544 specifies the requirement for reason codes based on the decision indicator."
+      ],
+      "suggestions": [
+        "Review the decision indicator and reason code requirements for the esMD system.",
+        "Ensure that the correct decision indicator is used based on the submission requirements.",
+        "Verify that the reason code is included in the submission when the decision indicator is N or R."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the specific requirements for reason codes when the decision indicator is A?",
+        "Are there any additional requirements for reason codes when the decision indicator is N or R?",
+        "How can the esMD system be configured to accommodate different reason code requirements based on the decision indicator?"
+      ],
+      "detailed_response": "Based on the provided context, it appears that the esMD system has specific requirements for reason codes depending on the decision indicator. For decision indicator A, a reason code is not required, but for decision indicators N or R, a reason code is required. This information can be found in the error codes listed in the context, specifically error code 544, which states that a reason code is required when the decision indicator is N or R.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9980936646461487
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9971390962600708
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9948882460594177
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.668
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:49:08.985027",
+    "query": "Why do we use 630 from esMD to RC?",
+    "response": {
+      "summary": "The context does not mention using 630 from esMD to RC. It only mentions the Inbound and Outbound process with time intervals set by the RC, but the specific value of 630 is not mentioned.",
+      "key_points": [],
+      "suggestions": [],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "Can you provide more information about the context where 630 is mentioned?",
+        "Is there a specific section or document that mentions the value 630?",
+        "Can you clarify what 630 refers to in the context of esMD and RC?"
+      ],
+      "detailed_response": "The provided context describes the esMD RC Java Client and .NET Client, which run outside the CMS network on the RC's machine, computer, or server. The clients use the esMD Auth API to authenticate users and upload/download files. However, the value of 630 is not mentioned in the context. It is possible that this value is mentioned in a different section or document not provided in the context.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.05363783612847328
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.03867720067501068
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.651
+    }
+  },
+  {
+    "timestamp": "2025-10-08T16:50:01.689236",
+    "query": "I was asking about the error codes list from esMD to RC?",
+    "response": {
+      "summary": "The error codes list from esMD to RC is provided in the context, which includes various error codes with their corresponding descriptions.",
+      "key_points": [
+        "The error codes list from esMD to RC is provided in the context.",
+        "The list includes various error codes with their corresponding descriptions.",
+        "The list is divided into different sections, including All Errors sent from esMD to RC, CMS XLC Error Codes, and CMS XLC Error Codes (Java User Guide)."
+      ],
+      "suggestions": [
+        "Review the error codes list to ensure that all potential errors are handled correctly.",
+        "Implement error handling mechanisms to catch and handle the error codes listed in the context.",
+        "Test the esMD to RC process to ensure that it can handle the error codes listed in the context."
+      ],
+      "code_snippets": [],
+      "follow_up_questions": [
+        "What are the most common error codes encountered during the esMD to RC process?",
+        "How can we improve the error handling mechanisms to reduce the occurrence of error codes?",
+        "Are there any additional error codes that need to be added to the list?"
+      ],
+      "detailed_response": "The error codes list from esMD to RC is provided in the context, which includes various error codes with their corresponding descriptions. The list is divided into different sections, including All Errors sent from esMD to RC, CMS XLC Error Codes, and CMS XLC Error Codes (Java User Guide). Each error code is accompanied by a description of the error that occurred. The list provides a comprehensive overview of the potential errors that may occur during the esMD to RC process.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9955325126647949
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9921356439590454
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9919297695159912
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.772
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:33:32.370455",
+    "query": "What is 625 codes why it is used from esMD to RC?",
+    "response": {
+      "summary": "Error",
+      "detailed_response": "I encountered an error processing your request."
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:35:18.623298",
+    "query": "What is 625 codes why it is used from esMD to RC?",
+    "response": {
+      "detailed_response": "The context provided includes a list of error codes sent from esMD to RC, but the 625 code is not present in this list. Additionally, there is a list of esMD validation error codes, but again, the 625 code is not included. Without further information, it is not possible to determine the purpose and usage of the 625 code.",
+      "key_points": [],
+      "follow_up_questions": [
+        "What is the purpose of the 625 code?",
+        "How is the 625 code used in the esMD to RC communication?",
+        "Is there any additional information available about the 625 code that is not included in the provided context?"
+      ],
+      "suggestions": [
+        "Review the provided context again to ensure that the 625 code is not mentioned.",
+        "Check if there are any other documents or sections that may contain information about the 625 code.",
+        "If the 625 code is not mentioned in the provided context, it may be necessary to contact the relevant authorities or support teams for further assistance."
+      ],
+      "code_snippets": [],
+      "summary": "The provided context does not mention the 625 code, so its purpose and usage from esMD to RC cannot be determined.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.09221141785383224
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.05555145442485809
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.707
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:41:25.602882",
+    "query": "What is 625 codes why it is used from esMD to RC?",
+    "response": {
+      "detailed_response": "The context provided is related to the esMD system, its implementation, and the X12N 278 Companion Guide. However, there is no mention of the 625 codes or its usage from esMD to RC. It is possible that the information is not included in the provided documents.",
+      "key_points": [],
+      "follow_up_questions": [
+        "What is the purpose of the 625 codes in the esMD system?",
+        "How are the 625 codes used in the esMD system to communicate with RC?",
+        "Are there any specific scenarios or use cases where the 625 codes are used in the esMD system?"
+      ],
+      "suggestions": [
+        "Review the esMD system documentation and guides for more information on the 625 codes and its usage.",
+        "Contact the esMD system support team for clarification on the 625 codes and its usage.",
+        "Check the esMD system implementation notes and release notes for any information related to the 625 codes."
+      ],
+      "code_snippets": [],
+      "summary": "The provided context does not mention the 625 codes or its usage from esMD to RC.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esMD X12N 278 Companion Guide AR2024.10.v18.0.pdf",
+          "relevance": 0.10270263254642487
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.04693682864308357
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.672
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:45:14.217279",
+    "query": "Errro coes from esMD to RC?",
+    "response": {
+      "detailed_response": "The context provides information about the esMD Cloud File Transfers and the structure of the file names, but it does not explicitly mention error codes from esMD to RC. However, it does provide information on how to submit an inbound submission error on the Administrative Error Response to Inbound Submissions Tab.",
+      "key_points": [
+        "The context provides information about the esMD Cloud File Transfers.",
+        "The structure of the file names is described in the context.",
+        "The context provides information on how to submit an inbound submission error."
+      ],
+      "follow_up_questions": [
+        "What is the expected format for error codes from esMD to RC?",
+        "How are error codes handled in the esMD system?",
+        "What are the possible error codes that can be received from esMD to RC?"
+      ],
+      "suggestions": [
+        "Review the section on submitting an inbound submission error on the Administrative Error Response to Inbound Submissions Tab.",
+        "Check the file name structure to ensure it matches the expected format.",
+        "Consult the provided documentation for more information on error handling."
+      ],
+      "code_snippets": [],
+      "summary": "Error codes from esMD to RC are not explicitly mentioned in the provided context.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.32877182960510254
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.029029620811343193
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.691
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:46:39.979307",
+    "query": "esMD validation error: Reason code is not required for decision Indicator A. Correct and Resubmit",
+    "response": {
+      "key_points": [
+        "A reason code is not required for decision indicator A.",
+        "The user should correct and resubmit the response.",
+        "The response should meet the required format and include all necessary elements for successful validation."
+      ],
+      "code_snippets": [],
+      "detailed_response": "Based on the provided context, it appears that the esMD validation error message is indicating that a reason code is not required for decision indicator A. This suggests that the user should remove or correct the reason code in their response and resubmit it. It is essential to ensure that the response meets the required format and includes all necessary elements for successful validation.",
+      "summary": "The provided error message indicates that a reason code is not required for decision indicator A, and the user should correct and resubmit the response.",
+      "suggestions": [
+        "Review the esMD validation error messages to ensure that all errors are addressed and corrected.",
+        "Verify that the response includes all necessary elements and meets the required format.",
+        "Resubmit the corrected response to esMD for validation."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for decision indicator A in the esMD validation process?",
+        "Are there any additional elements or fields required for decision indicator A?",
+        "What are the consequences of not including a reason code for decision indicator A?"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9974572062492371
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9961774349212646
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9937676191329956
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.668
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:47:32.119879",
+    "query": "Error \nCode",
+    "response": {
+      "key_points": [
+        "The CMS XLC system uses error codes to populate the ErrorInfo object inside error notifications.",
+        "The error codes are categorized into pickup errors, PA reject errors, and administrative errors.",
+        "The guide includes tables and sections that detail the specific error codes and their corresponding descriptions."
+      ],
+      "code_snippets": [
+        "Table 38: Pickup Error Codes",
+        "Table 39: PA Reject Error Codes",
+        "Table 45: Pickup Error Codes",
+        "Table 46: PA Reject Error Codes"
+      ],
+      "detailed_response": "The context provides a comprehensive list of error codes and their descriptions, categorized into pickup errors, PA reject errors, and administrative errors. These error codes are used to populate the ErrorInfo object inside error notifications. The guide also includes tables and sections that detail the specific error codes and their corresponding descriptions.",
+      "summary": "The provided context is a user guide and error code reference for the CMS XLC system, specifically for the Review Contractor (RC) Client.",
+      "suggestions": [
+        "Review the provided tables and sections to identify the specific error codes and their descriptions.",
+        "Consult the guide for information on how to populate the ErrorInfo object inside error notifications.",
+        "Use the error codes to troubleshoot issues with the CMS XLC system."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for populating the ErrorInfo object inside error notifications?",
+        "How do I troubleshoot issues with the CMS XLC system using the provided error codes?",
+        "Are there any additional resources or documentation available for the CMS XLC system?"
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.7799952626228333
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.767017126083374
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.615
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:48:55.030437",
+    "query": "What are the errros send from esMD to RC?",
+    "response": {
+      "summary": "The esMD system sends errors to RC in the form of Pickup Validation Error Responses, which include an ErrorCode, ErrorName, and ErrorDescription.",
+      "follow_up_questions": [
+        "What is the ErrorCode for the Pickup Validation Error Response?",
+        "What is the ErrorName for the Pickup Validation Error Response?",
+        "How does the RC Client handle Pickup Validation Error Responses?"
+      ],
+      "suggestions": [
+        "Review the Pickup Validation Error Response to identify the type and description of the error.",
+        "Correct the pickup notification and resubmit it to esMD.",
+        "Verify that the RC Client is properly configured and authenticated with esMD."
+      ],
+      "detailed_response": "When the RC Client sends a Pickup Notification to esMD, the esMD application processes and sends the Pickup Notification to the HIH. If there is an error in processing the Pickup Notification submitted by the RC, the esMD application generates the Pickup Validation Error Response, as detailed in Figure 24: F_L13_PDW000000007903_Validation_Error.xml. The Pickup Validation Error Response includes an ErrorCode, ErrorName, and ErrorDescription, which are used to indicate the type and description of the error. The RC will correct the pickup notification and resubmit it to esMD.",
+      "code_snippets": [
+        {
+          "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ns0:RCPickupNotificationResponse xmlns:ns0=\"http://esmd.ois.cms.hhs.gov/v1/rc/config\">\n    <ESMDTransactionId>PDW000000007903</ESMDTransactionId>\n    <ErrorInfo>\n        <ErrorCode>520</ErrorCode>\n        <ErrorName> </ErrorName>\n        <ErrorDescription>Review Contractor Response Transaction ID does not exist</ErrorDescription>\n    </ErrorInfo>\n    <Status>FAILED</Status>\n</ns0:RCPickupNotificationResponse>",
+          "description": "Pickup Validation Error Response XML"
+        }
+      ],
+      "key_points": [
+        "The esMD system sends errors to RC in the form of Pickup Validation Error Responses.",
+        "The Pickup Validation Error Response includes an ErrorCode, ErrorName, and ErrorDescription.",
+        "The RC will correct the pickup notification and resubmit it to esMD."
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.3776940107345581
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.25467434525489807
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:53:33.592214",
+    "query": "Can you provide a list of error codes that are used by esMD to reject RC transactions?",
+    "response": {
+      "summary": "The esMD system uses various error codes to reject RC transactions, which can be found in the Reject Error Codes section of the esMD User Guide.",
+      "follow_up_questions": [
+        "What are the specific error codes used by the esMD system to reject RC transactions?",
+        "How can the RC transactions be corrected according to the error codes provided?",
+        "What are the consequences of not correcting the errors in the RC transactions?"
+      ],
+      "suggestions": [
+        "Review the Reject Error Codes section of the esMD User Guide to understand the specific error codes used by the system.",
+        "Check the RC transactions for errors and correct them according to the error codes provided.",
+        "Consult the esMD User Guide for more information on the error codes and how to correct the errors."
+      ],
+      "detailed_response": "According to the provided context, the esMD system uses error codes to reject RC transactions. The Reject Error Codes section of the esMD User Guide lists the error codes used by the system. These error codes are used to indicate specific issues with the RC transactions, such as incorrect content type codes, missing encoded documents, or virus scanning system failures. The error codes are used to inform the Review Contractor (RC) of the specific issues with their transactions and to guide them in correcting the errors.",
+      "code_snippets": [],
+      "key_points": [
+        "The esMD system uses error codes to reject RC transactions.",
+        "The Reject Error Codes section of the esMD User Guide lists the error codes used by the system.",
+        "The error codes are used to indicate specific issues with the RC transactions."
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9776221513748169
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9693503975868225
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T20:58:13.679637",
+    "query": "What is Medicare Fee-for-Service program?",
+    "response": {
+      "summary": "The Medicare Fee-for-Service (FFS) program is a legislatively mandated program that utilizes Recovery Audit Contractors (RACs) to identify improper payments paid by Medicare to FFS providers.",
+      "follow_up_questions": [
+        "What are the specific requirements for participating in the Targeted Probe and Educate (TPE) program?",
+        "How do I determine if Prior Authorization is required for certain items or services in my state?",
+        "What are the consequences of non-compliance with Medicare rules and regulations?"
+      ],
+      "suggestions": [
+        "Review the Medicare FFS program guidelines to understand the requirements and expectations.",
+        "Consider participating in the Targeted Probe and Educate (TPE) program to reduce claim denials and appeals.",
+        " Familiarize yourself with the Prior Authorization and Pre-Claim Review programs to ensure compliance with Medicare rules."
+      ],
+      "detailed_response": "The Medicare Fee-for-Service (FFS) program is a legislatively mandated program that utilizes Recovery Audit Contractors (RACs) to identify improper payments paid by Medicare to FFS providers. The program is designed to prevent, reduce, and measure improper payments in FFS Medicare through medical review. The RACs identify the improper payments, and the Medicare Administrative Contractors (MACs) adjust the claims, recoup identified overpayments, and return underpayments. The program also includes other components such as Targeted Probe and Educate (TPE), Prior Authorization, and Pre-Claim Review, which are designed to educate and support Medicare providers in understanding and applying Medicare FFS policies while reducing provider burden.",
+      "code_snippets": [],
+      "key_points": [
+        "The Medicare Fee-for-Service (FFS) program is a legislatively mandated program.",
+        "The program utilizes Recovery Audit Contractors (RACs) to identify improper payments.",
+        "The program includes components such as Targeted Probe and Educate (TPE), Prior Authorization, and Pre-Claim Review."
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\pim83c03_hih.pdf",
+          "relevance": 0.5634642839431763,
+          "page": 4
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_monitoring-programs_medicare-fee-service-compliance-programs.txt",
+          "relevance": 0.5448232293128967
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.501
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:00:16.411082",
+    "query": "What is Medicare Fee-for-Service program?",
+    "response": {
+      "summary": "The Medicare Fee-for-Service (FFS) program is a legislatively mandated program that utilizes Recovery Audit Contractors (RACs) to identify improper payments paid by Medicare to FFS providers, with the goal of preventing future improper payments.",
+      "follow_up_questions": [
+        "What are the specific requirements for participating in the Targeted Probe and Educate (TPE) program?",
+        "How do I access the Prior Authorization and Pre-Claim Review initiatives?",
+        "What are the consequences of non-compliance with Medicare rules?"
+      ],
+      "suggestions": [
+        "Review the Medicare FFS program guidelines to ensure compliance.",
+        "Participate in the Targeted Probe and Educate (TPE) program to reduce claim denials and appeals.",
+        "Use the Prior Authorization and Pre-Claim Review initiatives to ensure compliance with Medicare rules."
+      ],
+      "detailed_response": "The Medicare Fee-for-Service (FFS) program is a legislatively mandated program that utilizes Recovery Audit Contractors (RACs) to identify improper payments paid by Medicare to FFS providers. The program is designed to prevent, reduce, and measure improper payments in FFS Medicare through medical review. The RACs identify the improper payments, and the Medicare Administrative Contractors (MACs) adjust the claims, recoup identified overpayments and return underpayments. The program also includes other components such as Targeted Probe and Educate (TPE), Prior Authorization, and Pre-Claim Review, which are designed to educate and support Medicare providers in understanding and applying Medicare FFS policies while reducing provider burden.",
+      "code_snippets": [],
+      "key_points": [
+        "The Medicare Fee-for-Service (FFS) program is a legislatively mandated program.",
+        "The program utilizes Recovery Audit Contractors (RACs) to identify improper payments.",
+        "The goal of the program is to prevent future improper payments."
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\pim83c03_hih.pdf",
+          "relevance": 0.5634642839431763,
+          "page": 4
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\https___www_cms_gov_data-research_monitoring-programs_medicare-fee-service-compliance-programs.txt",
+          "relevance": 0.5448232293128967
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.501
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:01:19.207834",
+    "query": "Who are Recovery Audit Contractors? for HIH",
+    "response": {
+      "summary": "Recovery Audit Contractors (RACs) are utilized by the Medicare Fee-for-Service (FFS) Recovery Audit program to identify improper payments paid by Medicare to FFS providers.",
+      "follow_up_questions": [
+        "What are the specific criteria used by RACs to identify improper payments?",
+        "How do RACs work with MACs to adjust claims and recoup overpayments?",
+        "What are the consequences for providers who are found to have made improper payments?"
+      ],
+      "suggestions": [
+        "Review the Medicare Fee-for-Service (FFS) Recovery Audit program guidelines to understand the role of RACs in identifying improper payments.",
+        "Consult with a Medicare Administrative Contractor (MAC) to learn more about the process of adjusting claims and recouping overpayments.",
+        "Ensure that your organization is in compliance with Medicare billing rules and regulations to avoid improper payments."
+      ],
+      "detailed_response": "The Medicare Fee-for-Service (FFS) Recovery Audit program is a legislatively mandated program that utilizes Recovery Audit Contractors (RACs) to identify improper payments paid by Medicare to FFS providers. The RACs identify the improper payments, and the Medicare Administrative Contractors (MACs) adjust the claims, recoup identified overpayments and return underpayments. The goal of the RACs is to identify and correct improper payments, thereby protecting the Medicare Trust Funds and ensuring that providers are held accountable for accurate billing practices.",
+      "code_snippets": [],
+      "key_points": [
+        "Recovery Audit Contractors (RACs) are used to identify improper payments by Medicare to FFS providers.",
+        "RACs work with MACs to adjust claims, recoup overpayments, and return underpayments.",
+        "The goal of RACs is to protect the Medicare Trust Funds and ensure accurate billing practices."
+      ],
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\pim83c03_hih.pdf",
+          "relevance": 0.21507954597473145,
+          "page": 4
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:03:57.743166",
+    "query": "I want to onboard to esMD? for HIH",
+    "response": {
+      "summary": "Error",
+      "detailed_response": "I encountered an error processing your request."
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:11:36.381327",
+    "query": "I want to onboard to esMD? for HIH",
+    "response": {
+      "key_points": [
+        "Complete the esMD HIH Onboarding Request Form",
+        "Submit the results of successfully completed CONNECT/CONNECT-compatible self-tests",
+        "Provide the HIH's Internet Protocol (IP) address for the HIH's Gateway",
+        "Provide the Uniform Resource Locator (URL) for the HIH's Gateway Endpoint to receive responses from the esMD system",
+        "Obtain a Transport Layer Security Certificate"
+      ],
+      "summary": "To onboard to esMD for HIH, complete the esMD HIH Onboarding Request Form and submit it to the esMD Support Team along with the results of successfully completed CONNECT/CONNECT-compatible self-tests.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the esMD HIH Onboarding Request Form and ensure all required information is provided",
+        "Contact the esMD Support Team to confirm the onboarding process and provide any necessary documentation",
+        "Plan to renew and submit certificate renewals to the esMD Support Team four weeks in advance of the expiration date"
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the Transport Layer Security Certificate?",
+        "How do I obtain a HL7 OID and register it on the HL7 website?",
+        "What are the FIPS 140-2 Compliance criteria for cryptographic modules used by HIH eHealth Exchange instances?"
+      ],
+      "detailed_response": "The esMD Onboarding Process for HIHs involves several steps. First, the HIH shall complete and submit the esMD HIH Onboarding Request Form, along with the results of successfully completed CONNECT/CONNECT-compatible self-tests to the esMD Support Team to the following email address: esMD_Support@cms.hhs.gov. The HIH Onboarding Request Form is located on the following CMS Government website: http://www.cms.gov/Research-Statistics-Data-and-Systems/Computer-Data-and-Systems/ESMD/Information_for_HIHs.html. The esMD Support Team will verify the environment details that have been provided by the HIH are acceptable and will validate the API CONNECT/CONNECT-compatible self-tests conducted by the HIH were successful, based on the self-tests results submitted to the esMD Support Team. Additionally, the HIH will need to provide the esMD Support Team with the HIH's Internet Protocol (IP) address for the HIH's Gateway, the Uniform Resource Locator (URL) for the HIH's Gateway Endpoint to receive responses from the esMD system, and a Transport Layer Security Certificate. The HIH shall include the following sever certificate information in the HIH Onboarding Request Form submitted to the esMD Support Team: Server Certificate, Intermediate Certificates (if applicable), and Root Certificate. All CAs must adhere to the following guidelines in order to be submitted to the esMD Support Team: Level 2 Identity Proofing, 2048-bit Rivest, Shamir, & Adelman (RSA) keys, Advance Encryption Standard 128-bit encryption, and Secure Hash Algorithm-2 (SHA-2, 256-bit at least) certificate signing algorithm.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.9859265089035034,
+          "page": 23
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:13:19.592359",
+    "query": "Can you provide a list of error codes that are used by esMD to reject RC transactions?",
+    "response": {
+      "key_points": [
+        "The esMD system uses error codes to reject RC transactions.",
+        "The Reject Error Codes list is available in Appendix B.",
+        "Error codes are used to indicate specific problems with RC transactions."
+      ],
+      "summary": "The esMD system uses various error codes to reject RC transactions, which can be found in the Reject Error Codes list.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the Reject Error Codes list to identify potential issues with RC transactions.",
+        "Use the error codes to troubleshoot and resolve issues with RC transactions.",
+        "Consult the provided documents for more information on the esMD system and RC transactions."
+      ],
+      "follow_up_questions": [
+        "What are the specific error codes used by the esMD system to reject RC transactions?",
+        "How can I use the Reject Error Codes list to troubleshoot issues with RC transactions?",
+        "Are there any additional resources available for learning more about the esMD system and RC transactions?"
+      ],
+      "detailed_response": "According to the provided context, the esMD system uses error codes to reject RC transactions. The Reject Error Codes list is available in Appendix B of the provided documents. This list contains error codes with corresponding descriptions, which can be used to identify and resolve issues with RC transactions. The error codes are used to indicate specific problems with the transactions, such as incorrect content type codes, missing encoded documents, or invalid reject reason codes.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9776221513748169
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9693503975868225
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:20:21.384609",
+    "query": "hello how are you doing for RC",
+    "response": {
+      "key_points": [
+        "The blue successful message does not necessarily mean the RC Client is active.",
+        "Using multiple instances of the RC Client simultaneously can result in errors.",
+        "The RC Client requires folder permissions to download files."
+      ],
+      "summary": "The RC Client is a tool used for Electronic Submission of Medical Documentation (esMD) and requires proper setup and permissions to function correctly.",
+      "code_snippets": [
+        "esmd-rc-client-config.xml"
+      ],
+      "suggestions": [
+        "Check the log files and restart the RC Client if the RC Client is not active.",
+        "Use only one copy of the RC Client at a time.",
+        "Ensure that the RC Client has the necessary folder read/write permissions to download and copy files."
+      ],
+      "follow_up_questions": [
+        "What are the specific folder permissions required for the RC Client to download files?",
+        "How can I update the valid ClientID and ClientSecret values in the esmd-rc-client-config.xml file?",
+        "What are the consequences of running multiple instances of the RC Client for the same jurisdiction?"
+      ],
+      "detailed_response": "The RC Client is a tool used for Electronic Submission of Medical Documentation (esMD) and requires proper setup and permissions to function correctly. According to the provided context, there are several issues that may arise when using the RC Client, including the blue successful message that indicates the login was successful but the RC Client is not active due to a temporary internet disconnection, using multiple instances of the RC Client simultaneously, and the RC Client being unable to download files due to folder permission issues. To resolve these issues, it is recommended to check the log files, restart the RC Client, use only one copy of the RC Client at a time, and ensure that the RC Client has the necessary folder read/write permissions to download and copy files. Additionally, it is essential to update the valid ClientID and ClientSecret values in the esmd-rc-client-config.xml file for the user to be able to login.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.09546452760696411
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.05219435319304466
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:50:17.286527",
+    "query": "What is Entering an Inbound Submissions Error?",
+    "response": {
+      "key_points": [
+        "Select the Administrative Error Response to Inbound Submissions tab",
+        "Enter the Transaction ID and select an Error Situation or Error Code",
+        "Select Save to submit the Inbound Submissions error for submission"
+      ],
+      "summary": "Entering an Inbound Submissions Error is a process in the RC Client to submit an error on the Administrative Error Response to Inbound Submissions tab.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the fields on the tabs, as described in Appendix A: Description of Fields on RC Client Tabs",
+        "Use the Add Another Response button to submit another response after successfully saving a decision for submission",
+        "Verify that the Inbound Submissions error has been successfully submitted"
+      ],
+      "follow_up_questions": [
+        "What are the possible error situations or error codes that can be selected from the drop-down menu?",
+        "How does the Notification API invoke the Auth API to authenticate the user?",
+        "What is the purpose of the delivery confirmation in JSON format returned to the RC Client?"
+      ],
+      "detailed_response": "To enter an inbound submissions error, follow the steps outlined in the context. The process involves selecting the Administrative Error Response to Inbound Submissions tab, entering the Transaction ID, selecting an Error Situation or Error Code from the drop-down menu, and then selecting Save to submit the Inbound Submissions error for submission. After selecting Save, the Notification API invokes the Auth API to authenticate the user, and an Admin Error JSON message is created and sent to esMD. The Admin Error is delivered to HIH, and the delivery confirmation in JSON format is returned to the RC Client. The notification API process converts the JSON message to an XML file and saves it in the notification folder.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9179459810256958
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.8781651854515076
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.58
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:56:32.689654",
+    "query": "What are error codes RC get from esMD?",
+    "response": {
+      "key_points": [
+        "Error codes are sent from esMD to RC for various validation and system errors.",
+        "Validation errors include issues with provider information, procedure codes, and payload size.",
+        "System errors include unzip failures, checksum errors, and metadata errors."
+      ],
+      "summary": "Error codes RC receives from esMD include a variety of validation and system errors.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the error codes and descriptions to identify the specific issue causing the error.",
+        "Check the provider information, procedure codes, and payload size to ensure they are valid and correctly formatted.",
+        "Verify that the esMD internal system is functioning correctly and that any necessary permissions or settings are in place."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the provider information, procedure codes, and payload size?",
+        "How can RC troubleshoot and resolve unzip failures, checksum errors, and metadata errors?",
+        "What are the necessary permissions or settings required for RC to use the esMD internal system?"
+      ],
+      "detailed_response": "Error codes sent from esMD to RC are listed in several tables within the provided context. These error codes cover a range of issues, including validation errors for provider information, procedure codes, and payload size, as well as system errors such as unzip failures, checksum errors, and metadata errors. Additionally, there are errors related to the esMD internal system, such as unauthorized use of content type codes and invalid transaction IDs.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9935099482536316
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9933013916015625
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9885830879211426
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:57:57.867535",
+    "query": "Can you list me all error codes that came to RC from esMD?",
+    "response": {
+      "key_points": [
+        "Error codes are sent from esMD to RC for various reasons, including file formatting and validation issues.",
+        "The error codes are categorized and listed in tables for easy reference.",
+        "Some error codes require resubmission of the request with corrections."
+      ],
+      "summary": "The error codes sent from esMD to RC are listed in Table 36 and Table 43 of the provided documents.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the error codes and their descriptions to understand the specific issues with the esMD to RC submissions.",
+        "Check the submission format and content to ensure it meets the required standards.",
+        "Resubmit the request with corrections as needed to resolve the errors."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the file format and content to avoid errors?",
+        "How can the RC ensure that the submission meets the required standards?",
+        "What are the consequences of not resubmitting the request with corrections?"
+      ],
+      "detailed_response": "According to the documents, the error codes sent from esMD to RC include errors related to file formatting, validation, sending responses, and more. These errors are categorized and listed in the provided tables.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9918985366821289
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9865526556968689
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9829011559486389
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T21:59:41.026206",
+    "query": "esMD validation error: Duplicate Reason Codes found. Correct and resubmit?",
+    "response": {
+      "key_points": [
+        "Error code 600 indicates duplicate reason codes were found.",
+        "The user should correct and resubmit the response to resolve the error.",
+        "Duplicate reason codes can cause esMD validation errors."
+      ],
+      "summary": "The error code 600 indicates that duplicate reason codes were found, and the user should correct and resubmit the response.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the reason codes in the response to identify and correct duplicates.",
+        "Verify that the reason codes are unique and valid before resubmitting the response.",
+        "Consider implementing a validation process to prevent duplicate reason codes in the future."
+      ],
+      "follow_up_questions": [
+        "What are the consequences of submitting duplicate reason codes to esMD?",
+        "How can the user ensure that the reason codes are unique and valid?",
+        "Are there any specific requirements or guidelines for reason codes in the esMD system?"
+      ],
+      "detailed_response": "According to the provided context, error code 600 is an esMD validation error that occurs when duplicate reason codes are found. This error is listed in both the .NET and Java user guides, indicating that it is a common issue. To resolve this error, the user should correct the duplicate reason codes and resubmit the response. It is essential to ensure that the reason codes are unique and valid to avoid this error.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9959473013877869
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9958414435386658
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9938431978225708
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.673
+    }
+  },
+  {
+    "timestamp": "2025-10-08T22:00:49.363877",
+    "query": "esMD validation error: A Decision Indicator of \u2018M\u2019 is invalid for PMD PA response. Provide a valid Decision Indicator and resubmit.",
+    "response": {
+      "key_points": [
+        "A Decision Indicator of \u2018M\u2019 is invalid for a PMD PA response.",
+        "A valid Decision Indicator must be provided for a PMD PA response.",
+        "The response must be resubmitted with a valid Decision Indicator."
+      ],
+      "summary": "The esMD validation error indicates that a Decision Indicator of \u2018M\u2019 is invalid for a PMD PA response. A valid Decision Indicator must be provided and the response must be resubmitted.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the Decision Indicator used in the response and replace it with a valid one.",
+        "Check the documentation for the valid Decision Indicators for a PMD PA response.",
+        "Resubmit the response with the corrected Decision Indicator."
+      ],
+      "follow_up_questions": [
+        "What are the valid Decision Indicators for a PMD PA response?",
+        "How can I determine the correct Decision Indicator for my response?",
+        "What are the consequences of using an invalid Decision Indicator in a PMD PA response?"
+      ],
+      "detailed_response": "According to the provided context, there is an esMD validation error with the error code 567. The error description states that a Decision Indicator of \u2018M\u2019 is invalid for a PMD PA response. This means that the Decision Indicator used in the response is not valid for the type of response being submitted. To resolve this error, a valid Decision Indicator must be provided and the response must be resubmitted. The valid Decision Indicators for a PMD PA response are A, N, or M.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9999336004257202
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9999152421951294
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9719645380973816
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.663
+    }
+  },
+  {
+    "timestamp": "2025-10-08T22:03:13.432302",
+    "query": "Give me Sample Letters JSON Message?",
+    "response": {
+      "key_points": [
+        "The Sample Letters JSON Message is included in Figure 50: Sample Letters JSON Message.",
+        "The description PADL/RRL is changed to Letters in all the places wherever applicable.",
+        "The Qualifier Type and ID elements in the details section in the Letters JSON are made mandatory."
+      ],
+      "summary": "The Sample Letters JSON Message is included in Figure 50: Sample Letters JSON Message.",
+      "code_snippets": [
+        {
+          "language": "JSON",
+          "code": "Figure 50: Sample Letters JSON Message."
+        }
+      ],
+      "suggestions": [
+        "Review the Sample Letters JSON Message in Figure 50: Sample Letters JSON Message.",
+        "Understand the mandatory Qualifier Type and ID elements in the details section in the Letters JSON.",
+        "Check the pre-defined list of Qualifier Type values in the LETTERS request (CTC 20)."
+      ],
+      "follow_up_questions": [
+        "What are the valid Qualifier Type values in the LETTERS request (CTC 20)?",
+        "How does esMD process the Letters request in a deferred approach if the document size is greater than 10 MB?",
+        "What is the purpose of encoding the pdf document in MD5 hexadecimal format?"
+      ],
+      "detailed_response": "The Sample Letters JSON Message is included in Figure 50: Sample Letters JSON Message. The description PADL/RRL is changed to Letters in all the places wherever applicable. The Qualifier Type and ID elements in the details section in the Letters JSON are made mandatory.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9507319927215576
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.42387181520462036
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.565
+    }
+  },
+  {
+    "timestamp": "2025-10-08T22:11:58.385249",
+    "query": "eMDR Pre-Pay Logical Process Flow Steps",
+    "response": {
+      "key_points": [
+        "The eMDR Pre-Pay Logical Process Flow Steps are detailed in Table 44.",
+        "The process flow depicts the series of events and sequence of interactions between esMD and HIH via the XDR interface.",
+        "The order and timing of the exchange of messages with HIHs is driven by RC submissions."
+      ],
+      "summary": "The eMDR Pre-Pay Logical Process Flow Steps describe the series of events and sequence of interactions between esMD and HIH via the XDR interface.",
+      "code_snippets": [
+        {
+          "language": "XML",
+          "code": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<eMDRProcessMetadata xmlns=\"http://esmd.ois.cms.hhs.gov/rc/v1/emdr/processmetadata\">\n    <uniqueID>UY6KPVE4QGGN8JBV</uniqueID>\n    <numberOfDocuments>38</numberOfDocuments>\n    <submissionMetadata>\n        <creationTime>2023-10-18T17:00:47.5710000-04:00</creationTime>\n        <routingName>ES0015</routingName>\n    </submissionMetadata>\n</eMDRProcessMetadata>"
+        }
+      ],
+      "suggestions": [
+        "Review the eMDR Pre-Pay Logical Process Flow Steps in Table 44 to understand the sequence of interactions between esMD and HIH.",
+        "Consult the provided context for more information on the eMDR Pre-Pay process.",
+        "Contact the relevant authorities for clarification on any aspects of the eMDR Pre-Pay process."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the eMDR Pre-Pay batch request file?",
+        "How does the esMD system process the ADR letter zip packages received from the RC?",
+        "What are the possible statuses for the document/request received from esMD?"
+      ],
+      "detailed_response": "The eMDR Pre-Pay Logical Process Flow Steps are detailed in Table 44 of the provided context. The process flow depicts the series of events and sequence of interactions between esMD and HIH via the XDR interface. The order and timing of the exchange of messages with HIHs is driven by RC submissions. The steps include: 1.1 The esMD system receives the eMDR Pre-Pay batch request file from the DC. 2.1 The RC sends ADR letters (PDF) matching the eMDR requests in the zip request package to esMD. 3.1 The esMD system constructs the XDR request payload with the RC's ADR PDF letter and structured matching eMDR embedded in the unstructured HL7 clinical document standard and sends the package to the HIH. 4.1 The HIH sends the package delivery confirmation to esMD after the ADR PDF letter and eMDR structured XML are successfully transmitted to the Provider.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.999327540397644,
+          "page": 198
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.601
+    }
+  },
+  {
+    "timestamp": "2025-10-08T22:13:26.692377",
+    "query": "Administrative Error Codes",
+    "response": {
+      "key_points": [
+        "Administrative Error Codes are used to report unexpected errors related to the payload received in a downloaded file from esMD.",
+        "Table 44: Administrative Error Codes lists the error codes used to report unexpected errors.",
+        "Table 45: Pickup Error Codes lists the types of error codes and their descriptions used to populate the ErrorInfo object inside the error pickup notification."
+      ],
+      "summary": "Administrative Error Codes are used to report unexpected errors related to the payload received in a downloaded file from esMD.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the Administrative Error Codes listed in Table 44 to ensure accurate reporting of errors.",
+        "Consult Table 45: Pickup Error Codes to understand the types of error codes and their descriptions used in error pickup notifications.",
+        "Verify the payload received in a downloaded file from esMD to ensure it is complete and accurate."
+      ],
+      "follow_up_questions": [
+        "What are the specific error codes used to report unexpected errors related to the payload received in a downloaded file from esMD?",
+        "How are the Administrative Error Codes used in error pickup notifications?",
+        "What are the consequences of not reporting errors accurately using Administrative Error Codes?"
+      ],
+      "detailed_response": "Administrative Error Codes are listed in Table 44: Administrative Error Codes. These codes are used to report unexpected errors related to the payload received in a downloaded file from esMD. The codes include ESMD_410 for Cannot Read Files/Corrupt Files, ESMD_411 for Submission Sent to Incorrect RC, and ESMD_413 for Other. The description for each code is also provided. Additionally, Table 45: Pickup Error Codes lists the types of error codes and their descriptions used to populate the ErrorInfo object inside the error pickup notification.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9988061189651489
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.996971845626831
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 0.637
+    }
+  },
+  {
+    "timestamp": "2025-10-08T22:14:05.821036",
+    "query": "eMDR Pre-Pay Logical Process Flow Steps",
+    "response": {
+      "key_points": [
+        "The eMDR Pre-Pay Logical Process Flow Steps describe the series of events and sequence of interactions between esMD and HIH via the XDR interface.",
+        "The order and timing of the exchange of messages with the HIHs is driven by RC submissions.",
+        "The esMD system will not restrict the special characters sent by RCs in the Pre-Pay metadata file except for the below mentioned required fields."
+      ],
+      "summary": "The eMDR Pre-Pay Logical Process Flow Steps describe the series of events and sequence of interactions between esMD and HIH via the XDR interface.",
+      "code_snippets": [
+        {
+          "language": "XML",
+          "code": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<eMDRProcessMetadata xmlns=\"http://esmd.ois.cms.hhs.gov/rc/v1/emdr/processmetadata\">\n    <uniqueID>UY6KPVE4QGGN8JBV</uniqueID>\n    <numberOfDocuments>38</numberOfDocuments>\n    <submissionMetadata>\n        <creationTime>2023-10-18T17:00:47.5710000-04:00</creationTime>\n        <routingName>ES0015</routingName>\n    </submissionMetadata>\n</eMDRProcessMetadata>"
+        }
+      ],
+      "suggestions": [
+        "Review the required fields that are exempt from special characters.",
+        "Understand the sequence of interactions between esMD and HIH via the XDR interface.",
+        "Familiarize yourself with the RC submissions that drive the order and timing of the exchange of messages with the HIHs."
+      ],
+      "follow_up_questions": [
+        "What are the required fields that are exempt from special characters in the Pre-Pay metadata file?",
+        "How do RC submissions drive the order and timing of the exchange of messages with the HIHs?",
+        "What are the implications of the esMD system not restricting special characters in the Pre-Pay metadata file?"
+      ],
+      "detailed_response": "Table 44: eMDR Pre-Pay Logical Process Flow Steps details the eMDR process. The eMDR Pre-Pay logical flow depicts the series of events and sequence of interactions between esMD and HIHs via the XDR interface. The order and timing of the exchange of messages with the HIHs is driven by RC submissions. As part of the July 2024 release, the esMD system will not restrict the special characters sent by RCs in the Pre-Pay metadata file except for the below mentioned required fields.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\HIH\\esmd-hih-implementation-guide-ar2025.04.0-v16.0 (2).pdf",
+          "relevance": 0.999327540397644,
+          "page": 198
+        }
+      ],
+      "selected_tenant": "HIH",
+      "tenant_preselect_score": 0.601
+    }
+  },
+  {
+    "timestamp": "2025-10-08T22:15:00.208522",
+    "query": "eMDR Pre-Pay Logical Process Flow Steps in RC",
+    "response": {
+      "key_points": [
+        "The eMDR Pre-Pay Logical Process Flow Steps are detailed in Table 17 and Table 22.",
+        "The process flow depicts the logical processing of the eMDR (Pre-Pay) process.",
+        "The order and timing of the exchange of messages with HIHs are driven by RC submissions."
+      ],
+      "summary": "The eMDR Pre-Pay Logical Process Flow Steps describe the series of events and sequence of interactions between esMD and Health Information Handlers (HIH) via the XDR interface, driven by RC submissions.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review Table 17 and Table 22 for detailed information on the eMDR Pre-Pay Logical Process Flow Steps.",
+        "Understand the Content Type Code for this program, which is changed from 1.5 to 2.5.",
+        "Familiarize yourself with the esMD system and its interactions with the HIH via the XDR interface."
+      ],
+      "follow_up_questions": [
+        "What are the possible statuses that the HIH can acknowledge for the document/request received from esMD?",
+        "How does the esMD system maintain the record of any processing errors or failures?",
+        "What is the purpose of the ADR letter (PDF) in the eMDR Pre-Pay Logical Process Flow Steps?"
+      ],
+      "detailed_response": "The eMDR Pre-Pay Logical Process Flow Steps are detailed in Table 17: eMDR Pre-Pay Logical Process Flow Steps and Table 22: eMDR Pre-Pay Logical Process Flow Steps. The process flow depicts the logical processing of the eMDR (Pre-Pay) process, and the order and timing of the exchange of messages with HIHs are driven by RC submissions. The Content Type Code for this program is changed from 1.5 to 2.5. The process involves the esMD system receiving the eMDR Pre-Pay batch request file from the Data Center (DC), processing the eMDR (Pre-Pay) batch request file, and holding the eMDR requests within the esMD system until the matching ADR letter (PDF) is received from the RC. The esMD system maintains the record of any processing errors or failures. The RC sends ADR letters (PDF) matching the eMDR requests in the zip request package to esMD, and the esMD system processes the ADR letter zip packages received from the RC and generates the appropriate acceptance or rejection response acknowledgement to the RC. These messages are delivered to RC using esMD Status API. The esMD system constructs the XDR request payload with the RC\u2019s ADR PDF letter and structured matching eMDR embedded in the unstructured HL7 clinical document standard and sends it to the HIH. The HIH acknowledges the acceptance/failure with any of the following statuses for the document/request received from esMD: RequestAccepted, ResponseAccepted, Success, or Error.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9993801116943359
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.998415470123291
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-10-08T22:16:19.475067",
+    "query": "Errors: esMD to RC?",
+    "response": {
+      "key_points": [
+        "Error codes are sent from esMD to RC for validation errors, internal system errors, and other issues.",
+        "Common errors include incorrect timestamps, missing or invalid data, and errors with the zip file extraction.",
+        "Internal system errors, such as unzip failure and checksum errors, are also listed."
+      ],
+      "summary": "The context provides a list of error codes sent from esMD to RC, including validation errors, internal system errors, and other issues.",
+      "code_snippets": [],
+      "suggestions": [
+        "Review the error codes and correct any issues before resubmitting the data.",
+        "Check the submission process to ensure that all required data is included and formatted correctly.",
+        "Verify that the zip file is extracted correctly and that the checksum matches the calculated value."
+      ],
+      "follow_up_questions": [
+        "What are the specific requirements for the submission process?",
+        "How can we ensure that the zip file is extracted correctly and that the checksum matches the calculated value?",
+        "What are the consequences of resubmitting incorrect data?"
+      ],
+      "detailed_response": "The provided context lists various error codes that are sent from esMD to RC, indicating issues with the submission process. These errors include validation errors, such as incorrect timestamps, missing or invalid data, and errors with the zip file extraction. Additionally, internal system errors, such as unzip failure and checksum errors, are also listed. It is recommended to review the error codes and correct any issues before resubmitting the data.",
+      "sources": [
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esMD-Error-Codes-to-RCs.pdf",
+          "relevance": 0.9969967603683472
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-net-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9959486126899719
+        },
+        {
+          "filename": "C:\\Users\\udayg\\Documents\\Rag-Project\\Rag-Project\\documents\\RC\\esmd-rc-implementation-guide-java-ar2025.04.0-v18.1_0.pdf",
+          "relevance": 0.9936791062355042
+        }
+      ],
+      "selected_tenant": "RC",
+      "tenant_preselect_score": 1.0
+    }
+  }
+]

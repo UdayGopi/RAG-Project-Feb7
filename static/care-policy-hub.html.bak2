@@ -1,0 +1,638 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarePolicy Hub - AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ¤–</text></svg>">
+    <style>
+        :root {
+            --bg-color: #f8fafc; --primary-glow: #60a5fa; --secondary-glow: #7dd3fc;
+            --card-bg: rgba(255, 255, 255, 0.8); --text-primary: #1e3a8a;
+            --text-secondary: #475569; --border-color: rgba(0, 0, 0, 0.08);
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-secondary); overflow: hidden; height: 100dvh; -webkit-text-size-adjust: 100%; overscroll-behavior: contain; }
+        .background-gradient { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .background-gradient::before, .background-gradient::after {
+            content: ''; position: absolute; width: 800px; height: 800px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%);
+            border-radius: 50%; filter: blur(120px); opacity: 0.1; animation: move-glow 40s infinite alternate;
+        }
+        .background-gradient::after { background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 60%); animation-duration: 50s; animation-direction: alternate-reverse; bottom: -300px; right: -300px; }
+        @keyframes move-glow { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(200px, 150px) scale(1.3); } 100% { transform: translate(-150px, -100px) scale(1); } }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        .light-card { background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slide-in-fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fade-in 0.6s ease-out forwards; } .message-in { animation: slide-in-fade 0.5s ease-out forwards; }
+        .typing-indicator span { animation: bounce 1.4s infinite ease-in-out both; }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; } .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+        .prose { max-width: none; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; }
+        .prose ol { list-style-type: decimal; padding-left: 1.5rem; }
+        /* Sticky input safe-area on mobile */
+        .safe-bottom { padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); }
+    </style>
+</head>
+<body class="w-full h-screen p-4 flex justify-center items-center">
+    <div class="background-gradient"></div>
+
+    <main id="app-page" class="w-full h-full max-w-7xl mx-auto flex gap-4 fade-in" style="height:100dvh;">
+        <!-- Sidebar: hidden on small screens, toggleable -->
+        <aside id="sidebar" class="hidden md:flex md:w-1/4 xl:w-1/5 h-full rounded-2xl p-4 flex-col transition-all duration-300 fixed md:static inset-y-4 left-4 right-4 z-30 md:z-auto bg-gradient-to-br from-sky-50 via-white to-blue-50 border border-blue-100 shadow">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center border border-blue-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+                    <div><h1 class="text-xl font-bold text-blue-900">CarePolicy Hub</h1><p class="text-xs text-slate-500">AI Policy Assistant</p></div>
+                </div>
+                <button id="close-sidebar" class="md:hidden p-2 rounded border text-slate-600 hover:bg-slate-50" aria-label="Close sidebar">âœ•</button>
+            </div>
+            <div class="flex-grow flex flex-col overflow-y-auto">
+                 <h2 class="text-sm font-semibold text-slate-500 mb-2">Chat History</h2>
+                 <div class="mb-4 p-2 bg-slate-100 rounded-lg">
+                    <label class="text-xs text-slate-600">Filter by date:</label>
+                    <div class="flex gap-1 mt-1">
+                        <input type="date" id="start-date-filter" class="w-1/2 p-1 text-xs border rounded-md">
+                        <input type="date" id="end-date-filter" class="w-1/2 p-1 text-xs border rounded-md">
+                    </div>
+                </div>
+                 <div id="chat-history-list" class="flex-grow space-y-1 overflow-y-auto pr-2"></div>
+            </div>
+            <button id="new-conversation-btn" class="mt-4 w-full bg-blue-600 text-white p-3 rounded-lg text-sm font-semibold hover:bg-blue-700 border border-blue-700 transition-all flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>New Conversation</button>
+        </aside>
+
+        <section class="flex-1 h-full rounded-2xl flex flex-col p-4 overflow-hidden min-w-0 bg-gradient-to-br from-sky-50 via-white to-blue-50 border border-blue-100 shadow">
+            <div class="flex justify-between items-center pb-3 border-b border-blue-200 flex-shrink-0">
+                <div id="tabs" class="flex gap-1 md:gap-4 overflow-x-auto">
+                    <button data-target="chat-panel" class="tab-btn text-blue-700 font-semibold text-sm border-b-2 border-blue-600 pb-3 px-3 flex-shrink-0">Chat</button>
+                    <button data-target="upload-panel" id="upload-tab" class="tab-btn text-slate-500 hover:text-blue-700 font-medium text-sm pb-3 px-3 flex-shrink-0">Upload Docs</button>
+                    <button data-target="analytics-panel" id="analytics-tab" class="tab-btn text-slate-500 hover:text-blue-700 font-medium text-sm pb-3 px-3 flex-shrink-0">Analytics</button>
+                </div>
+                <div class="flex items-center gap-3">
+                    <img id="user-avatar" src="" alt="avatar" class="w-8 h-8 rounded-full border hidden"/>
+                    <button id="signout-btn" class="text-xs px-2 py-1 border rounded text-slate-700 hover:bg-blue-50 border-blue-300">Sign Out</button>
+                </div>
+            </div>
+            <div id="panels" class="flex-1 overflow-y-auto min-h-0">
+                <div id="chat-panel" class="panel-content h-full flex flex-col min-h-0"><div id="chat-window" class="flex-1 overflow-y-auto p-4 space-y-6 min-h-0"></div><div class="mt-auto pt-4 px-4 flex-shrink-0"><form id="chat-form" class="relative"><textarea id="chat-input" rows="1" placeholder="Ask a question..." class="w-full bg-white border border-blue-300 rounded-xl p-4 pr-14 text-sm text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none transition-all"></textarea><button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-slate-400 shadow text-white">Send</button></form></div></div>
+                <div id="upload-panel" class="panel-content hidden p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Ingest New Documents</h3>
+                            <form id="upload-form" class="mt-4 space-y-4">
+                                <div class="space-y-2">
+                                    <label for="tenant-select" class="text-sm font-medium text-slate-700">Select Existing Tenant</label>
+                                    <select id="tenant-select" name="tenant_id" class="w-full p-2 border border-gray-300 rounded-lg bg-white"></select>
+                                </div>
+                                <div class="text-center my-2 text-sm text-slate-500">OR</div>
+                                <div class="space-y-2">
+                                    <label for="new-tenant-input" class="text-sm font-medium text-slate-700">Create New Tenant</label>
+                                    <input type="text" id="new-tenant-input" name="new_tenant_id" placeholder="Enter new tenant name..." class="w-full p-2 border border-gray-300 rounded-lg">
+                                </div>
+                                <hr class="my-6">
+                                <div class="space-y-2">
+                                    <label for="url-input" class="text-sm font-medium text-slate-700">Ingest from URL</label>
+                                    <input type="url" id="url-input" name="url" placeholder="https://example.com/policy" class="w-full p-2 border border-gray-300 rounded-lg">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-slate-700">Upload Files</label>
+                                    <div id="drop-zone" class="mt-1 flex justify-center items-center flex-col w-full h-32 px-6 transition bg-white border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:border-blue-400">
+                                        <input type="file" id="file-input" name="files" multiple class="hidden"/>
+                                        <label for="file-input" class="text-center cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-gray-400 mx-auto"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                            <span class="font-medium text-gray-600">Drag & drop or click to select</span>
+                                            <span class="block text-xs text-gray-500">PDF, TXT, DOCX</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="file-list" class="text-sm mt-2"></div>
+                                <button type="submit" class="mt-4 bg-blue-600 text-white font-semibold p-3 rounded-lg hover:bg-blue-700 w-full">Upload & Ingest</button>
+                            </form>
+                            <div id="upload-summary" class="mt-3 hidden text-sm bg-slate-50 border border-slate-200 rounded p-3"></div>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">How to Ingest Content</h4>
+                             <ul class="mt-4 space-y-3 text-sm list-decimal list-inside text-slate-500">
+                                <li><strong>Choose Tenant:</strong> Select an existing project/topic or create a new one to keep documents organized.</li>
+                                <li><strong>Add Content:</strong> You can either paste a URL to ingest a webpage or upload one or more document files.</li>
+                                <li><strong>Start Ingestion:</strong> Click "Upload & Ingest". The system will process the content and add it to the selected tenant's knowledge base.</li>
+                                <li><strong>Start Chatting:</strong> Once ingestion is complete, navigate to the Chat tab to ask questions based on the newly added information.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="analytics-panel" class="panel-content hidden p-6">
+                    <h3 class="text-xl font-bold text-blue-900 mb-4">Query Analytics</h3>
+                    <div class="bg-white p-4 rounded-lg border">
+                        <h4 class="text-lg font-semibold text-slate-700">Queries per Tenant</h4>
+                        <div class="mt-4" style="height: 400px;">
+                            <canvas id="tenant-chart"></canvas>
+                        </div>
+                    </div>`n        <ul id="tenant-list" class="mt-4 text-sm text-slate-600 space-y-1"></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('CarePolicy Hub: DOMContentLoaded initialized');
+            const API_BASE_URL = window.location.origin;
+
+            // --- Element Selectors ---
+            const chatWindow = document.getElementById('chat-window');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            const chatHistoryList = document.getElementById('chat-history-list');
+            const startDateFilter = document.getElementById('start-date-filter');
+            const endDateFilter = document.getElementById('end-date-filter');
+            const uploadForm = document.getElementById('upload-form');
+            const fileInput = document.getElementById('file-input');
+            const dropZone = document.getElementById('drop-zone');
+            const fileList = document.getElementById('file-list');
+            const uploadSummary = document.getElementById('upload-summary');
+            const newConversationBtn = document.getElementById('new-conversation-btn');
+            const tenantSelect = document.getElementById('tenant-select');
+            const sidebar = document.getElementById('sidebar');
+            const openSidebarBtn = document.getElementById('open-sidebar');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            let tenantChart = null;
+            
+            // --- Reusable Notification Function (disabled by default) ---
+            const ENABLE_TOASTS = false; // global default off
+            function showNotification(message, isError = false) {
+                if (!ENABLE_TOASTS) return; // no-op
+                const el = document.createElement('div');
+                el.className = `fixed top-5 right-5 p-4 rounded-lg shadow-lg text-white ${isError ? 'bg-red-500' : 'bg-green-500'} transition-all duration-300 opacity-0 transform translate-y-2 z-50`;
+                el.textContent = message;
+                document.body.appendChild(el);
+                setTimeout(() => el.classList.remove('opacity-0', 'translate-y-2'), 10);
+                setTimeout(() => { el.classList.add('opacity-0', 'translate-y-2'); setTimeout(() => el.remove(), 5000); }, 5000);
+            }
+
+            // Show a toast only for onboarding/download intent regardless of ENABLE_TOASTS
+            function notifyOnboarding(data) {
+                try {
+                    if (!data || !data.is_download_intent) return;
+                    const el = document.createElement('div');
+                    el.className = 'fixed top-5 right-5 p-4 rounded-lg shadow-lg text-white bg-blue-600 transition-all duration-300 opacity-0 transform translate-y-2 z-50';
+                    el.textContent = 'Onboarding detected. You can use the Download button in Sources.';
+                    document.body.appendChild(el);
+                    setTimeout(() => el.classList.remove('opacity-0','translate-y-2'), 10);
+                    setTimeout(() => { el.classList.add('opacity-0','translate-y-2'); setTimeout(() => el.remove(), 5000); }, 5000);
+                } catch {}
+            }
+            
+            // --- Chat UI Functions ---
+            function displayWelcomeMessage() {
+                 chatWindow.innerHTML = '';
+                 const welcomeData = {
+                    is_welcome: true,
+                    detailed_response: "Hello! I'm your AI assistant. Use the 'Upload Docs' tab to add knowledge, then ask me anything about it.",
+                };
+                appendMessage(welcomeData, 'ai', "Welcome");
+            }
+
+            async function ensureAuth() {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/me`, { credentials: 'include' });
+                    if (res.status === 401) { window.location.href = '/auth.html'; return null; }
+                    const me = await res.json();
+                    if (me && me.user && me.user.avatar_url) {
+                        const av = document.getElementById('user-avatar');
+                        av.src = me.user.avatar_url; av.classList.remove('hidden');
+                    }
+                    return me;
+                } catch (e) { window.location.href = '/auth.html'; return null; }
+            }
+
+            let isSending = false;
+            async function submitQuery(query) {
+                if (!query) return;
+                const me = await ensureAuth(); if (!me) return;
+                if (isSending) return; // debounce
+                isSending = true;
+                
+                appendMessage(query, 'user');
+                chatInput.value = '';
+                showThinkingIndicator();
+                // disable submit button
+                const sendBtn = document.querySelector('#chat-form button[type="submit"]');
+                if (sendBtn) sendBtn.disabled = true;
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/chat`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ query: query }),
+                    });
+                    
+                    removeThinkingIndicator();
+                    const result = await res.json();
+                    if (!res.ok) throw new Error(result.error || `Server error: ${res.status}`);
+                    
+                    appendMessage(result, 'ai', query);
+                    // Only show toast for onboarding/download intent
+                    notifyOnboarding(result);
+                    loadChatHistory();
+                } catch (error) {
+                    removeThinkingIndicator();
+                    appendMessage({ summary: "Error", detailed_response: error.message }, 'ai-error', query);
+                } finally {
+                    isSending = false;
+                    if (sendBtn) sendBtn.disabled = false;
+                }
+            }
+            
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                submitQuery(chatInput.value.trim());
+            });
+
+            // --- Auto-resize chat textarea for mobile typing ---
+            function autoResizeTextarea(el) {
+                if (!el) return;
+                el.style.height = 'auto';
+                const max = 160; // ~5-6 lines
+                el.style.height = Math.min(el.scrollHeight, max) + 'px';
+            }
+            chatInput.addEventListener('input', () => autoResizeTextarea(chatInput));
+            // Initialize size
+            autoResizeTextarea(chatInput);
+
+            // --- Mobile sidebar toggle ---
+            function openSidebar() {
+                if (!sidebar) return;
+                sidebar.classList.remove('hidden');
+            }
+            function closeSidebar() {
+                if (!sidebar) return;
+                sidebar.classList.add('hidden');
+            }
+            if (openSidebarBtn) openSidebarBtn.addEventListener('click', openSidebar);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+
+            function appendMessage(data, sender, originalQuery = "") {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.className = 'flex items-start gap-3 message-in';
+
+                if (sender === 'user') {
+                    messageWrapper.classList.add('justify-end');
+                    messageWrapper.innerHTML = `<div class="bg-blue-600 rounded-xl rounded-br-none p-4 text-sm max-w-xl user-message-content"><p class="text-white">${data}</p></div>`;
+                } else {
+                     const iconHtml = `<div class="w-8 h-8 bg-blue-100 rounded-full flex-shrink-0 flex items-center justify-center border border-blue-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M4 14h16"/></svg></div>`;
+                    let contentHtml;
+                    const hasCodes = Array.isArray(data?.codes) && data.codes.length > 0;
+                    if (sender === 'ai-error') {
+                        contentHtml = `<div class="bg-red-100 border border-red-200 rounded-xl rounded-tl-none p-4 text-sm max-w-2xl w-full ai-response-content"><p class="font-semibold text-red-800 mb-2">Error</p><div class="text-red-700">${data.detailed_response}</div></div>`;
+                    } else if (data.is_welcome || data.is_conversational) {
+                         contentHtml = `<div class="bg-gray-100 rounded-xl rounded-tl-none p-4 text-sm max-w-2xl w-full ai-response-content">
+                                         <p>${data.answer || data.detailed_response}</p>
+                                     </div>`;
+                    } else if (data.needs_tenant_selection) {
+                         contentHtml = `<div class="bg-amber-50 border border-amber-200 rounded-xl rounded-tl-none p-4 text-sm max-w-2xl w-full ai-response-content">
+                                         <p class="text-amber-800 font-semibold mb-2">Please select a tenant for your query about "${data.original_query}":</p>
+                                         <div class="flex flex-wrap gap-2">
+                                            ${(data.tenants || []).map(t => `<button class="tenant-selection-btn p-2 bg-amber-100 text-amber-800 text-xs rounded-lg hover:bg-amber-200" data-tenant="${t}" data-query="${data.original_query}">${t}</button>`).join('')}
+                                            <button class="skip-tenant-selection-btn p-2 bg-gray-200 text-gray-700 text-xs rounded-lg hover:bg-gray-300" data-query="${data.original_query}">Skip (Auto-Select)</button>
+                                         </div>
+                                     </div>`;
+                    } else {
+                        const toHtmlList = (items) => items && items.length > 0 ? `<ul class="list-disc pl-5 mt-2 space-y-1">${items.map(item => `<li>${item}</li>`).join('')}</ul>` : '';
+                        
+                        // Optional Codes section
+                        const codesHtml = hasCodes ? `<div class="mt-4"><h4 class="text-sm font-semibold text-slate-700">Codes</h4><ul class="list-disc pl-5 mt-1 space-y-1">${data.codes.map(c => `<li class="font-mono text-slate-800">${c}</li>`).join('')}</ul></div>` : '';
+
+                        // Normalize relevance scores relative to the top source for clearer display
+                        const sourcesHtml = (data.sources && data.sources.length > 0)
+                            ? (() => {
+                                const scores = data.sources.map(s => (typeof s.relevance === 'number' ? s.relevance : 0));
+                                const maxScore = Math.max(...scores, 0);
+                                return `<div class="mt-4"><h4 class="text-sm font-semibold text-slate-700">Sources</h4><ul class="text-xs text-slate-600 space-y-1 mt-2">${data.sources.map((s) => {
+                                    const raw = (typeof s.relevance === 'number') ? s.relevance : 0;
+                                    const normPct = maxScore > 0 ? Math.round((raw / maxScore) * 100) : 0;
+                                    const pathParts = s.filename.split(/[\\/]/);
+                                    const baseName = pathParts[pathParts.length - 1] || s.filename;
+                                    const parent = pathParts.length > 1 ? pathParts[pathParts.length - 2] : '';
+                                    const displayPath = parent ? `${parent}/${baseName}` : baseName;
+                                    const pathForUrl = s.relative_path ? s.relative_path : baseName;
+                                    const viewPageFrag = (typeof s.page !== 'undefined' && s.page !== null) ? `#page=${encodeURIComponent(s.page)}` : '';
+                                    const viewHref = `${API_BASE_URL}/view/${data.selected_tenant}/${encodeURIComponent(pathForUrl)}${viewPageFrag}`;
+                                    const downloadHref = `${API_BASE_URL}/download/${data.selected_tenant}/${encodeURIComponent(pathForUrl)}`;
+                                    const downloadBtn = data.is_download_intent ? `<a class=\"px-2 py-0.5 rounded bg-blue-600 text-white hover:bg-blue-700\" href=\"${downloadHref}\" target=\"_blank\">Download</a>` : '';
+                                    return `<li class="flex justify-between items-center bg-slate-100 p-1 rounded">
+                                                <span class="truncate pr-4">${displayPath}</span>
+                                                <span class="flex items-center gap-3">
+                                                    <span class="font-mono text-blue-500">Relevance: ${normPct}%</span>
+                                                    <a class=\"px-2 py-0.5 rounded bg-blue-600 text-white hover:bg-blue-700\" href=\"${viewHref}\" target=\"_blank\">Open</a>
+                                                    ${downloadBtn}
+                                                </span>
+                                            </li>`
+                                }).join('')}</ul></div>`;
+                              })()
+                            : '';
+
+                        const followUpsHtml = (data.follow_up_questions && data.follow_up_questions.length > 0)
+                            ? `<div class="mt-4"><h4 class="text-sm font-semibold text-slate-700">Follow-up Questions</h4><div class="flex flex-wrap gap-2 mt-2">${data.follow_up_questions.map(q => `<button class="suggested-question-btn p-2 bg-blue-100 text-blue-800 text-xs rounded-lg hover:bg-blue-200">${q}</button>`).join('')}</div></div>`
+                            : '';
+                        
+                        const feedbackHtml = `<div class="feedback-container mt-4 pt-3 border-t border-gray-200 flex items-center gap-2 text-xs text-slate-500">
+                                                <span>Was this helpful?</span>
+                                                <button class="feedback-btn p-1 rounded-md hover:bg-gray-200" data-helpful="true">ðŸ‘</button>
+                                                <button class="feedback-btn p-1 rounded-md hover:bg-gray-200" data-helpful="false">ðŸ‘Ž</button>
+                                            </div>`;
+
+                        contentHtml = `<div class="bg-gray-100 rounded-xl rounded-tl-none p-4 text-sm max-w-2xl w-full ai-response-content space-y-3" data-query="${originalQuery}">
+                                         <div><h4 class="text-sm font-semibold text-slate-700">Summary</h4><p class="mt-1">${data.summary || 'No summary available.'}</p></div>
+                                         <div><h4 class="text-sm font-semibold text-slate-700">Detailed Response</h4><div class="prose prose-sm mt-1">${marked.parse(data.detailed_response || '')}</div></div>
+                                         ${(data.key_points && data.key_points.length > 0) ? `<div><h4 class="text-sm font-semibold text-slate-700">Key Points</h4>${toHtmlList(data.key_points)}</div>` : ''}
+                                         ${(data.suggestions && data.suggestions.length > 0) ? `<div><h4 class="text-sm font-semibold text-slate-700">Suggestions</h4>${toHtmlList(data.suggestions)}</div>` : ''}
+                                         ${codesHtml}
+                                         ${sourcesHtml}
+                                         ${followUpsHtml}
+                                         ${feedbackHtml}
+                                     </div>`;
+                    }
+                    messageWrapper.innerHTML = `${iconHtml}${contentHtml}`;
+                }
+                chatWindow.appendChild(messageWrapper);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            function showThinkingIndicator() {
+                const indicatorWrapper = document.createElement('div');
+                indicatorWrapper.id = 'thinking-indicator';
+                indicatorWrapper.className = 'flex items-start gap-3 message-in';
+                indicatorWrapper.innerHTML = `<div class="w-8 h-8 bg-blue-100 rounded-full flex-shrink-0 flex items-center justify-center border border-blue-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M4 14h16"/></svg></div><div class="bg-gray-100 rounded-xl rounded-tl-none p-4 text-sm text-slate-600"><div class="typing-indicator flex items-center gap-1.5"><span class="w-2 h-2 bg-blue-500 rounded-full"></span><span class="w-2 h-2 bg-blue-500 rounded-full"></span><span class="w-2 h-2 bg-blue-500 rounded-full"></span><span class="ml-2">Thinking...</span></div></div>`;
+                chatWindow.appendChild(indicatorWrapper);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            function removeThinkingIndicator() {
+                const indicator = document.getElementById('thinking-indicator');
+                if (indicator) indicator.remove();
+            }
+
+            // --- Signout ---
+            document.getElementById('signout-btn').addEventListener('click', async () => {
+                try {
+                    await fetch(`${API_BASE_URL}/auth/signout`, { method: 'POST', credentials: 'include' });
+                } finally { window.location.href = '/auth.html'; }
+            });
+
+            // --- Event Delegation for dynamically added buttons ---
+            chatWindow.addEventListener('click', async (e) => {
+                const feedbackBtn = e.target.closest('.feedback-btn');
+                const suggestedBtn = e.target.closest('.suggested-question-btn');
+                const tenantBtn = e.target.closest('.tenant-selection-btn');
+                const skipBtn = e.target.closest('.skip-tenant-selection-btn');
+
+                if (suggestedBtn) {
+                    submitQuery(suggestedBtn.textContent);
+                }
+
+                if (tenantBtn) {
+                    const originalQuery = tenantBtn.dataset.query;
+                    const tenant = tenantBtn.dataset.tenant;
+                    const newQuery = `${originalQuery} for ${tenant}`;
+                    submitQuery(newQuery);
+                }
+                
+                if (skipBtn) {
+                    const originalQuery = skipBtn.dataset.query;
+                    const newQuery = `${originalQuery} [AUTO]`;
+                    submitQuery(newQuery);
+                }
+
+                if (feedbackBtn) {
+                    const isHelpful = feedbackBtn.dataset.helpful === 'true';
+                    const responseContainer = feedbackBtn.closest('.ai-response-content');
+                    const query = responseContainer.dataset.query;
+                    const feedbackContainer = feedbackBtn.parentElement;
+                    
+                    feedbackContainer.innerHTML = `<span class="text-xs text-slate-500">Thank you for your feedback!</span>`;
+
+                    try {
+                        const res = await fetch(`${API_BASE_URL}/feedback`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ query, is_helpful: isHelpful })
+                        });
+                        if (!res.ok) throw new Error('Feedback request failed');
+                        
+                        if (!isHelpful) {
+                            const data = await res.json();
+                            if (data.suggestions && data.suggestions.length > 0) {
+                                const rephraseContainer = document.createElement('div');
+                                rephraseContainer.className = 'mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg';
+                                rephraseContainer.innerHTML = `<h5 class="text-xs font-semibold text-amber-800">Try rephrasing your question:</h5><div class="flex flex-wrap gap-2 mt-2">${data.suggestions.map(q => `<button class="suggested-question-btn p-2 bg-amber-100 text-amber-800 text-xs rounded-lg hover:bg-amber-200">${q}</button>`).join('')}</div>`;
+                                responseContainer.appendChild(rephraseContainer);
+                            }
+                        }
+                    } catch (error) {
+                        showNotification(error.message, true);
+                    }
+                }
+            });
+            
+            // --- Chat History ---
+            async function loadChatHistory() {
+                const me = await ensureAuth(); if (!me) return;
+                const start = startDateFilter.value;
+                const end = endDateFilter.value;
+                let url = `${API_BASE_URL}/history`;
+                if (start && end) {
+                    url += `?start=${start}&end=${end}`;
+                }
+
+                try {
+                    const res = await fetch(url, { credentials: 'include' });
+                    if (!res.ok) throw new Error("Could not fetch history");
+                    const history = await res.json();
+                    
+                    chatHistoryList.innerHTML = '';
+                    if (history.length === 0) {
+                        chatHistoryList.innerHTML = '<p class="text-xs text-slate-400 p-2">No history found for this period.</p>';
+                        return;
+                    }
+
+                    history.reverse().forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'p-2 text-sm text-slate-600 rounded-md cursor-pointer hover:bg-slate-100';
+                        const date = new Date(item.timestamp).toLocaleString();
+                        li.innerHTML = `<span class="block font-medium">${item.query.substring(0, 30)}...</span><span class="text-xs text-slate-400">${date}</span>`;
+                        li.title = item.query;
+                        li.onclick = () => { 
+                            chatWindow.innerHTML = ''; 
+                            appendMessage(item.query, 'user'); 
+                            appendMessage(item.response, 'ai', item.query); 
+                        };
+                        chatHistoryList.appendChild(li);
+                    });
+                } catch (err) { 
+                    chatHistoryList.innerHTML = '<p class="text-xs text-red-400 p-2">Could not load history.</p>';
+                    showNotification(err.message, true);
+                 }
+            }
+            
+            startDateFilter.addEventListener('change', loadChatHistory);
+            endDateFilter.addEventListener('change', loadChatHistory);
+            newConversationBtn.addEventListener('click', ()=>{
+                displayWelcomeMessage();
+                loadChatHistory();
+            });
+
+            // --- Upload Panel Functions ---
+            async function fetchTenants() {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/tenants`);
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Failed to fetch tenants');
+                    tenantSelect.innerHTML = '<option value="">-- Select --</option>';
+                    data.tenants.forEach(t => {
+                        const opt = document.createElement('option');
+                        opt.value = t;
+                        opt.textContent = t;
+                        tenantSelect.appendChild(opt);
+                    });
+                } catch (error) {
+                    showNotification(error.message, true);
+                }
+            }
+
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-blue-500', 'bg-blue-50'); });
+            dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('border-blue-500', 'bg-blue-50'); });
+            dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('border-blue-500', 'bg-blue-50'); fileInput.files = e.dataTransfer.files; updateFileList(); });
+            fileInput.addEventListener('change', updateFileList);
+            
+            function updateFileList() {
+                fileList.innerHTML = '';
+                if (fileInput.files.length > 0) {
+                    const list = document.createElement('ul');
+                    list.className = 'list-disc pl-5 text-slate-600';
+                    for (const file of fileInput.files) { const li = document.createElement('li'); li.textContent = `${file.name}`; list.appendChild(li); }
+                    fileList.appendChild(list);
+                }
+            }
+            
+            uploadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitButton = uploadForm.querySelector('button[type="submit"]');
+                const formData = new FormData(uploadForm);
+
+                if (!formData.get('tenant_id') && !formData.get('new_tenant_id')) {
+                     showNotification('Please select or create a tenant.', true);
+                     return;
+                }
+
+                submitButton.disabled = true;
+                submitButton.textContent = 'Ingesting...';
+                uploadSummary.classList.add('hidden');
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/upload`, {
+                        method: 'POST',
+                        body: formData,
+                    });
+                    const result = await res.json();
+                    if(!res.ok && res.status !== 207) throw new Error(result.error || (result.errors && result.errors.join(', ')) || 'Server error');
+                    
+                    showNotification(result.message || 'Ingestion complete!');
+                    let summaryHtml = `<strong>Status:</strong> ${result.message}<br>`;
+                    if(result.details && result.details.length) summaryHtml += `<strong>Details:</strong><ul>${result.details.map(d => `<li>${d}</li>`).join('')}</ul>`;
+                    if(result.errors && result.errors.length) summaryHtml += `<strong class="text-red-500">Errors:</strong><ul>${result.errors.map(e => `<li>${e}</li>`).join('')}</ul>`;
+                    uploadSummary.innerHTML = summaryHtml;
+                    uploadSummary.classList.remove('hidden');
+
+                    uploadForm.reset();
+                    fileList.innerHTML = '';
+                    fetchTenants();
+                } catch (error) {
+                    showNotification(error.message, true);
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Upload & Ingest';
+                }
+            });
+            
+            // --- Analytics Panel ---
+            async function loadAnalytics() {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/analytics`);
+                    const data = await res.json();
+                    if (!res.ok) throw new Error("Could not fetch analytics");
+
+                    const ctx = document.getElementById('tenant-chart').getContext('2d');
+                    if(tenantChart) tenantChart.destroy();
+                    
+                    tenantChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Number of Queries',
+                                data: data.data,
+                                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                                borderColor: 'rgba(59, 130, 246, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } catch(err) {
+                    showNotification(err.message, true);
+                }
+            }
+
+            // --- Tab Navigation ---
+            document.getElementById('tabs').addEventListener('click', (e) => {
+                const button = e.target.closest('.tab-btn');
+                if (!button) return;
+                document.querySelectorAll('.tab-btn').forEach(tab => {
+                    tab.classList.remove('text-blue-800', 'font-semibold', 'border-b-2', 'border-blue-700');
+                    tab.classList.add('text-slate-500');
+                });
+                button.classList.add('text-blue-800', 'font-semibold', 'border-b-2', 'border-blue-700');
+                button.classList.remove('text-slate-500');
+
+                document.querySelectorAll('.panel-content').forEach(p => p.classList.add('hidden'));
+                document.getElementById(button.dataset.target)?.classList.remove('hidden');
+                
+                if (button.dataset.target === 'upload-panel') {
+                    fetchTenants();
+                } else if (button.dataset.target === 'analytics-panel') {
+                }
+            });
+            
+            // --- Initial State ---
+            displayWelcomeMessage();
+            fetchTenants();
+            loadChatHistory();
+        });
+    </script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,36 @@
+#Core Frameworks
+flask
+flask_cors
+python-dotenv
+
+#LLM & RAG Libraries
+llama-index
+langchain
+llama-index-llms-groq
+llama-index-embeddings-huggingface
+llama-index-readers-web
+pymupdf
+unstructured
+Pillow
+camelot-py[cv]
+tabula-py
+pandas
+openpyxl
+pyjwt
+authlib
+
+#Document Loading
+pypdf
+python-docx
+beautifulsoup4
+
+#For HuggingFace Embeddings
+torch
+transformers
+sentence-transformers
+werkzeug
+trafilatura
+unstructured
+python-magic
+lxml
+gunicorn
