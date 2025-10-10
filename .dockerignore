@@ -26,3 +26,13 @@ Thumbs.db
 history.json
 users.db
 uploads/
+
+# Backups and local-only files/folders
+*.bak
+**/*.bak
+utils.py
+schedules.json
+README.md
+readme.md
+aws/
+0-DataIngestParsing/

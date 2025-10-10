@@ -18,6 +18,7 @@ pandas
 openpyxl
 pyjwt
 authlib
+trafilatura[llama-index-readers-web]
 
 #Document Loading
 pypdf

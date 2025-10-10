@@ -1,5 +1,6 @@
 import os
 import re
+import unicodedata
 import logging
 import json
 import shutil
@@ -37,6 +38,11 @@ class RAGAgent:
         self.tools = []
         self.tenant_embeddings = {}
         self.tenant_tool_map = {}
+        # Cleaning toggle (enable by default)
+        try:
+            self.cleaning_enabled = str(os.getenv("CLEANING_ENABLED", "true")).strip().lower() not in ("0","false","no")
+        except Exception:
+            self.cleaning_enabled = True
         try:
             self.TENANT_HIGH_CONF_THRESH = float(os.getenv("TENANT_HIGH_CONF_THRESH", "0.75"))
         except ValueError:
@@ -122,6 +128,64 @@ class RAGAgent:
                         recursive=True,
                         file_extractor=file_extractor or None,
                     ).load_data()
+                    # Optional cleaning pass before chunking/indexing
+                    if self.cleaning_enabled:
+                        def _is_code_like(s: str) -> bool:
+                            if not s:
+                                return False
+                            s2 = s.strip()
+                            # ICD-10, CPT, HCPCS, DRG/MS-DRG quick checks
+                            if re.search(r"\b[A-TV-Z][0-9]{2}(?:\.[A-Z0-9]{1,4})?\b", s2, re.IGNORECASE):
+                                return True
+                            if re.search(r"\b\d{5}\b", s2):
+                                return True
+                            if re.search(r"\b[A-VJ-KM-PQRS-T][0-9]{4}\b", s2, re.IGNORECASE):
+                                return True
+                            if re.search(r"\b(?:MS-)?DRG\s*\d{3}\b", s2, re.IGNORECASE):
+                                return True
+                            return False
+
+                        def _clean_text(txt: str) -> str:
+                            if not isinstance(txt, str) or not txt:
+                                return txt
+                            # Unicode normalize
+                            t = unicodedata.normalize("NFKC", txt)
+                            # Normalize line endings
+                            t = t.replace("\r\n", "\n").replace("\r", "\n")
+                            # De-hyphenate across line breaks: word-\nword => wordword (but avoid inside recognized codes)
+                            t = re.sub(r"(?<=\w)-(?:\n|\r\n)(?=\w)", "", t)
+                            # Remove control chars (except \n and \t)
+                            t = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F]", " ", t)
+                            # Collapse excessive blank lines
+                            t = re.sub(r"\n{3,}", "\n\n", t)
+                            # Header/footer heuristic: drop lines repeated often, short, and non-code
+                            lines = t.split("\n")
+                            counts = {}
+                            for ln in lines:
+                                key = ln.strip()
+                                if key:
+                                    counts[key] = counts.get(key, 0) + 1
+                            cleaned_lines = []
+                            for ln in lines:
+                                key = ln.strip()
+                                if not key:
+                                    cleaned_lines.append(ln)
+                                    continue
+                                # Repeated boilerplate and not a code line
+                                if counts.get(key, 0) >= 3 and 2 <= len(key) <= 80 and not _is_code_like(key):
+                                    continue
+                                cleaned_lines.append(ln)
+                            t = "\n".join(cleaned_lines)
+                            # Collapse horizontal whitespace sequences (not newlines)
+                            t = re.sub(r"[ \t]{2,}", " ", t)
+                            return t.strip()
+
+                        for d in documents:
+                            try:
+                                if hasattr(d, 'text') and isinstance(d.text, str):
+                                    d.text = _clean_text(d.text)
+                            except Exception:
+                                pass
                     index = VectorStoreIndex.from_documents(documents)
                     index.storage_context.persist(persist_dir=tenant_storage_dir)
                 
