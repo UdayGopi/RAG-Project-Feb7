@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import json
 import logging # PERMANENT FIX: Import the logging module
+import warnings
 from datetime import datetime, timedelta
 from uuid import uuid4
 from collections import Counter
@@ -14,8 +15,15 @@ import jwt
 from authlib.integrations.flask_client import OAuth
 from typing import Optional
 
-# Load environment variables from .env file
+# Load environment variables from .env file (for local dev). In containers, we pass envs via --env-file
 load_dotenv()
+
+# Suppress noisy Pydantic v2 validate_default warnings emitted by dependencies
+warnings.filterwarnings(
+    "ignore",
+    message=r".*The 'validate_default' attribute.*",
+    category=UserWarning,
+)
 app = Flask(__name__, static_folder='static')
 CORS(app, supports_credentials=True)
 
