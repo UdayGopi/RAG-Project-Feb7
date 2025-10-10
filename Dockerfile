@@ -35,22 +35,44 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PATH="/opt/venv/bin:$PATH" \
     PORT=5001
 
-# Make Java optional (for tabula). Default: off for faster builds
-ARG INCLUDE_JAVA=false
+# Feature toggles (keep defaults lean for smallest image)
+ARG INCLUDE_JAVA=false       # Tabula (Java) for table extraction
+ARG INCLUDE_PDF_TOOLS=false  # poppler/ghostscript for some PDF pipelines
+ARG INCLUDE_OPENCV=false     # OpenCV GUI-related libs
 
-# Runtime system deps for PDF/HTML processing and OpenCV
+# Minimal runtime deps first
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates curl \
-    ghostscript poppler-utils \
-    libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 \
-    libmagic1 tini \
-    && if [ "$INCLUDE_JAVA" = "true" ]; then apt-get install -y --no-install-recommends default-jre; fi \
+    ca-certificates curl libmagic1 tini \
     && rm -rf /var/lib/apt/lists/*
+
+# Optional PDF tools
+RUN if [ "$INCLUDE_PDF_TOOLS" = "true" ]; then \
+      apt-get update && apt-get install -y --no-install-recommends ghostscript poppler-utils && \
+      rm -rf /var/lib/apt/lists/* ; \
+    fi
+
+# Optional OpenCV GUI-related libs
+RUN if [ "$INCLUDE_OPENCV" = "true" ]; then \
+      apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 && \
+      rm -rf /var/lib/apt/lists/* ; \
+    fi
+
+# Optional Java for tabula
+RUN if [ "$INCLUDE_JAVA" = "true" ]; then \
+      apt-get update && apt-get install -y --no-install-recommends default-jre && \
+      rm -rf /var/lib/apt/lists/* ; \
+    fi
 
 WORKDIR /app
 
 # Copy virtualenv from builder
 COPY --from=builder /opt/venv /opt/venv
+
+# Prune caches/tests in venv to reduce image size
+RUN find /opt/venv -type d -name "__pycache__" -prune -exec rm -rf {} + \
+ && find /opt/venv -type f -name "*.pyc" -delete \
+ && find /opt/venv/lib -type d -regex '.*site-packages/.*/tests' -prune -exec rm -rf {} + \
+ && find /opt/venv/lib -type d -regex '.*site-packages/.*/test' -prune -exec rm -rf {} + || true
 
 # Copy app source
 COPY . .
