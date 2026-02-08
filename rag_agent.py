@@ -5,7 +5,10 @@ import logging
 import json
 import shutil
 from urllib.parse import urlparse
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, StorageContext, load_index_from_storage, download_loader
+import requests
+import html as html_lib
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, StorageContext, load_index_from_storage, Document
+from llama_index.core import download_loader
 from llama_index.llms.groq import Groq
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
@@ -15,6 +18,7 @@ from llama_index.core.base.response.schema import Response
 from llama_index.core.postprocessor import SentenceTransformerRerank
 from math import sqrt
 import time
+import tiktoken  # For accurate token counting
 
 class RAGAgent:
     def __init__(self, documents_dir="documents", storage_dir="storage"):
@@ -40,9 +44,59 @@ class RAGAgent:
         self.tenant_tool_map = {}
         # Cleaning toggle (enable by default)
         try:
+            # Build retrieval keywords and retrieval_query for routing/retrieval (not for generation)
+            def _extract_keywords(q: str, k_max: int = 8):
+                try:
+                    text = (q or '').lower()
+                    text = re.sub(r"[^a-z0-9\s]", " ", text)
+                    tokens = [t for t in text.split() if len(t) >= 3]
+                    stop = set(["the","and","for","with","that","this","from","your","about","have","what","which","when","where","will","there","into","those","been","being","were","are","how","make","made","like","such","use","uses","used","using","can","you","please","tell","more","info","info.","step","steps","process","guide","guidance","policy","policies","onboarding","onboard","form","forms","rc","rcs"])  # basic stoplist
+                    freq = {}
+                    for t in tokens:
+                        if t in stop:
+                            continue
+                        freq[t] = freq.get(t, 0) + 1
+                    domain_terms = [t for t in ["esmd","fhir","cms","hhs","extension","extensions","implementation","guide"] if t in tokens]
+                    key = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+                    kws = [w for w, _ in key][:k_max]
+                    out = []
+                    for w in domain_terms + kws:
+                        if w not in out:
+                            out.append(w)
+                    return out[:k_max]
+                except Exception:
+                    return []
+
+            query_keywords = _extract_keywords(query)
+            keywords_str = " ".join(query_keywords)
+            retrieval_query = (f"keywords: {keywords_str}\nquestion: {query}" if query_keywords else query)
+            trace["keywords"] = query_keywords
+            trace["retrieval_query"] = retrieval_query
+            # Trace object for logs/response (optional)
+            trace = {
+                "query": query,
+                "keywords": query_keywords,
+                "retrieval_query": retrieval_query,
+                "mentioned_tenants": [],
+                "tenant_scores": [],
+                "selected_tenant": None,
+                "selected_score": None,
+                "decision_path": None
+            }
+            logging.info(f"Routing: keywords={query_keywords}")
             self.cleaning_enabled = str(os.getenv("CLEANING_ENABLED", "true")).strip().lower() not in ("0","false","no")
         except Exception:
             self.cleaning_enabled = True
+        # Table extraction toggle (enable by default)
+        try:
+            self.table_extract_enabled = str(os.getenv("TABLE_EXTRACT_ENABLED", "true")).strip().lower() not in ("0","false","no")
+        except Exception:
+            self.table_extract_enabled = True
+        # Response cache toggle (enable by default)
+        try:
+            self.cache_enabled = str(os.getenv("CACHE_ENABLED", "true")).strip().lower() not in ("0","false","no")
+        except Exception:
+            self.cache_enabled = True
         try:
             self.TENANT_HIGH_CONF_THRESH = float(os.getenv("TENANT_HIGH_CONF_THRESH", "0.75"))
         except ValueError:
@@ -51,8 +105,115 @@ class RAGAgent:
             self.TENANT_MIN_CONF_THRESH = float(os.getenv("TENANT_MIN_CONF_THRESH", "0.5"))
         except ValueError:
             self.TENANT_MIN_CONF_THRESH = 0.5
+        # Clarify intent thresholds (tunable)
+        try:
+            self.CLARIFY_NONTRIVIAL_MAX = int(os.getenv("CLARIFY_NONTRIVIAL_MAX", "1"))
+        except ValueError:
+            self.CLARIFY_NONTRIVIAL_MAX = 1
+        try:
+            self.CLARIFY_MIN_TOTAL_TOKENS = int(os.getenv("CLARIFY_MIN_TOTAL_TOKENS", "2"))
+        except ValueError:
+            self.CLARIFY_MIN_TOTAL_TOKENS = 2
+        # Tenant alias mapping (JSON env or sensible defaults)
+        try:
+            aliases_env = os.getenv("TENANT_ALIASES", "")
+            if aliases_env.strip():
+                self.alias_to_tenant = {k.lower(): v for k, v in json.loads(aliases_env).items()}
+            else:
+                self.alias_to_tenant = {
+                    "hih": "HIH",
+                    "health information handler": "HIH",
+                    "handler": "HIH",
+                    "rc": "RC",
+                    "review contractor": "RC",
+                    "review contractors": "RC",
+                }
+        except Exception:
+            self.alias_to_tenant = {}
         self.cache_file = os.path.join(os.getcwd(), "cache_store.json")
         self._rebuild_router_engine()
+
+    # -------------------- Intent detection --------------------
+    def _detect_intent(self, query: str) -> str:
+        """Very lightweight intent classifier.
+        Returns one of: 'small_talk' | 'clarify' | 'download' | 'question' | 'unknown'.
+        """
+        try:
+            raw = (query or "").strip()
+            q = raw.lower()
+            q_stripped = re.sub(r"[^a-z0-9\s]", "", q)  # strip punctuation/emojis for heuristic
+            if not q:
+                return 'unknown'
+            # If user mentions a tenant explicitly or via alias, this is not small talk
+            mentioned = self._resolve_tenants_in_text(q)
+            if mentioned:
+                return 'question'
+            # Greetings (use word boundaries to avoid matching 'hi' inside 'hih')
+            if (
+                re.search(r"\b(hi|hello|hey|hiya|yo|sup)\b", q_stripped) or
+                re.search(r"\b(good\s+(morning|afternoon|evening))\b", q_stripped) or
+                'how are you' in q_stripped or 'what is up' in q_stripped or 'whats up' in q_stripped
+            ) and len(q_stripped.split()) <= 6:
+                return 'small_talk'
+            # Clarification-needed: extremely vague or placeholder queries (no meaningful tokens)
+            words = [w for w in q_stripped.split() if len(w) > 1]
+            low_info_terms = {"what", "is", "the", "a", "an", "of", "in"}
+            nontrivial = [w for w in words if w not in low_info_terms]
+            if len(nontrivial) == 0:
+                return 'clarify'
+            if any(k in q_stripped for k in ['download', 'form', 'get', 'obtain', 'document']):
+                return 'download'
+            if any(ch in (raw or '') for ch in ['?', ':']) or len(q_stripped.split()) >= 4:
+                return 'question'
+            return 'unknown'
+        except Exception:
+            return 'unknown'
+
+    # -------------------- URL enrichment for cached responses --------------------
+    def _enrich_sources_with_url(self, resp: dict):
+        try:
+            if not isinstance(resp, dict):
+                return resp
+            sources = resp.get('sources') or []
+            if not sources:
+                return resp
+            sel = resp.get('selected_tenant') or ''
+            tenants_in_scope = [t.strip() for t in str(sel).split(',') if t.strip()] if sel else []
+            url_maps = {}
+            for t in tenants_in_scope:
+                try:
+                    url_map_path = os.path.join(self.documents_dir, t, 'url_map.json')
+                    if os.path.exists(url_map_path):
+                        with open(url_map_path, 'r', encoding='utf-8') as fh:
+                            m = json.load(fh) or {}
+                            for k, v in m.items():
+                                try:
+                                    url_maps[os.path.normpath(k)] = v
+                                    url_maps[os.path.basename(os.path.normpath(k))] = v
+                                except Exception:
+                                    url_maps[k] = v
+                except Exception:
+                    continue
+            changed = False
+            for s in sources:
+                try:
+                    if s.get('url'):
+                        continue
+                    fname = str(s.get('filename') or '')
+                    if not fname:
+                        continue
+                    key1 = os.path.normpath(fname)
+                    url_val = url_maps.get(key1) or url_maps.get(os.path.basename(key1))
+                    if url_val:
+                        s['url'] = url_val
+                        changed = True
+                except Exception:
+                    continue
+            if changed:
+                resp['sources'] = sources
+            return resp
+        except Exception:
+            return resp
 
     def _rebuild_router_engine(self):
         """
@@ -71,7 +232,8 @@ class RAGAgent:
                 self.router_query_engine = None
                 return
 
-            reranker = SentenceTransformerRerank(model="BAAI/bge-reranker-base", top_n=5)
+            # Use reranker to filter only the most relevant results (top 3 for focused responses)
+            reranker = SentenceTransformerRerank(model="BAAI/bge-reranker-base", top_n=3)
 
             for tenant_id in self.tenants:
                 tenant_doc_dir = os.path.join(self.documents_dir, tenant_id)
@@ -186,12 +348,70 @@ class RAGAgent:
                                     d.text = _clean_text(d.text)
                             except Exception:
                                 pass
+                    # Optional: extract tables from PDFs and append as additional Documents
+                    if self.table_extract_enabled:
+                        try:
+                            import os as _os
+                            pdf_paths = []
+                            for root, _, fs in _os.walk(tenant_doc_dir):
+                                for f in fs:
+                                    if f.lower().endswith('.pdf'):
+                                        pdf_paths.append(_os.path.join(root, f))
+                            if pdf_paths:
+                                try:
+                                    import camelot  # type: ignore
+                                except Exception:
+                                    camelot = None
+                                for pdf_path in pdf_paths:
+                                    lines = []
+                                    tables = None
+                                    if camelot is not None:
+                                        try:
+                                            tables = camelot.read_pdf(pdf_path, pages='all', flavor='lattice')
+                                        except Exception:
+                                            try:
+                                                tables = camelot.read_pdf(pdf_path, pages='all', flavor='stream')
+                                            except Exception:
+                                                tables = None
+                                    if not tables or getattr(tables, 'n', 0) == 0:
+                                        continue
+                                    for t in tables:
+                                        try:
+                                            df = t.df
+                                            for row in df.values.tolist():
+                                                row_text = " | ".join([str(x).strip() for x in row if str(x).strip()])
+                                                if any(c.isdigit() for c in row_text):
+                                                    lines.append(row_text)
+                                        except Exception:
+                                            continue
+                                    if lines:
+                                        text = "\n".join(lines)
+                                        try:
+                                            sidecar = pdf_path + '.tables.txt'
+                                            with open(sidecar, 'w', encoding='utf-8') as fh:
+                                                fh.write(text)
+                                        except Exception:
+                                            pass
+                                        # Append as a lightweight document to improve recall
+                                        documents.append(
+                                            Document(
+                                                text=text,
+                                                metadata={
+                                                    'file_path': sidecar if 'sidecar' in locals() else (pdf_path + '::tables'),
+                                                    'source_pdf': pdf_path,
+                                                }
+                                            )
+                                        )
+                        except Exception as _te:
+                            logging.warning(f"Table extraction skipped due to error: {_te}")
+
                     index = VectorStoreIndex.from_documents(documents)
                     index.storage_context.persist(persist_dir=tenant_storage_dir)
                 
                 query_engine = index.as_query_engine(
-                    similarity_top_k=15,  # Retrieve more candidates for the re-ranker
-                    node_postprocessors=[reranker]
+                    similarity_top_k=10,  # Retrieve focused set of candidates (reduced from 15)
+                    node_postprocessors=[reranker],
+                    similarity_cutoff=0.5  # Filter out low-relevance results
                 )
                 
                 tool = QueryEngineTool(
@@ -220,6 +440,48 @@ class RAGAgent:
         except Exception as e:
             logging.error(f"Failed to create router engine: {e}", exc_info=True)
             self.router_query_engine = None
+
+    def _resolve_tenants_in_text(self, text: str):
+        """Return list of tenant IDs explicitly mentioned in text via exact tenant IDs or aliases.
+        Deduplicated, preserves order of first appearance.
+        """
+        found = []
+        seen = set()
+        ql = (text or "").lower()
+        # direct tenant ID matches
+        for t in self.tenants:
+            if t and t.lower() in ql:
+                if t not in seen:
+                    seen.add(t)
+                    found.append(t)
+        # aliases
+        for alias, tenant in (self.alias_to_tenant or {}).items():
+            if alias in ql:
+                tid = tenant
+                if tid in self.tenants and tid not in seen:
+                    seen.add(tid)
+                    found.append(tid)
+        return found
+
+    # -------------------- Routing normalization --------------------
+    def _normalize_for_routing(self, text: str) -> str:
+        """Normalize user query for routing/tenant selection only.
+        - Lowercase, NFKC normalize
+        - Remove punctuation
+        - Remove common stopwords and filler phrases
+        We still send the ORIGINAL query to the LLM and retrieval engine.
+        """
+        try:
+            sw = {
+                'a','an','the','and','or','but','if','then','else','for','to','of','in','on','at','by','with','from','as','about','is','are','was','were','be','being','been','it','this','that','these','those','do','does','did','doing','have','has','had','having','you','your','yours','me','my','we','our','ours','they','their','them','i','he','she','his','her','him','what','which','who','whom','whose','when','where','why','how','can','could','should','would','will','shall','may','might','also','please','kindly','hi','hello','hey','thanks','thank','regards'
+            }
+            t = unicodedata.normalize('NFKC', text or '')
+            t = t.lower()
+            t = re.sub(r"[^a-z0-9\s]", " ", t)
+            tokens = [w for w in t.split() if w not in sw and len(w) > 1]
+            return " ".join(tokens).strip()
+        except Exception:
+            return (text or '').strip()
 
     def _build_tenant_descriptor(self, tenant_id: str, tenant_doc_dir: str) -> str:
         """Create a compact textual descriptor for a tenant to enable cheap embedding-based routing."""
@@ -319,7 +581,7 @@ class RAGAgent:
             tokens.add(m.group(0).lower())
         # short keywords (avoid common stopwords)
         words = re.findall(r'[A-Za-z0-9_\-]+', q.lower())
-        stop = {"what","is","the","a","an","and","or","to","from","for","why","it","used","use","of","in","on"}
+        stop = {"a","an","the","and","or","to","from","for","why","it","is","are","was","were","be","being","been","use","used","of","in","on","at","by","with","what","which","who","whom","how","when","where","hello","hi","hey","please"}
         for w in words:
             if w not in stop and len(w) >= 2:
                 tokens.add(w)
@@ -473,18 +735,80 @@ class RAGAgent:
                 out.append(ch)
         return ''.join(out)
 
+    def _smart_truncate_context(self, source_nodes, max_tokens=3500):
+        """
+        Intelligently truncate context to fit within token limits while preserving
+        the most relevant information. Already reranked nodes are prioritized.
+        
+        Args:
+            source_nodes: List of source nodes (already reranked by relevance)
+            max_tokens: Maximum tokens allowed (default 3500 to leave room for prompt + response)
+        
+        Returns:
+            Truncated context string with most relevant information
+        """
+        try:
+            # Initialize tokenizer (cl100k_base is used by most modern models)
+            encoding = tiktoken.get_encoding("cl100k_base")
+            
+            # Nodes are already reranked, so we take them in order of relevance
+            selected_chunks = []
+            total_tokens = 0
+            
+            for node in source_nodes:
+                content = node.get_content()
+                # Count tokens in this chunk
+                chunk_tokens = len(encoding.encode(content))
+                
+                # If adding this chunk stays within limit, include it
+                if total_tokens + chunk_tokens <= max_tokens:
+                    selected_chunks.append(content)
+                    total_tokens += chunk_tokens
+                else:
+                    # If we can't fit the whole chunk, try to fit part of it
+                    remaining_tokens = max_tokens - total_tokens
+                    if remaining_tokens > 100:  # Only add if we have meaningful space
+                        # Truncate the chunk to fit remaining space
+                        tokens = encoding.encode(content)[:remaining_tokens]
+                        truncated_content = encoding.decode(tokens) + "... [truncated]"
+                        selected_chunks.append(truncated_content)
+                    break
+            
+            context = "\n\n".join(selected_chunks)
+            
+            # Log the truncation
+            if len(selected_chunks) < len(source_nodes):
+                logging.info(f"Context truncated: Used {len(selected_chunks)}/{len(source_nodes)} chunks (~{total_tokens} tokens)")
+            
+            return context
+            
+        except Exception as e:
+            logging.warning(f"Token counting failed, using fallback truncation: {e}")
+            # Fallback: simple character-based truncation
+            fallback_context = "\n\n".join([r.get_content() for r in source_nodes])
+            max_chars = max_tokens * 4  # Rough estimate: 1 token ≈ 4 chars
+            if len(fallback_context) > max_chars:
+                fallback_context = fallback_context[:max_chars] + "\n\n... [context truncated to fit token limit]"
+            return fallback_context
+
     def _format_rag_response(self, query, rag_response, selected_tenant):
-        context_str = "\n\n".join([r.get_content() for r in rag_response.source_nodes])
+        # Use smart truncation to ensure context fits within token limits
+        # Keep most relevant information from reranked nodes
+        # Max tokens: 3500 for context + ~1000 for prompt/instructions + ~1500 for response = ~6000 total (under Groq limit)
+        context_str = self._smart_truncate_context(rag_response.source_nodes, max_tokens=3500)
         
         prompt = f"""
-        You are a professional AI assistant for company employees. Your purpose is to provide accurate information based SOLELY on the provided context.
+        You are a professional AI assistant providing concise, accurate information to company employees. Your purpose is to deliver ONLY the most relevant information based STRICTLY on the provided context.
 
-        RULES:
+        CRITICAL RULES:
         1.  **NO HALLUCINATIONS:** If the answer is not in the `CONTEXT` below, you MUST state that you could not find the information in the available documents. Do not use any outside knowledge.
-        2.  **STRICTLY USE CONTEXT:** Base your entire response on the `CONTEXT` provided.
-        3.  **PROFESSIONAL TONE:** Frame your answers in a clear, professional, and helpful manner.
-        4.  **CODE SNIPPETS:** If the context contains any code blocks (e.g., XML, JSON, Python), extract them exactly as they are.
-        5.  **DOWNLOAD INTENT:** If the user query contains keywords like "download", "form", "get", "obtain", or "document", identify the most relevant filename(s) from the context and include them in the `downloadable_files` list.
+        2.  **STRICTLY USE CONTEXT:** Base your entire response on the `CONTEXT` provided. Extract ONLY information that directly answers the user's question.
+        3.  **PROFESSIONAL & CONCISE:** Provide clear, professional responses. Be direct and avoid unnecessary elaboration. Each sentence must add value.
+        4.  **RELEVANCE FIRST:** Include ONLY information that directly addresses the user's specific question. Omit tangential or background information unless explicitly asked.
+        5.  **CODE SNIPPETS:** If the context contains any code blocks (e.g., XML, JSON, Python), extract them exactly as they are.
+        6.  **DOWNLOAD INTENT:** If the user query contains keywords like "download", "form", "get", "obtain", or "document", identify the most relevant filename(s) from the context and include them in the `downloadable_files` list.
+        7.  **CONSISTENT FORMATTING:** In `detailed_response`, write concise, parallel bullets or short paragraphs. Keep structure consistent and on-topic.
+        8.  **PRECISION OVER VOLUME:** Answer precisely what was asked. If multiple tenants are involved, integrate only the relevant evidence and clearly note any key differences.
 
         CONTEXT FROM TENANT '{selected_tenant}':
         ---
@@ -497,21 +821,34 @@ class RAGAgent:
 
         RESPONSE FORMAT (JSON object only):
         {{
-            "summary": "Concise 1-3 sentence summary based ONLY on the context. If no context, say that.",
-            "detailed_response": "Detailed, multi-paragraph answer based ONLY on the context. If no context, state that the information is not in the documents.",
-            "key_points": ["List of 3-5 key takeaways from the context. If none, return an empty list."],
-            "suggestions": ["List of 2-3 practical next steps based on the context. If none, return an empty list."],
-            "follow_up_questions": ["List of 2-3 relevant follow-up questions that can be answered from the context. If none, return an empty list."],
+            "summary": "Concise 1-2 sentence summary with ONLY the most relevant information from context. If no context, say that clearly.",
+            "detailed_response": "Focused, professional answer with ONLY information directly relevant to the question. Use clear bullet points or short paragraphs. Avoid filler content. If no context, state that the information is not in the documents.",
+            "key_points": ["List of 2-4 key takeaways that DIRECTLY answer the question. Include only essential information. If none, return empty list."],
+            "suggestions": ["List of 1-2 practical next steps based ONLY on relevant context. Omit generic advice. If none, return empty list."],
+            "follow_up_questions": ["List of 1-2 highly relevant follow-up questions that can be answered from the context. If none, return empty list."],
             "code_snippets": [],
         }}
 
         IMPORTANT OUTPUT RULES:
         - Output MUST be a single valid JSON object and NOTHING else. Do not add headings or lists after the JSON.
         - Escape all newlines within string values as \n. Do not include raw line breaks inside JSON strings.
+        - Be concise and professional. Every piece of information must be directly relevant to the user's question.
+        - Quality over quantity: Provide focused, useful information rather than comprehensive overviews.
         """
         ql = (query or '').lower()
         wants_only_codes = any(k in ql for k in ['only code', 'only codes', 'just code', 'just codes', 'codes only'])
         code_candidates = self._extract_code_like_tokens(context_str)
+        response_str = None  # Initialize to avoid UnboundLocalError
+        
+        # Validate total prompt size before sending to API
+        try:
+            encoding = tiktoken.get_encoding("cl100k_base")
+            prompt_tokens = len(encoding.encode(prompt))
+            if prompt_tokens > 5500:  # Leave room for response (6000 - 500 buffer)
+                logging.warning(f"Prompt size ({prompt_tokens} tokens) approaching limit. Consider reducing context further.")
+        except Exception:
+            pass  # If token counting fails, proceed anyway
+        
         try:
             response_str = self.llm.complete(prompt).text
             # Local helpers to avoid attribute lookup issues in some runtimes
@@ -599,8 +936,38 @@ class RAGAgent:
             sanitized["is_download_intent"] = bool(di)
             return sanitized
         except Exception as e:
-            logging.error(f"Failed to parse LLM response into JSON: {e}. Response: {response_str}")
-            return {"summary": "Could not format response.", "detailed_response": rag_response.response}
+            # Check if error is due to API payload size limit or token issues
+            error_msg = str(e)
+            if "413" in error_msg or "Payload Too Large" in error_msg or "rate_limit_exceeded" in error_msg or "token" in error_msg.lower():
+                logging.error(f"API payload/token limit exceeded for query: {query[:100]}... Error: {error_msg[:200]}")
+                return {
+                    "summary": "Query Retrieved Too Much Data",
+                    "detailed_response": "The system retrieved more information than can be processed in one response. The context has been automatically optimized, but you may get better results by:\n\n1. **Be more specific**: Focus on one aspect at a time\n2. **Narrow the scope**: Ask about specific items or categories\n3. **Use filters**: Specify particular dates, types, or criteria\n4. **Break it down**: Split complex questions into smaller queries\n\nNote: The system now automatically keeps only the most relevant information to fit within limits.",
+                    "key_points": [
+                        "Your query is valid but retrieved extensive context",
+                        "System automatically prioritizes most relevant information",
+                        "More specific queries yield better results"
+                    ],
+                    "suggestions": [
+                        "Rephrase with more specific criteria",
+                        "Focus on one aspect of your question at a time"
+                    ],
+                    "follow_up_questions": [],
+                    "code_snippets": [],
+                    "codes": []
+                }
+            
+            # Log the error with response if available
+            if response_str:
+                logging.error(f"Failed to parse LLM response into JSON: {e}. Response: {response_str[:500]}...")
+            else:
+                logging.error(f"LLM API call failed: {e}")
+            
+            # Return fallback response
+            return {
+                "summary": "Could not format response.",
+                "detailed_response": rag_response.response if hasattr(rag_response, 'response') else "An error occurred while processing your request."
+            }
 
     def get_response(self, query):
         if not self.router_query_engine:
@@ -613,7 +980,8 @@ class RAGAgent:
         if auto_select:
             query = query.replace("[AUTO]", "").strip()
         
-        ambiguous_keywords = ["onboard", "onboarding", "form"]
+        # Ambiguity detection (more tolerant to misspellings like 'onbording')
+        ambiguous_keywords = ["onboard", "onboarding", "onbord", "onbordin", "form"]
         is_ambiguous = any(keyword in query.lower() for keyword in ambiguous_keywords)
         
         if not auto_select and is_ambiguous and not any(tenant.lower() in query.lower() for tenant in self.tenants):
@@ -624,55 +992,161 @@ class RAGAgent:
                 "original_query": query
             }
 
-        try:
-            # Try cached response (using auto-selected tenant descriptor if present later; fallback to None)
-            # We attempt cache after we know tenant. For now, try all tenants and pick a hit if any.
-            for t in self.tenants:
-                cached = self._get_cached_response(query, t)
-                if cached:
-                    logging.info(f"Serving cached response for tenant '{t}'")
-                    return cached
+        # Small-talk / greeting bypass to avoid hallucinations without context
+        intent = self._detect_intent(query)
+        if intent == 'small_talk':
+            return {
+                "is_conversational": True,
+                "answer": "👋 Hi! I'm your policy bot. You can ask about policies, codes, or upload docs first. Use the Upload tab to add content, then ask me anything about it."
+            }
+        if intent == 'clarify':
+            return {
+                "is_conversational": True,
+                "answer": (
+                    "I can help with company or policy-related questions. Please be specific, for example: \n"
+                    "- 'What are the esMD onboarding steps for RCs?'\n"
+                    "- 'Show HIPAA guidance for NPI submission.'\n"
+                    "- 'List CPT codes referenced in Medicare policy XYZ.'"
+                )
+            }
 
-            # 1) Embed query and pick best-scoring tenant via cosine similarity
+        try:
+            # Initialize routing trace early to avoid NameError on later references
+            trace = {
+                "query": query,
+                "keywords": [],
+                "retrieval_query": query,
+                "mentioned_tenants": [],
+                "tenant_scores": [],
+                "selected_tenant": None,
+                "selected_score": None,
+                "decision_path": None
+            }
+            # Build retrieval keywords and construct retrieval_query for routing/retrieval
+            def _extract_keywords(q: str, k_max: int = 8):
+                try:
+                    text = (q or '').lower()
+                    text = re.sub(r"[^a-z0-9\s]", " ", text)
+                    tokens = [t for t in text.split() if len(t) >= 3]
+                    stop = set(["the","and","for","with","that","this","from","your","about","have","what","which","when","where","will","there","into","those","been","being","were","are","how","make","made","like","such","use","uses","used","using","can","you","please","tell","more","info","info.","step","steps","process","guide","guidance","policy","policies","onboarding","onboard","form","forms","rc","rcs"])  # basic stoplist
+                    freq = {}
+                    for t in tokens:
+                        if t in stop:
+                            continue
+                        freq[t] = freq.get(t, 0) + 1
+                    domain_terms = [t for t in ["esmd","fhir","cms","hhs","extension","extensions","implementation","guide"] if t in tokens]
+                    key = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+                    kws = [w for w, _ in key][:k_max]
+                    out = []
+                    for w in domain_terms + kws:
+                        if w not in out:
+                            out.append(w)
+                    return out[:k_max]
+                except Exception:
+                    return []
+
+            query_keywords = _extract_keywords(query)
+            keywords_str = " ".join(query_keywords)
+            retrieval_query = (f"keywords: {keywords_str}\nquestion: {query}" if query_keywords else query)
+            # Try cached response if enabled. We don't know the tenant yet, so scan all tenants for a hit.
+            if self.cache_enabled:
+                for t in self.tenants:
+                    cached = self._get_cached_response(query, t)
+                    if cached:
+                        logging.info(f"Serving cached response for tenant '{t}'")
+                        return self._enrich_sources_with_url(cached)
+
+            # 0) If explicit tenants mentioned in the query, honor them (single or multiple)
+            ql_full = query.lower()
+            mentioned = self._resolve_tenants_in_text(ql_full)
+            trace["mentioned_tenants"] = mentioned
+            if len(mentioned) >= 2:
+                logging.info(f"Explicit multi-tenant query detected: {mentioned}")
+                source_nodes = []
+                for t in mentioned:
+                    engine = self.tenant_tool_map.get(t)
+                    if not engine:
+                        continue
+                    try:
+                        r = engine.query(retrieval_query)
+                        source_nodes.extend(list(getattr(r, 'source_nodes', []) or []))
+                    except Exception:
+                        continue
+                if not source_nodes:
+                    return {
+                        "is_conversational": True,
+                        "answer": "I couldn't find relevant information across the tenants you mentioned. Please refine your question or upload documents."
+                    }
+                class _R:
+                    def __init__(self, nodes):
+                        self.source_nodes = nodes
+                        self.response = ''
+                adapted = _R(source_nodes)
+                selected_tenant = ",".join(mentioned)
+                # continue to scoring/aggregation/formatting using combined nodes
+            # 1) Embed query (biased by keywords) and pick best-scoring tenant via cosine similarity
             best_tenant = None
             best_score = -1.0
             try:
-                q_emb = self.embed_model.get_text_embedding(query)
+                route_q = self._normalize_for_routing(retrieval_query)
+                q_emb = self.embed_model.get_text_embedding(route_q or query)
                 # Prefer explicit tenant mention in the query
                 ql = query.lower()
                 explicit = None
-                for tenant_id in self.tenants:
-                    if tenant_id.lower() in ql:
-                        explicit = tenant_id
-                        break
+                if len(mentioned) == 1:
+                    explicit = mentioned[0]
+                else:
+                    # fallback single explicit from text or alias
+                    exp = self._resolve_tenants_in_text(ql)
+                    if len(exp) == 1:
+                        explicit = exp[0]
 
                 if explicit:
                     best_tenant = explicit
                     best_score = 1.0
+                # Blend cosine similarity with tenant keyword overlap
+                alpha = float(os.getenv('ROUTING_COSINE_WEIGHT', '0.7'))  # cosine weight
                 for tenant_id, t_emb in self.tenant_embeddings.items():
-                    score = self._cosine(q_emb, t_emb)
+                    cos = float(self._cosine(q_emb, t_emb))
+                    # compute keyword overlap score
+                    prof = self._load_tenant_profile(tenant_id)
+                    kw_map = prof.get('keywords', {}) or {}
+                    overlap = 0.0
+                    if query_keywords and kw_map:
+                        hits = sum(1 for kw in query_keywords if kw in kw_map)
+                        overlap = hits / max(len(query_keywords), 1)
+                    score = alpha * cos + (1.0 - alpha) * overlap
+                    trace["tenant_scores"].append({"tenant": tenant_id, "cosine": cos, "overlap": overlap, "blended": float(score)})
                     if score > best_score:
                         best_score = score
                         best_tenant = tenant_id
                 logging.info(f"Best tenant preselection: {best_tenant} (score={best_score:.3f})")
+                trace["selected_tenant"] = best_tenant
+                trace["selected_score"] = float(best_score)
             except Exception as e:
                 logging.warning(f"Query embedding or tenant similarity failed, falling back to router: {e}")
                 best_tenant = None
 
             # 2) Decision: if confident OR user requested auto-select, route directly
-            if best_tenant and (best_score >= self.TENANT_MIN_CONF_THRESH or auto_select):
+            if 'selected_tenant' in locals() and len(mentioned) >= 2:
+                response = adapted  # already assembled combined nodes
+                trace["decision_path"] = "explicit_multi_tenant"
+            elif best_tenant and (best_score >= self.TENANT_MIN_CONF_THRESH or auto_select or explicit):
                 selected_tenant = best_tenant
                 tenant_engine = self.tenant_tool_map.get(selected_tenant)
                 if tenant_engine is None:
                     logging.warning(f"No engine found for selected tenant '{selected_tenant}', falling back to router.")
-                    response = self.router_query_engine.query(query)
+                    response = self.router_query_engine.query(retrieval_query)
+                    trace["decision_path"] = "router_fallback_no_engine"
                 else:
-                    response = tenant_engine.query(query)
+                    response = tenant_engine.query(retrieval_query)
+                    trace["decision_path"] = "tenant_engine"
             else:
                 # Low confidence: if auto-select was requested, fall back to router silently; otherwise ask user
                 if auto_select:
                     logging.info("Low-confidence routing with [AUTO]. Falling back to router engine.")
-                    response = self.router_query_engine.query(query)
+                    response = self.router_query_engine.query(retrieval_query)
+                    trace["decision_path"] = "router_low_conf_with_auto"
                 else:
                     logging.info("Low-confidence routing. Asking user for tenant selection.")
                     return {
@@ -763,21 +1237,143 @@ class RAGAgent:
 
             source_nodes = sorted(response.source_nodes, key=score_node, reverse=True)
 
-            seen_sources = set()
-            unique_sources = []
+            # Guardrail: if we have sources but none contain the retrieval keywords, avoid hallucinated answers
+            try:
+                if query_keywords:
+                    kw_hits = 0
+                    for n in source_nodes[:10]:  # check top-k
+                        tl = (n.get_content() or '').lower()
+                        if any(kw in tl for kw in query_keywords):
+                            kw_hits += 1
+                    if kw_hits == 0:
+                        logging.warning("Retrieved content lacks query keywords; returning no-relevant-info message.")
+                        trace["decision_path"] = (trace.get("decision_path") or "") + ":guard_no_keyword_hits"
+                        return {
+                            "is_conversational": True,
+                            "answer": "I couldn't find relevant information in the documents for your question. Please provide more specifics or ingest related content.",
+                            "trace": trace if str(os.getenv("SHOW_TRACE", "false")).lower() in ("1","true","yes") else None
+                        }
+            except Exception:
+                pass
+
+            # Aggregate by canonical source key: prefer original PDF over sidecar and collect all matched pages
+            agg = {}
             for node in source_nodes:
-                file_path = node.metadata.get('file_path')
-                if file_path not in seen_sources:
-                    seen_sources.add(file_path)
-                    # PERMANENT FIX: Convert the score to a standard Python float, include page if present
-                    page = node.metadata.get('page', node.metadata.get('page_label'))
-                    src = {"filename": file_path, "relevance": float(node.score)}
-                    if page is not None:
+                meta = getattr(node, 'metadata', {}) or {}
+                file_path = meta.get('file_path')
+                source_pdf = meta.get('source_pdf')
+                key_raw = source_pdf or file_path or ""
+                try:
+                    key_norm = os.path.normpath(str(key_raw)).lower()
+                except Exception:
+                    key_norm = str(key_raw)
+                if not key_norm:
+                    continue
+                display_name = source_pdf or file_path
+                score_val = float(getattr(node, 'score', 0.0) or 0.0)
+                page = meta.get('page', meta.get('page_label'))
+                # init bucket
+                bucket = agg.get(key_norm)
+                if bucket is None:
+                    bucket = {"filename": display_name, "relevance": score_val, "_pages": set()}
+                    agg[key_norm] = bucket
+                else:
+                    # keep the best display name (prefer PDF) and highest relevance
+                    if score_val > bucket.get("relevance", 0.0):
+                        bucket["relevance"] = score_val
+                        bucket["filename"] = display_name
+                # collect page
+                if page is not None:
+                    try:
+                        bucket["_pages"].add(int(page))
+                    except Exception:
                         try:
-                            src["page"] = int(page)
+                            # Normalize like "12" -> 12 when possible, else keep string
+                            p_int = int(str(page).strip())
+                            bucket["_pages"].add(p_int)
                         except Exception:
-                            src["page"] = page
-                    unique_sources.append(src)
+                            bucket["_pages"].add(str(page))
+
+            # Materialize unique sources list with sorted pages
+            # Load URL maps for tenants in scope (selected_tenant may be ","-joined)
+            url_maps = {}
+            try:
+                tenants_in_scope = []
+                try:
+                    tenants_in_scope = [t.strip() for t in str(selected_tenant).split(',') if t.strip()]
+                except Exception:
+                    tenants_in_scope = [selected_tenant] if selected_tenant else []
+                for t in tenants_in_scope or []:
+                    url_map_path = os.path.join(self.documents_dir, t, 'url_map.json')
+                    if os.path.exists(url_map_path):
+                        with open(url_map_path, 'r', encoding='utf-8') as fh:
+                            m = json.load(fh) or {}
+                            for k, v in m.items():
+                                try:
+                                    url_maps[os.path.normpath(k)] = v
+                                    url_maps[os.path.basename(os.path.normpath(k))] = v
+                                except Exception:
+                                    url_maps[k] = v
+            except Exception:
+                url_maps = {}
+
+            unique_sources = []
+            for _, bucket in agg.items():
+                pages = list(bucket.get("_pages", set()))
+                try:
+                    pages = sorted(pages)
+                except Exception:
+                    pass
+                # Prefer original source path; strip sidecar suffixes
+                fn = bucket.get("filename")
+                try:
+                    if isinstance(fn, str):
+                        if fn.endswith('.tables.txt'):
+                            fn = fn[:-11]
+                        if fn.endswith('::tables'):
+                            fn = fn[:-8]
+                except Exception:
+                    pass
+                # Attach original URL if this came from a URL-ingested .txt
+                url_value = None
+                try:
+                    raw_fn = str(bucket.get("filename") or "")
+                    key_norm = os.path.normpath(raw_fn)
+                    base = os.path.basename(key_norm)
+                    url_value = url_maps.get(key_norm) or url_maps.get(base)
+                    if not url_value:
+                        # Try documents/<tenant>/<basename> variants
+                        for t in (tenants_in_scope or []):
+                            alt = os.path.normpath(os.path.join(self.documents_dir, t, base))
+                            url_value = url_maps.get(alt)
+                            if url_value:
+                                break
+                    if not url_value:
+                        logging.debug(f"URL map miss for source filename='{raw_fn}', base='{base}', tenants={tenants_in_scope}")
+                except Exception:
+                    url_value = None
+                # relative_path: path under tenant dir for view/download (actual document, not chunk file)
+                try:
+                    rel_path = os.path.basename(str(fn).strip()) if fn else None
+                except Exception:
+                    rel_path = None
+                src = {"filename": fn, "relevance": float(bucket.get("relevance", 0.0))}
+                if rel_path:
+                    src["relative_path"] = rel_path
+                if url_value:
+                    src["url"] = url_value
+                if pages:
+                    src["pages"] = pages
+                    src["page"] = pages[0]  # first page for #page= fragment
+                unique_sources.append(src)
+
+            # De-duplicate defensively by normalized filename and keep top 2 by relevance
+            dedup = {}
+            for s in unique_sources:
+                name = str(s.get("filename") or "").strip().lower()
+                if name not in dedup or float(s.get("relevance", 0.0)) > float(dedup[name].get("relevance", 0.0)):
+                    dedup[name] = s
+            unique_sources = sorted(dedup.values(), key=lambda x: float(x.get("relevance", 0.0)), reverse=True)[:10]
 
             # Build final structured response and attach sources/metadata
             # Create a lightweight response adapter with the possibly filtered nodes for formatting
@@ -790,12 +1386,20 @@ class RAGAgent:
             structured_response["sources"] = unique_sources
             structured_response["selected_tenant"] = selected_tenant
             structured_response["tenant_preselect_score"] = round(float(best_score), 3) if best_tenant else None
+            if str(os.getenv("SHOW_TRACE", "false")).lower() in ("1","true","yes"):
+                structured_response["trace"] = trace
             # Ensure no leaked keys like 'downloadable_files' are returned
             if "downloadable_files" in structured_response:
                 try:
                     del structured_response["downloadable_files"]
                 except Exception:
                     pass
+            # Write-through cache
+            try:
+                if self.cache_enabled:
+                    self.cache_response(query, structured_response)
+            except Exception:
+                pass
             return structured_response
         except Exception as e:
             logging.error(f"Error getting response from agent for query '{query}': {e}", exc_info=True)
@@ -827,6 +1431,46 @@ class RAGAgent:
                     filepath = os.path.join(tenant_dir, file.filename)
                     file.save(filepath)
                     saved_files.append(file.filename)
+                    # keyword profiling from file content (best-effort for .txt/.source.html)
+                    try:
+                        text_sample = ""
+                        fname_lower = (file.filename or "").lower()
+                        if fname_lower.endswith('.txt') or fname_lower.endswith('.html') or fname_lower.endswith('.source.html'):
+                            with open(filepath, 'r', encoding='utf-8', errors='ignore') as rf:
+                                text_sample = rf.read()
+                        elif fname_lower.endswith('.pdf'):
+                            try:
+                                import pypdf
+                                reader = pypdf.PdfReader(filepath)
+                                for i, pg in enumerate(reader.pages[:3]):
+                                    try:
+                                        text_sample += (pg.extract_text() or "") + "\n"
+                                    except Exception:
+                                        continue
+                            except Exception:
+                                pass
+                        kws = self._extract_keywords_from_text(text_sample, k_max=200) if text_sample else []
+                        if kws:
+                            self._update_tenant_profile(tenant_id, kws)
+                    except Exception:
+                        pass
+                    # record metadata
+                    try:
+                        size = os.path.getsize(filepath)
+                        mtime = os.path.getmtime(filepath)
+                        sha = self._hash_file(filepath)
+                        self._append_metadata_entry(tenant_dir, {
+                            "filename": file.filename,
+                            "path": filepath,
+                            "tenant": tenant_id,
+                            "source_type": "file_upload",
+                            "size_bytes": size,
+                            "mtime": mtime,
+                            "sha256": sha,
+                            "created_at": time.time()
+                        })
+                    except Exception:
+                        pass
                 except Exception as e:
                     errors.append(f"Error saving {file.filename}: {e}")
             else:
@@ -868,6 +1512,14 @@ class RAGAgent:
         sigs.sort()
         return sigs
 
+    def _write_manifest(self, manifest_path: str, current_list):
+        try:
+            os.makedirs(os.path.dirname(manifest_path), exist_ok=True)
+            with open(manifest_path, 'w', encoding='utf-8') as fh:
+                json.dump({"files": current_list, "updated_at": time.time()}, fh, indent=2)
+        except Exception:
+            pass
+
     def _read_manifest(self, manifest_path: str):
         try:
             if not os.path.exists(manifest_path):
@@ -880,25 +1532,105 @@ class RAGAgent:
         except Exception:
             return []
 
-    def _write_manifest(self, manifest_path: str, current_list):
+    def _diff_manifest(self, prev_list, current_list):
         try:
-            os.makedirs(os.path.dirname(manifest_path), exist_ok=True)
+            prev_set = set(prev_list or [])
+            curr_set = set(current_list or [])
+            added = list(curr_set - prev_set)
+            deleted = list(prev_set - curr_set)
+            # We use simple set difference; any 'changed' is handled by rebuild elsewhere
+            changed = []
+            return changed, deleted, added
         except Exception:
-            pass
+            return [], [], []
+
+    # -------------------- Tenant keyword profiling --------------------
+    def _extract_keywords_from_text(self, text: str, k_max: int = 200):
         try:
-            with open(manifest_path, 'w', encoding='utf-8') as fh:
-                json.dump(current_list, fh, indent=2)
+            t = (text or '').lower()
+            t = re.sub(r"[^a-z0-9\s]", " ", t)
+            tokens = [tok for tok in t.split() if len(tok) >= 3]
+            stop = set([
+                "the","and","for","with","that","this","from","your","about","have","what","which","when","where","will","there","into","those","been","being","were","are","how","make","made","like","such","use","uses","used","using","can","you","please","tell","more","info","info","step","steps","process","guide","guidance","policy","policies","form","forms","table","tables","section","sections"
+            ])
+            # Keep important domain terms
+            domain_keep = set(["esmd","fhir","cms","hhs","extension","extensions","implementation","guide","onboarding","onboard","rc","rcs"])
+            freq = {}
+            for tok in tokens:
+                if tok in stop and tok not in domain_keep:
+                    continue
+                freq[tok] = freq.get(tok, 0) + 1
+            ranks = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+            return [w for w, _ in ranks[:k_max]]
+        except Exception:
+            return []
+
+    def _tenant_profile_path(self, tenant_id: str):
+        return os.path.join(self.documents_dir, tenant_id, 'tenant_profile.json')
+
+    def _load_tenant_profile(self, tenant_id: str):
+        try:
+            path = self._tenant_profile_path(tenant_id)
+            if os.path.exists(path):
+                with open(path, 'r', encoding='utf-8') as fh:
+                    obj = json.load(fh) or {}
+                    if isinstance(obj, dict):
+                        return obj
+            return {"keywords": {}}
+        except Exception:
+            return {"keywords": {}}
+
+    def _update_tenant_profile(self, tenant_id: str, keywords: list):
+        try:
+            profile = self._load_tenant_profile(tenant_id)
+            kw_map = profile.get('keywords', {}) or {}
+            for kw in (keywords or []):
+                try:
+                    kw_map[kw] = int(kw_map.get(kw, 0)) + 1
+                except Exception:
+                    continue
+            profile['keywords'] = kw_map
+            path = self._tenant_profile_path(tenant_id)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, 'w', encoding='utf-8') as fh:
+                json.dump(profile, fh, indent=2)
         except Exception:
             pass
 
-    def _diff_manifest(self, prev_list, curr_list):
-        prev_set = set(prev_list or [])
-        curr_set = set(curr_list or [])
-        added = list(curr_set - prev_set)
-        deleted = list(prev_set - curr_set)
-        # We use simple set difference; changed handled by rebuilding if needed elsewhere
-        changed = []
-        return changed, deleted, added
+    # -------------------- URL map helpers --------------------
+    def _url_map_path(self, tenant_id: str):
+        return os.path.join(self.documents_dir, tenant_id, 'url_map.json')
+
+    def _load_url_map(self, tenant_id: str):
+        try:
+            p = self._url_map_path(tenant_id)
+            if os.path.exists(p):
+                with open(p, 'r', encoding='utf-8') as fh:
+                    m = json.load(fh) or {}
+                    if isinstance(m, dict):
+                        return m
+            return {}
+        except Exception:
+            return {}
+
+    def _update_url_map(self, tenant_id: str, key_path: str, src_url: str):
+        try:
+            if not key_path or not src_url:
+                return
+            m = self._load_url_map(tenant_id)
+            m[os.path.normpath(key_path)] = src_url
+            # Also store basename as convenience
+            try:
+                base = os.path.basename(os.path.normpath(key_path))
+                m[base] = src_url
+            except Exception:
+                pass
+            p = self._url_map_path(tenant_id)
+            os.makedirs(os.path.dirname(p), exist_ok=True)
+            with open(p, 'w', encoding='utf-8') as fh:
+                json.dump(m, fh, indent=2)
+        except Exception:
+            pass
 
     def ingest_url(self, tenant_id, url):
         try:
@@ -916,12 +1648,128 @@ class RAGAgent:
             sanitized_filename = re.sub(r'[^a-zA-Z0-9_-]', '_', url) + ".txt"
             filepath = os.path.join(tenant_dir, sanitized_filename)
 
+            # Write initial extract from reader
+            extracted = ''
+            try:
+                extracted = "\n\n".join([(doc.text or '') for doc in documents])
+            except Exception:
+                extracted = ''
             with open(filepath, "w", encoding="utf-8") as f:
-                for doc in documents:
-                    f.write(doc.text + '\n\n')
+                f.write(extracted)
+
+            # If extract seems too small, perform robust fallback: fetch full HTML, save snapshot, strip tags
+            try:
+                min_chars = int(os.getenv('URL_MIN_CHARS_FOR_FALLBACK', '2000'))
+            except Exception:
+                min_chars = 2000
+            if len((extracted or '').strip()) < min_chars:
+                try:
+                    headers = {'User-Agent': os.getenv('URL_USER_AGENT', 'Mozilla/5.0 (RAG Ingest)')}
+                    timeout = int(os.getenv('URL_TIMEOUT', '20'))
+                    r = requests.get(url, headers=headers, timeout=timeout)
+                    r.raise_for_status()
+                    html_raw = r.text or ''
+                    # Save snapshot for audit
+                    snapshot_path = os.path.join(tenant_dir, sanitized_filename.replace('.txt', '.source.html'))
+                    try:
+                        with open(snapshot_path, 'w', encoding='utf-8') as sf:
+                            sf.write(html_raw)
+                    except Exception:
+                        pass
+                    # Strip scripts/styles and tags
+                    no_scripts = re.sub(r'<script[\s\S]*?</script>', ' ', html_raw, flags=re.IGNORECASE)
+                    no_styles = re.sub(r'<style[\s\S]*?</style>', ' ', no_scripts, flags=re.IGNORECASE)
+                    text_only = re.sub(r'<[^>]+>', ' ', no_styles)
+                    text_only = html_lib.unescape(text_only)
+                    text_only = re.sub(r'\s+', ' ', text_only)
+                    text_only = re.sub(r'\n{2,}', '\n', text_only)
+                    # Overwrite .txt with fuller text
+                    with open(filepath, 'w', encoding='utf-8') as f:
+                        f.write(text_only.strip())
+                except Exception as _:
+                    pass
+
+            # Update tenant keyword profile from extracted text and snapshot (if present)
+            try:
+                prof_text = ""
+                try:
+                    with open(filepath, 'r', encoding='utf-8', errors='ignore') as rf:
+                        prof_text += rf.read()
+                except Exception:
+                    pass
+                snapshot_path = os.path.join(tenant_dir, sanitized_filename.replace('.txt', '.source.html'))
+                if os.path.exists(snapshot_path):
+                    try:
+                        with open(snapshot_path, 'r', encoding='utf-8', errors='ignore') as sf:
+                            prof_text += "\n" + sf.read()
+                    except Exception:
+                        pass
+                kws = self._extract_keywords_from_text(prof_text, k_max=200) if prof_text else []
+                if kws:
+                    self._update_tenant_profile(tenant_id, kws)
+            except Exception:
+                pass
+
+            # Record URL mapping so sources can reference original page URL
+            try:
+                self._update_url_map(tenant_id, filepath, url)
+            except Exception:
+                pass
+
+            # record metadata for .txt and snapshot if present
+            try:
+                size = os.path.getsize(filepath)
+                mtime = os.path.getmtime(filepath)
+                sha = self._hash_file(filepath)
+                self._append_metadata_entry(tenant_dir, {
+                    "filename": sanitized_filename,
+                    "path": filepath,
+                    "tenant": tenant_id,
+                    "source_type": "url",
+                    "url": url,
+                    "size_bytes": size,
+                    "mtime": mtime,
+                    "sha256": sha,
+                    "created_at": time.time()
+                })
+            except Exception:
+                pass
+            try:
+                snapshot_path = os.path.join(tenant_dir, sanitized_filename.replace('.txt', '.source.html'))
+                if os.path.exists(snapshot_path):
+                    size = os.path.getsize(snapshot_path)
+                    mtime = os.path.getmtime(snapshot_path)
+                    sha = self._hash_file(snapshot_path)
+                    self._append_metadata_entry(tenant_dir, {
+                        "filename": os.path.basename(snapshot_path),
+                        "path": snapshot_path,
+                        "tenant": tenant_id,
+                        "source_type": "url_snapshot",
+                        "url": url,
+                        "size_bytes": size,
+                        "mtime": mtime,
+                        "sha256": sha,
+                        "created_at": time.time()
+                    })
+            except Exception:
+                pass
             
             tenant_storage_dir = os.path.join(self.storage_dir, tenant_id)
             manifest_path = os.path.join(tenant_storage_dir, "manifest.json")
+            # Persist URL mapping so later responses can attach original URLs in sources
+            try:
+                url_map_path = os.path.join(tenant_dir, 'url_map.json')
+                url_map = {}
+                if os.path.exists(url_map_path):
+                    with open(url_map_path, 'r', encoding='utf-8') as fh:
+                        url_map = json.load(fh) or {}
+                # map by full normalized path and by basename
+                url_map[os.path.normpath(filepath)] = url
+                url_map[os.path.basename(os.path.normpath(filepath))] = url
+                with open(url_map_path, 'w', encoding='utf-8') as fh:
+                    json.dump(url_map, fh, indent=2)
+            except Exception:
+                pass
             current = self._scan_manifest(tenant_dir)
             prev = self._read_manifest(manifest_path)
             changed, deleted, added = self._diff_manifest(prev, current)

@@ -1,0 +1,110 @@
+{
+  "family": "rag-app-ultralight",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/rag-app-task-role",
+  "containerDefinitions": [
+    {
+      "name": "rag-app",
+      "image": "YOUR_ACCOUNT_ID.dkr.ecr.YOUR_REGION.amazonaws.com/rag-app:ultralight",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 5001,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "ENVIRONMENT",
+          "value": "production"
+        },
+        {
+          "name": "DEBUG",
+          "value": "false"
+        },
+        {
+          "name": "STORAGE_BACKEND",
+          "value": "s3"
+        },
+        {
+          "name": "S3_BUCKET",
+          "value": "your-rag-documents"
+        },
+        {
+          "name": "VECTOR_STORE",
+          "value": "qdrant"
+        },
+        {
+          "name": "QDRANT_URL",
+          "value": "http://your-qdrant-url:6333"
+        },
+        {
+          "name": "LLM_PROVIDER",
+          "value": "groq"
+        },
+        {
+          "name": "LLM_MODEL",
+          "value": "llama-3.1-8b-instant"
+        },
+        {
+          "name": "EMBEDDING_PROVIDER",
+          "value": "openai"
+        },
+        {
+          "name": "EMBEDDING_MODEL",
+          "value": "text-embedding-3-small"
+        },
+        {
+          "name": "RETRIEVAL_MODE",
+          "value": "semantic"
+        },
+        {
+          "name": "TABLE_EXTRACT_ENABLED",
+          "value": "false"
+        },
+        {
+          "name": "MAX_WORKERS",
+          "value": "1"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "SECRET_KEY",
+          "valueFrom": "arn:aws:secretsmanager:YOUR_REGION:YOUR_ACCOUNT_ID:secret:rag-app/secret-key"
+        },
+        {
+          "name": "GROQ_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:YOUR_REGION:YOUR_ACCOUNT_ID:secret:rag-app/groq-api-key"
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:YOUR_REGION:YOUR_ACCOUNT_ID:secret:rag-app/openai-api-key"
+        },
+        {
+          "name": "JWT_SECRET",
+          "valueFrom": "arn:aws:secretsmanager:YOUR_REGION:YOUR_ACCOUNT_ID:secret:rag-app/jwt-secret"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/rag-app-ultralight",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs",
+          "awslogs-create-group": "true"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:5001/health || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 30
+      }
+    }
+  ]
+}

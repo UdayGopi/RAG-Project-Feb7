@@ -1,38 +1,105 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.pytest_cache/
-.venv/
+# Docker ignore file - reduces build context size
+
+# Virtual environments
 venv/
+env/
+ENV/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Data directories (should be volumes or external storage)
+data/
+documents/
+storage/
+logs/
+*.log
+
+# Environment files
 .env
-.env.*
+.env.local
+.env.*.local
 
-# Node / Frontend build artifacts (if any)
-node_modules/
-dist/
-build/
-
-# VCS
-.git
+# Git
+.git/
 .gitignore
+.gitattributes
 
-# OS files
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
 Thumbs.db
 
-# Data / runtime artifacts
-history.json
-users.db
-uploads/
+# Documentation (not needed in container)
+docs/
+*.md
+!README.md
 
-# Backups and local-only files/folders
+# Tests
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Backup files
+*.backup
 *.bak
-**/*.bak
-utils.py
-schedules.json
-README.md
-readme.md
-aws/
+*-backup
+
+# Development files
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile.dev
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Large model files (should be downloaded at runtime or from S3)
+models/downloads/
+*.pkl
+*.pt
+*.pth
+*.bin
+*.onnx
+
+# Jupyter
+*.ipynb
+.ipynb_checkpoints/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Node modules (if any)
+node_modules/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Scripts (not needed in production container)
+scripts/
+restart_server.ps1
+test_connection.html
+
+# Old / alternate structure (keep root rag_agent.py - app.py imports it)
 0-DataIngestParsing/

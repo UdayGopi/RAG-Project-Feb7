@@ -14,9 +14,19 @@ import hashlib
 import jwt
 from authlib.integrations.flask_client import OAuth
 from typing import Optional
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Load environment variables from .env file (for local dev). In containers, we pass envs via --env-file
 load_dotenv()
+
+# Configure logging to show on console
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()  # Output to console
+    ]
+)
 
 # Suppress noisy Pydantic v2 validate_default warnings emitted by dependencies
 warnings.filterwarnings(
@@ -26,6 +36,9 @@ warnings.filterwarnings(
 )
 app = Flask(__name__, static_folder='static')
 CORS(app, supports_credentials=True)
+
+# Set Flask's logger to INFO level
+app.logger.setLevel(logging.INFO)
 
 # Initialize the RAG agent
 rag_agent = RAGAgent()
@@ -37,6 +50,7 @@ CHAT_HISTORY_FILE = os.path.join(os.getcwd(), "history.json")
 # OAuth setup (optional; enabled when client IDs are present)
 oauth = OAuth(app)
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 MS_CLIENT_ID = os.getenv("MS_CLIENT_ID")
 MS_CLIENT_SECRET = os.getenv("MS_CLIENT_SECRET")
 APP_BASE_URL = os.getenv("APP_BASE_URL", "http://127.0.0.1:5001")
@@ -202,7 +216,7 @@ def _init_db():
         conn.close()
 
 def _hash_password(password: str) -> str:
-    return hashlib.sha256((password or "").encode("utf-8")).hexdigest()
+    return generate_password_hash(password or "")
 
 def _make_token(payload: dict) -> str:
     data = dict(payload)
@@ -364,7 +378,7 @@ def auth_signin():
         cur = conn.cursor()
         cur.execute("SELECT id, email, name, avatar_url, password_hash FROM users WHERE email = ?", (email,))
         row = cur.fetchone()
-        if not row or row[4] != pw_hash:
+        if not row or not check_password_hash(row[4], password):
             return jsonify({"error": "invalid credentials"}), 401
         uid = row[0]
         name = row[2]
@@ -396,13 +410,16 @@ def get_me():
         return jsonify({"authenticated": False}), 401
     return jsonify({"authenticated": True, "user": user})
 
-# Serve the main HTML file (require login; otherwise redirect to /auth.html)
+# Landing page (public - no auth required)
 @app.route('/')
 def index():
+    # Check if user is logged in
     user = _get_auth_user()
-    if not user:
-        return redirect('/auth.html')
-    return redirect('/welcome')
+    if user:
+        # If logged in, redirect to dashboard
+        return redirect('/welcome')
+    # Otherwise show landing page
+    return send_from_directory('static', 'index.html')
 
 @app.route('/welcome')
 def welcome_page():
@@ -417,6 +434,20 @@ def hub_page():
     if not user:
         return redirect('/auth.html')
     return send_from_directory('static', 'care-policy-hub.html')
+
+# React app (built frontend) at /app/ — build with: cd frontend && npm run build (optional: VITE_BASE=/app/)
+_REACT_DIST = os.path.join(os.path.dirname(__file__), 'frontend', 'dist')
+@app.route('/app')
+@app.route('/app/')
+def serve_react_app():
+    if not os.path.exists(os.path.join(_REACT_DIST, 'index.html')):
+        return jsonify({"error": "React app not built. Run: cd frontend && npm run build"}), 404
+    return send_from_directory(_REACT_DIST, 'index.html')
+@app.route('/app/<path:path>')
+def serve_react_assets(path):
+    if not os.path.exists(_REACT_DIST):
+        return jsonify({"error": "Not found"}), 404
+    return send_from_directory(_REACT_DIST, path)
 
 @app.route('/auth.html')
 def serve_auth_page():
@@ -858,5 +889,7 @@ def update_schedule(sid: str):
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', '5001'))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    # Enable debug for development to see request logs
+    debug_mode = os.getenv('FLASK_DEBUG', 'True').lower() in ('true', '1', 'yes')
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
 

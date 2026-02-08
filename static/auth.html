@@ -3,113 +3,320 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In / Sign Up</title>
+  <title>Sign In - CarePolicy Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'IBM Plex Sans', 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    
+    /* Google Button Styling */
+    .google-btn {
+      background: white;
+      border: 1px solid #dadce0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      color: #3c4043;
+      transition: all 0.2s;
+    }
+    
+    .google-btn:hover:not(:disabled) {
+      background: #f8f9fa;
+      box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 2px 6px rgba(60, 64, 67, 0.15);
+    }
+    
+    .google-btn:active:not(:disabled) {
+      background: #f1f3f4;
+    }
+    
+    /* Microsoft Button Styling */
+    .microsoft-btn {
+      background: white;
+      border: 1px solid #8c8c8c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      color: #5e5e5e;
+      transition: all 0.2s;
+    }
+    
+    .microsoft-btn:hover:not(:disabled) {
+      background: #f5f5f5;
+    }
+    
+    .microsoft-btn:active:not(:disabled) {
+      background: #e5e5e5;
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-6">
-  <main class="w-full max-w-5xl h-[90vh] bg-white/90 backdrop-blur rounded-2xl shadow-2xl border border-slate-200 p-0 overflow-hidden">
-    <div class="grid md:grid-cols-2 h-full">
-      <!-- Left: Project overview -->
-      <section class="relative hidden md:block bg-gradient-to-br from-sky-50 via-white to-blue-50 text-slate-800 p-8 overflow-y-auto">
-        <div class="absolute inset-0 opacity-50 pointer-events-none" style="background: radial-gradient(500px 300px at 10% 10%, rgba(59,130,246,.15), transparent), radial-gradient(400px 350px at 90% 30%, rgba(147,197,253,.15), transparent), radial-gradient(600px 450px at 50% 90%, rgba(99,102,241,.15), transparent);"></div>
-        <div class="relative space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-white border border-slate-200 grid place-items-center"><span class="text-xl">🤖</span></div>
-            <div>
-              <h1 class="text-xl font-extrabold tracking-tight text-blue-900">CarePolicy Hub</h1>
-              <p class="text-xs text-slate-500">AI Policy Assistant</p>
-            </div>
-          </div>
-          <h2 class="text-2xl font-extrabold leading-snug text-blue-900">Welcome to your AI assistant for esMD & policy docs</h2>
-          <p class="text-slate-700">Search across complex guidance, extract codes or tables, and generate concise summaries — all grounded in your uploaded documents.</p>
-          <div class="mt-6">
-            <div class="rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
-              <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1600&auto=format&fit=crop" alt="AI agent with chatbot search" class="w-full h-80 object-cover"/>
-            </div>
-          </div>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center p-6">
+  <!-- Back to Home -->
+  <a href="/" class="absolute top-6 left-6 flex items-center gap-2 text-slate-600 hover:text-blue-600 font-medium transition-colors">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+    </svg>
+    Back to Home
+  </a>
+
+  <!-- Main Container -->
+  <div class="w-full max-w-sm">
+    <!-- Logo -->
+    <div class="text-center mb-4">
+      <div class="inline-flex items-center gap-3 mb-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
         </div>
-      </section>
-
-      <!-- Right: Auth panel -->
-      <section class="p-6 space-y-6 overflow-y-auto">
-        <header class="text-center">
-          <h1 class="text-2xl font-bold text-slate-800">Sign In / Sign Up</h1>
-          <p class="text-slate-500 text-sm">Access CarePolicy Hub</p>
-        </header>
-
-        <div class="flex justify-center">
-          <button id="view-toggle" class="px-4 py-1.5 rounded-full border border-slate-300 bg-slate-900 text-white text-sm shadow hover:bg-slate-800 transition-colors">New here? Create account</button>
-        </div>
-
-        <section id="signin" class="space-y-4">
-      <div class="space-y-2">
-        <button id="oauth-google" class="w-full border rounded p-2 hover:bg-slate-50 flex items-center justify-center gap-2">
-          <img src="https://www.google.com/favicon.ico" class="w-4 h-4"/> Sign in with Google
-        </button>
-        <button id="oauth-microsoft" class="w-full border rounded p-2 hover:bg-slate-50 flex items-center justify-center gap-2">
-          <img src="https://login.live.com/favicon.ico" class="w-4 h-4"/> Sign in with Microsoft
-        </button>
-        <div id="oauth-sep" class="text-center text-xs text-slate-400">or use email and password</div>
       </div>
-      <div class="space-y-2">
-        <label class="text-sm text-slate-700">Email</label>
-        <input id="si-email" type="email" class="w-full border rounded p-2" placeholder="you@example.com" />
-      </div>
-      <div class="space-y-2">
-        <label class="text-sm text-slate-700">Password</label>
-        <input id="si-password" type="password" class="w-full border rounded p-2" placeholder="••••••••" />
-      </div>
-      <button id="signin-btn" class="w-full bg-blue-600 text-white rounded p-2 hover:bg-blue-700">Sign In</button>
-      <div class="text-right"><button id="forgot-btn" type="button" class="mt-2 text-xs text-blue-700 hover:underline">Forgot password?</button></div>
-        </section>
-
-        <section id="signup" class="space-y-4 hidden">
-      <div class="flex flex-col items-center gap-2">
-        <img id="avatar-preview" src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=default" alt="Avatar" class="w-20 h-20" />
-        <p class="text-xs text-slate-500">Avatar auto-generates from your email</p>
-      </div>
-      <div class="space-y-2">
-        <label class="text-sm text-slate-700">Name</label>
-        <input id="su-name" type="text" class="w-full border rounded p-2" placeholder="Your Name" />
-      </div>
-      <div class="space-y-2">
-        <label class="text-sm text-slate-700">Email</label>
-        <input id="su-email" type="email" class="w-full border rounded p-2" placeholder="you@example.com" />
-      </div>
-      <div class="space-y-2">
-        <label class="text-sm text-slate-700">Password</label>
-        <input id="su-password" type="password" class="w-full border rounded p-2" placeholder="••••••••" />
-      </div>
-      <button id="signup-btn" class="w-full bg-blue-600 text-white rounded p-2 hover:bg-blue-700">Create Account</button>
-        </section>
-
-        <p id="msg" class="text-center text-sm text-red-600"></p>
-      </section>
+      <h1 class="text-2xl font-bold text-slate-900 mb-1 tracking-tight" id="form-title">Welcome back</h1>
+      <p class="text-sm text-slate-600" id="form-subtitle">Sign in to continue to CarePolicy Hub</p>
     </div>
-  </main>
+
+    <!-- Auth Card -->
+    <div class="bg-white rounded-xl shadow-xl border border-slate-200 p-6">
+      <!-- OAuth Buttons (Sign In Only) -->
+      <div id="oauth-section" class="space-y-2.5 mb-5">
+        <button id="oauth-google" class="w-full google-btn">
+          <svg width="16" height="16" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" fill-rule="evenodd">
+              <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+              <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+              <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+            </g>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+        
+        <button id="oauth-microsoft" class="w-full microsoft-btn">
+          <svg width="18" height="18" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+            <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+            <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+            <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+          </svg>
+          <span>Continue with Microsoft</span>
+        </button>
+      </div>
+
+      <div id="divider" class="relative mb-4">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-slate-200"></div>
+        </div>
+        <div class="relative flex justify-center text-xs">
+          <span class="px-3 bg-white text-slate-500 font-medium">or continue with email</span>
+        </div>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="signin-form" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Email address</label>
+          <input id="si-email" 
+                 type="email" 
+                 required
+                 class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-900 placeholder-slate-400" 
+                 placeholder="name@company.com" />
+        </div>
+        
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Password</label>
+          <input id="si-password" 
+                 type="password" 
+                 required
+                 class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-900 placeholder-slate-400" 
+                 placeholder="Enter your password" />
+        </div>
+
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" class="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+            <span class="text-slate-600 font-medium">Remember me</span>
+          </label>
+          <button type="button" id="forgot-btn" class="text-blue-600 hover:text-blue-700 font-semibold">
+            Forgot?
+          </button>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
+          Sign in
+        </button>
+      </form>
+
+      <!-- Sign Up Form (Hidden by Default) -->
+      <form id="signup-form" class="space-y-3 hidden">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Full name</label>
+          <input id="su-name" 
+                 type="text" 
+                 required
+                 class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-900 placeholder-slate-400" 
+                 placeholder="John Doe" />
+        </div>
+        
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Email address</label>
+          <input id="su-email" 
+                 type="email" 
+                 required
+                 class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-900 placeholder-slate-400" 
+                 placeholder="name@company.com" />
+        </div>
+        
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Password</label>
+          <input id="su-password" 
+                 type="password" 
+                 required
+                 class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-900 placeholder-slate-400" 
+                 placeholder="Create a strong password" />
+          <p class="mt-1 text-xs text-slate-500">Min 8 characters</p>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
+          Create account
+        </button>
+
+        <p class="text-xs text-center text-slate-500 leading-relaxed">
+          By creating an account, you agree to our <a href="#" class="text-blue-600 hover:underline font-medium">Terms</a> and <a href="#" class="text-blue-600 hover:underline font-medium">Privacy</a>
+        </p>
+      </form>
+
+      <!-- Error/Success Message -->
+      <p id="msg" class="mt-5 text-center text-sm font-medium"></p>
+
+      <!-- Toggle Between Sign In / Sign Up -->
+      <div class="mt-4 text-center text-xs">
+        <span class="text-slate-600" id="toggle-text">Don't have an account?</span>
+        <button type="button" id="toggle-btn" class="ml-1 text-blue-600 hover:text-blue-700 font-bold">
+          Sign up
+        </button>
+      </div>
+    </div>
+
+    <!-- Trust Indicators -->
+    <div class="mt-4">
+      <div class="flex items-center justify-center gap-4 text-xs text-slate-500">
+        <div class="flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="font-medium">Secure</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="font-medium">SOC 2</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="font-medium">GDPR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgot-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-6">
+    <div class="bg-white w-full max-w-sm rounded-xl shadow-2xl p-6">
+      <h3 class="text-xl font-bold text-slate-900 mb-1 tracking-tight">Reset Password</h3>
+      <p class="text-xs text-slate-600 mb-4">Enter your email and solve the verification</p>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Email address</label>
+          <input id="fp-email" 
+                 type="email" 
+                 placeholder="name@company.com" 
+                 class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+        </div>
+        
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Verification</label>
+          <div id="fp-captcha" class="text-base font-bold text-blue-600 mb-1.5"></div>
+          <input id="fp-answer" 
+                 type="number" 
+                 placeholder="Your answer" 
+                 class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+        </div>
+      </div>
+      
+      <div class="mt-4 flex items-center justify-end gap-2">
+        <button id="fp-cancel" class="px-4 py-2 text-sm rounded-lg border border-slate-300 hover:bg-slate-50 font-semibold transition-all">
+          Cancel
+        </button>
+        <button id="fp-submit" class="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all shadow-md">
+          Send Link
+        </button>
+      </div>
+      
+      <p id="fp-msg" class="mt-3 text-xs text-center"></p>
+    </div>
+  </div>
 
   <script>
     const API_BASE_URL = window.location.origin;
-    try { console.log('auth.html loaded'); } catch {}
-
-    const secSignin = document.getElementById('signin');
-    const secSignup = document.getElementById('signup');
-    const toggleBtn = document.getElementById('view-toggle');
+    const signinForm = document.getElementById('signin-form');
+    const signupForm = document.getElementById('signup-form');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const toggleText = document.getElementById('toggle-text');
+    const formTitle = document.getElementById('form-title');
+    const formSubtitle = document.getElementById('form-subtitle');
+    const oauthSection = document.getElementById('oauth-section');
+    const divider = document.getElementById('divider');
     const msg = document.getElementById('msg');
 
     let mode = 'signin';
+    
     function setMode(m) {
       mode = m;
       const isSignin = mode === 'signin';
-      secSignin.classList.toggle('hidden', !isSignin);
-      secSignup.classList.toggle('hidden', isSignin);
-      toggleBtn.textContent = isSignin ? 'New here? Create account' : 'Have an account? Sign in';
+      
+      signinForm.classList.toggle('hidden', !isSignin);
+      signupForm.classList.toggle('hidden', isSignin);
+      oauthSection.classList.toggle('hidden', !isSignin);
+      divider.classList.toggle('hidden', !isSignin);
+      
+      formTitle.textContent = isSignin ? 'Welcome back' : 'Create your account';
+      formSubtitle.textContent = isSignin ? 'Sign in to continue to CarePolicy Hub' : 'Start your 14-day free trial today';
+      toggleText.textContent = isSignin ? "Don't have an account?" : 'Already have an account?';
+      toggleBtn.textContent = isSignin ? 'Sign up' : 'Sign in';
+      
       msg.textContent = '';
+      msg.className = 'mt-5 text-center text-sm font-medium';
     }
-    toggleBtn.onclick = () => setMode(mode === 'signin' ? 'signup' : 'signin');
-    setMode('signin');
+    
+    toggleBtn.addEventListener('click', () => {
+      setMode(mode === 'signin' ? 'signup' : 'signin');
+    });
 
-    // Hide OAuth buttons if providers not configured
+    // Check OAuth providers
     (async () => {
       try {
         const res = await fetch(`${API_BASE_URL}/auth/providers`);
@@ -117,113 +324,141 @@
         const p = await res.json();
         const g = document.getElementById('oauth-google');
         const m = document.getElementById('oauth-microsoft');
-        const sep = document.getElementById('oauth-sep');
-        // Keep buttons visible; if not configured, disable with tooltip
-        if (g && !p.google) { g.disabled = true; g.title = 'Configure GOOGLE_CLIENT_ID/SECRET and APP_BASE_URL in .env'; g.classList.add('opacity-60','cursor-not-allowed'); }
-        if (m && !p.microsoft) { m.disabled = true; m.title = 'Configure MS_CLIENT_ID/SECRET and APP_BASE_URL in .env'; m.classList.add('opacity-60','cursor-not-allowed'); }
-        if (sep) sep.classList.remove('hidden');
+        if (g && !p.google) { 
+          g.disabled = true; 
+          g.classList.add('opacity-50', 'cursor-not-allowed');
+          g.title = 'Google Sign-In not configured';
+        }
+        if (m && !p.microsoft) { 
+          m.disabled = true; 
+          m.classList.add('opacity-50', 'cursor-not-allowed'); 
+          m.title = 'Microsoft Sign-In not configured';
+        }
       } catch {}
     })();
 
-    // Avatar preview on email change
-    const suEmail = document.getElementById('su-email');
-    const avatarImg = document.getElementById('avatar-preview');
-    if (suEmail) {
-      suEmail.addEventListener('input', () => {
-        const seed = encodeURIComponent(suEmail.value.trim().toLowerCase() || 'default');
-        avatarImg.src = `https://api.dicebear.com/8.x/bottts-neutral/svg?seed=${seed}`;
-      });
-    }
-
-    const signInBtn = document.getElementById('signin-btn');
-    if (signInBtn) signInBtn.onclick = async () => {
+    // Sign In
+    signinForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
       msg.textContent = '';
       const email = document.getElementById('si-email').value.trim();
       const password = document.getElementById('si-password').value;
+      
       try {
         const res = await fetch(`${API_BASE_URL}/auth/signin`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          credentials: 'include', body: JSON.stringify({ email, password })
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Sign in failed');
-        window.location.href = '/welcome';
-      } catch (e) { msg.textContent = e.message; }
-    };
+        window.location.href = '/app/';
+      } catch (e) {
+        msg.textContent = e.message;
+        msg.className = 'mt-5 text-center text-sm font-medium text-red-600';
+      }
+    });
 
-    const signUpBtn = document.getElementById('signup-btn');
-    if (signUpBtn) signUpBtn.onclick = async () => {
+    // Sign Up
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
       msg.textContent = '';
       const name = document.getElementById('su-name').value.trim();
       const email = document.getElementById('su-email').value.trim();
       const password = document.getElementById('su-password').value;
+      
       try {
         const res = await fetch(`${API_BASE_URL}/auth/signup`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          credentials: 'include', body: JSON.stringify({ name, email, password })
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ name, email, password })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Sign up failed');
-        window.location.href = '/welcome';
-      } catch (e) { msg.textContent = e.message; }
-    };
+        window.location.href = '/app/';
+      } catch (e) {
+        msg.textContent = e.message;
+        msg.className = 'mt-5 text-center text-sm font-medium text-red-600';
+      }
+    });
 
-    // OAuth buttons
-    const go = (url) => { window.location.href = url; };
-    const gbtn = document.getElementById('oauth-google');
-    if (gbtn) gbtn.onclick = () => go(`${API_BASE_URL}/auth/login/google`);
-    const msbtn = document.getElementById('oauth-microsoft');
-    if (msbtn) msbtn.onclick = () => go(`${API_BASE_URL}/auth/login/microsoft`);
+    // OAuth
+    document.getElementById('oauth-google')?.addEventListener('click', () => {
+      window.location.href = `${API_BASE_URL}/auth/login/google`;
+    });
+    document.getElementById('oauth-microsoft')?.addEventListener('click', () => {
+      window.location.href = `${API_BASE_URL}/auth/login/microsoft`;
+    });
 
-    // Forgot password modal handlers
-    (function(){
-      const forgotBtn = document.getElementById('forgot-btn');
-      const modal = document.getElementById('forgot-modal');
-      const cancel = document.getElementById('fp-cancel');
-      const submit = document.getElementById('fp-submit');
-      const emailEl = document.getElementById('fp-email');
-      const msgEl = document.getElementById('fp-msg');
-      const capEl = document.getElementById('fp-captcha');
-      const ansEl = document.getElementById('fp-answer');
-      let a=0,b=0;
-      function newCaptcha(){ a=Math.floor(10+Math.random()*40); b=Math.floor(1+Math.random()*9); if(capEl){ capEl.textContent = `What is ${a} + ${b}?`; } if(ansEl){ ansEl.value=''; } if(msgEl){ msgEl.textContent=''; } }
-      if (forgotBtn) forgotBtn.onclick = ()=>{ if(modal){ modal.classList.remove('hidden'); modal.classList.add('flex'); } newCaptcha(); };
-      if (cancel) cancel.onclick = ()=>{ if(modal){ modal.classList.add('hidden'); modal.classList.remove('flex'); } };
-      if (submit) submit.onclick = async ()=>{
-        if (msgEl) msgEl.textContent='';
-        const email = (emailEl && emailEl.value || '').trim();
-        if(!email){ if(msgEl){ msgEl.textContent='Email is required'; msgEl.className='mt-2 text-sm text-red-600'; } return; }
-        try{
-          const res = await fetch(`${API_BASE_URL}/auth/forgot`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, captcha_answer: ansEl && ansEl.value, captcha_expected: a+b }) });
-          const data = await res.json();
-          if(!res.ok) throw new Error(data.error || 'Request failed');
-          if(msgEl){ msgEl.textContent = data.message || 'If the email exists, a reset link has been sent.'; msgEl.className='mt-2 text-sm text-green-600'; }
-          setTimeout(()=>{ if(modal){ modal.classList.add('hidden'); modal.classList.remove('flex'); } }, 1500);
-        }catch(e){ if(msgEl){ msgEl.textContent = e.message; msgEl.className='mt-2 text-sm text-red-600'; } newCaptcha(); }
-      };
-    })();
+    // Forgot Password Modal
+    const forgotBtn = document.getElementById('forgot-btn');
+    const modal = document.getElementById('forgot-modal');
+    const fpCancel = document.getElementById('fp-cancel');
+    const fpSubmit = document.getElementById('fp-submit');
+    const fpEmail = document.getElementById('fp-email');
+    const fpMsg = document.getElementById('fp-msg');
+    const fpCaptcha = document.getElementById('fp-captcha');
+    const fpAnswer = document.getElementById('fp-answer');
+    
+    let a = 0, b = 0;
+    
+    function newCaptcha() {
+      a = Math.floor(10 + Math.random() * 40);
+      b = Math.floor(1 + Math.random() * 9);
+      fpCaptcha.textContent = `What is ${a} + ${b}?`;
+      fpAnswer.value = '';
+      fpMsg.textContent = '';
+      fpMsg.className = 'mt-4 text-sm text-center';
+    }
+    
+    forgotBtn.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      newCaptcha();
+    });
+    
+    fpCancel.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    });
+    
+    fpSubmit.addEventListener('click', async () => {
+      fpMsg.textContent = '';
+      const email = fpEmail.value.trim();
+      
+      if (!email) {
+        fpMsg.textContent = 'Email is required';
+        fpMsg.className = 'mt-4 text-sm text-center text-red-600';
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/forgot`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            captcha_answer: fpAnswer.value,
+            captcha_expected: a + b
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Request failed');
+        
+        fpMsg.textContent = data.message || 'If the email exists, a reset link has been sent.';
+        fpMsg.className = 'mt-4 text-sm text-center text-green-600';
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+        }, 2000);
+      } catch (e) {
+        fpMsg.textContent = e.message;
+        fpMsg.className = 'mt-4 text-sm text-center text-red-600';
+        newCaptcha();
+      }
+    });
   </script>
-<div id="forgot-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
-  <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-xl">
-    <h3 class="text-lg font-semibold text-blue-900">Reset password</h3>
-    <p class="text-sm text-slate-600 mt-1">Enter your email and solve the captcha.</p>
-    <div class="mt-3 space-y-3">
-      <input id="fp-email" type="email" placeholder="you@example.com" class="w-full border rounded p-2"/>
-      <div id="fp-captcha" class="text-sm text-slate-700"></div>
-      <input id="fp-answer" type="number" placeholder="Answer" class="w-full border rounded p-2"/>
-    </div>
-    <div class="mt-4 flex items-center justify-end gap-2">
-      <button id="fp-cancel" class="px-3 py-1.5 border rounded text-slate-700 hover:bg-slate-100">Cancel</button>
-      <button id="fp-submit" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700">Send Reset Link</button>
-    </div>
-    <p id="fp-msg" class="mt-2 text-sm"></p>
-  </div>
-</div>
 </body>
 </html>
-
-
-
-
-
-

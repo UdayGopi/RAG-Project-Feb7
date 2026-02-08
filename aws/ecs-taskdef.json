@@ -1,0 +1,40 @@
+{
+  "family": "carepolicy-hub",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "web",
+      "image": "<ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/carepolicy-hub:v1",
+      "portMappings": [
+        {
+          "containerPort": 5001,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        { "name": "PORT", "value": "5001" },
+        { "name": "APP_BASE_URL", "value": "https://your-domain.com" },
+        { "name": "JWT_SECRET", "value": "REPLACE_ME" },
+        { "name": "GROQ_API_KEY", "value": "REPLACE_ME" },
+        { "name": "STORAGE_BACKEND", "value": "local" },
+        { "name": "WEB_CONCURRENCY", "value": "2" },
+        { "name": "THREADS", "value": "4" },
+        { "name": "GUNICORN_TIMEOUT", "value": "180" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/carepolicy-hub",
+          "awslogs-region": "<REGION>",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
