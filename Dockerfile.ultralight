@@ -1,76 +1,75 @@
 # =============================================================================
-# ALTERNATIVE: Dockerfile.ultralight (small image, API-only)
+# Dockerfile.ultralight - Backend + React frontend
 # =============================================================================
-# Build:  docker build -f Dockerfile.ultralight -t carepolicy-hub:latest .
-# Uses:   requirements.ultralight.txt (no .env copied; set env at runtime)
-# Image:  <300MB. Requires OPENAI_API_KEY (or Cohere) for embeddings; no rag_agent.py in image (see note below).
-# Default Dockerfile (recommended): use root Dockerfile for full app.
+# Step 1 (on your machine): Build the React app first:
+#   cd frontend
+#   $env:VITE_BASE="/app/"
+#   npm install
+#   npm run build
+#   cd ..
+# Step 2: Then build this image:
+#   docker build -f Dockerfile.ultralight -t carepolicy-hub:latest .
 # =============================================================================
-# Target: < 300MB final image
-# Strategy: Alpine base + API-based ML (no local models)
 
 # ============================================
-# Stage 1: Builder
+# Stage 1: Python backend builder
 # ============================================
 FROM python:3.11-alpine AS builder
 
 WORKDIR /build
 
-# Install build dependencies (minimal)
 RUN apk add --no-cache \
     gcc \
     musl-dev \
     libffi-dev \
     openssl-dev
 
-# Copy requirements
 COPY requirements.ultralight.txt .
 
-# Create virtual environment
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Install dependencies with no cache
 RUN pip install --no-cache-dir --upgrade pip wheel && \
     pip install --no-cache-dir -r requirements.ultralight.txt
 
 # ============================================
-# Stage 2: Runtime (Ultra-lightweight)
+# Stage 2: Runtime (Backend + frontend)
 # ============================================
 FROM python:3.11-alpine
 
 LABEL maintainer="your-email@example.com"
-LABEL description="RAG Application - Ultra-lightweight"
+LABEL description="RAG Application - Ultra-lightweight (Backend + React)"
 LABEL version="2.0.0"
-LABEL size="<300MB"
 
-# Environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PATH="/opt/venv/bin:$PATH" \
     APP_HOME=/app
 
-# Install only essential runtime dependencies
 RUN apk add --no-cache \
     curl \
     ca-certificates \
     libffi \
     openssl
 
-# Create non-root user
 RUN addgroup -g 1000 appuser && \
     adduser -D -u 1000 -G appuser appuser
 
 WORKDIR $APP_HOME
 
-# Copy Python packages from builder
+# Python packages from backend builder
 COPY --from=builder /opt/venv /opt/venv
 
-# Copy application code (order optimized for caching)
+# Pre-download NLTK data (llama-index needs it; appuser must be able to read it)
+RUN NLTK_CACHE=/opt/venv/lib/python3.11/site-packages/llama_index/core/_static/nltk_cache && \
+    mkdir -p "$NLTK_CACHE" && \
+    /opt/venv/bin/python -c "import nltk; nltk.download('punkt_tab', download_dir='$NLTK_CACHE', quiet=True); nltk.download('punkt', download_dir='$NLTK_CACHE', quiet=True)" && \
+    chown -R appuser:appuser "$NLTK_CACHE"
+
+# Backend code
 COPY --chown=appuser:appuser config/ ./config/
 COPY --chown=appuser:appuser core/ ./core/
 COPY --chown=appuser:appuser agents/ ./agents/
-COPY --chown=appuser:appuser storage/ ./storage/
 COPY --chown=appuser:appuser models/ ./models/
 COPY --chown=appuser:appuser retrieval/ ./retrieval/
 COPY --chown=appuser:appuser database/ ./database/
@@ -79,10 +78,14 @@ COPY --chown=appuser:appuser utils/ ./utils/
 COPY --chown=appuser:appuser ingestion/ ./ingestion/
 COPY --chown=appuser:appuser static/ ./static/
 COPY --chown=appuser:appuser app.py .
+COPY --chown=appuser:appuser rag_agent.py .
 
-# Create directories
-RUN mkdir -p logs data/cache && \
-    chown -R appuser:appuser logs data
+# Pre-built React app (build locally: cd frontend && VITE_BASE=/app/ npm run build)
+COPY --chown=appuser:appuser frontend/dist ./frontend/dist
+
+# Create directories app and RAGAgent need so appuser can write at runtime
+RUN mkdir -p logs data/cache documents storage chat_history && \
+    chown -R appuser:appuser logs data documents storage chat_history
 
 # Switch to non-root user
 USER appuser

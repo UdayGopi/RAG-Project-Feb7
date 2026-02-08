@@ -182,7 +182,8 @@ def add_to_history(query, response):
 # Auth and User Management #
 ############################
 
-DB_PATH = os.path.join(os.getcwd(), "users.db")
+# Use data/ so DB is in a writable dir (e.g. in Docker where appuser owns data/)
+DB_PATH = os.path.join(os.getcwd(), "data", "users.db")
 
 def _db():
     conn = sqlite3.connect(DB_PATH)
@@ -190,7 +191,9 @@ def _db():
     return conn
 
 def _init_db():
+    conn = None
     try:
+        os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
         conn = _db()
         cur = conn.cursor()
         # Better concurrency for light multi-user workloads
@@ -212,8 +215,14 @@ def _init_db():
             """
         )
         conn.commit()
+    except Exception as e:
+        logging.warning("DB init failed: %s", e)
     finally:
-        conn.close()
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception:
+                pass
 
 def _hash_password(password: str) -> str:
     return generate_password_hash(password or "")

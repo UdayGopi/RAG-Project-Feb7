@@ -14,7 +14,8 @@ pydantic-settings==2.1.0
 python-dotenv==1.0.0
 
 # ==================== LlamaIndex Core (Minimal) ====================
-llama-index-core==0.10.0
+# 0.10.1+ required by llama-index-llms-groq 0.1.3
+llama-index-core>=0.10.1,<0.11.0
 
 # ==================== LLM Providers (API-based only) ====================
 llama-index-llms-groq==0.1.3
@@ -44,6 +45,7 @@ boto3==1.34.0
 
 # ==================== Authentication ====================
 PyJWT==2.8.0
+Authlib==1.3.0
 cryptography==41.0.7
 
 # ==================== Utilities ====================

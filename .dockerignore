@@ -83,9 +83,10 @@ models/downloads/
 *.ipynb
 .ipynb_checkpoints/
 
-# Build artifacts
+# Build artifacts (allow frontend/dist for Dockerfile.ultralight)
 build/
 dist/
+!frontend/dist/
 *.egg-info/
 
 # Node modules (if any)

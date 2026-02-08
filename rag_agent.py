@@ -10,13 +10,33 @@ import html as html_lib
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, StorageContext, load_index_from_storage, Document
 from llama_index.core import download_loader
 from llama_index.llms.groq import Groq
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.core.query_engine import RouterQueryEngine
 from llama_index.core.selectors import PydanticSingleSelector
 from llama_index.core.base.response.schema import Response
-from llama_index.core.postprocessor import SentenceTransformerRerank
 from math import sqrt
+
+# Optional reranker (requires sentence-transformers; skip in ultralight)
+try:
+    from llama_index.core.postprocessor import SentenceTransformerRerank
+    _RERANKER_AVAILABLE = True
+except Exception:
+    SentenceTransformerRerank = None
+    _RERANKER_AVAILABLE = False
+
+
+def _get_embed_model():
+    """Resolve embedding model from env: openai (API) or huggingface (local)."""
+    provider = (os.getenv("EMBEDDING_PROVIDER") or "").strip().lower()
+    if provider == "openai":
+        from llama_index.embeddings.openai import OpenAIEmbedding
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("EMBEDDING_PROVIDER=openai requires OPENAI_API_KEY.")
+        return OpenAIEmbedding(model="text-embedding-3-small")
+    # Default: HuggingFace (requires llama-index-embeddings-huggingface + PyTorch)
+    from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+    return HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 import time
 import tiktoken  # For accurate token counting
 
@@ -31,12 +51,21 @@ class RAGAgent:
         if not groq_api_key:
             raise ValueError("GROQ_API_KEY environment variable is not set.")
         self.llm = Groq(model="llama-3.1-8b-instant", api_key=groq_api_key)
-        self.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+        self.embed_model = _get_embed_model()
         Settings.llm = self.llm
         Settings.embed_model = self.embed_model
         Settings.chunk_size = 1024
         Settings.chunk_overlap = 100
-        self.web_reader = download_loader("TrafilaturaWebReader")()
+        # Skip web reader in ultralight (EMBEDDING_PROVIDER=openai) to avoid runtime pip install that fails
+        if (os.getenv("EMBEDDING_PROVIDER") or "").strip().lower() == "openai":
+            self.web_reader = None
+            logging.info("URL ingest disabled (ultralight mode).")
+        else:
+            try:
+                self.web_reader = download_loader("TrafilaturaWebReader")()
+            except Exception as e:
+                logging.warning(f"TrafilaturaWebReader not available (URL ingest disabled): {e}")
+                self.web_reader = None
         self.router_query_engine = None
         self.tenants = []
         self.tools = []
@@ -232,8 +261,14 @@ class RAGAgent:
                 self.router_query_engine = None
                 return
 
-            # Use reranker to filter only the most relevant results (top 3 for focused responses)
-            reranker = SentenceTransformerRerank(model="BAAI/bge-reranker-base", top_n=3)
+            # Use reranker if available (optional; not in ultralight image)
+            reranker = None
+            if _RERANKER_AVAILABLE and SentenceTransformerRerank:
+                try:
+                    reranker = SentenceTransformerRerank(model="BAAI/bge-reranker-base", top_n=3)
+                except Exception as e:
+                    logging.warning(f"Reranker not used: {e}")
+            node_postprocessors = [reranker] if reranker else []
 
             for tenant_id in self.tenants:
                 tenant_doc_dir = os.path.join(self.documents_dir, tenant_id)
@@ -410,7 +445,7 @@ class RAGAgent:
                 
                 query_engine = index.as_query_engine(
                     similarity_top_k=10,  # Retrieve focused set of candidates (reduced from 15)
-                    node_postprocessors=[reranker],
+                    node_postprocessors=node_postprocessors,
                     similarity_cutoff=0.5  # Filter out low-relevance results
                 )
                 
@@ -1634,6 +1669,8 @@ class RAGAgent:
 
     def ingest_url(self, tenant_id, url):
         try:
+            if self.web_reader is None:
+                raise ValueError("URL ingestion is not available (TrafilaturaWebReader not installed).")
             parsed_url = urlparse(url)
             if parsed_url.netloc not in self.ALLOWED_DOMAINS:
                 raise ValueError(f"Domain '{parsed_url.netloc}' is not in the list of allowed domains.")
